@@ -37,20 +37,6 @@ export default {
         demo: 'Richiedi una Demo',
       },
     },
-    dashboard: {
-      title: 'Dashboard',
-      notifications: 'Attiva Notifiche',
-      trends: {
-        hashtags: 'Hashtag Trending',
-        keywords: 'Parole Chiave',
-        topics: 'Argomenti Trending',
-        mentions: 'menzioni',
-      },
-      addTrend: {
-        hashtag: 'Aggiungi Hashtag',
-        keyword: 'Aggiungi Parola Chiave',
-      },
-    },
     pricing: {
       title: 'Prezzi semplici e trasparenti',
       subtitle: 'Prova il piano Base gratuitamente per 7 giorni. Nessuna carta di credito richiesta.',
@@ -134,6 +120,31 @@ export default {
       checkEmail: "Controlla la tua email per confermare l'account"
     },
     dashboard: {
+      title: 'Dashboard',
+      notifications: {
+        enable: 'Attiva notifiche',
+        enabled: 'Notifiche attivate',
+        description: 'Riceverai notifiche sui nuovi trend'
+      },
+      trends: {
+        hashtags: 'Hashtag in Tendenza',
+        keywords: 'Parole Chiave',
+        topics: 'Argomenti in Tendenza',
+        mentions: 'menzioni',
+        lastDay: 'Ultime 24 ore'
+      },
+      addTrend: {
+        hashtag: 'Aggiungi Hashtag',
+        keyword: 'Aggiungi Parola Chiave',
+        newHashtag: 'Nuovo Hashtag',
+        newKeyword: 'Nuova Parola Chiave',
+        hashtagPlaceholder: 'Inserisci un hashtag...',
+        keywordPlaceholder: 'Inserisci una parola chiave...',
+        hashtagAdded: 'Hashtag Aggiunto',
+        hashtagAddedDesc: 'L\'hashtag {name} è stato aggiunto con successo',
+        keywordAdded: 'Parola Chiave Aggiunta',
+        keywordAddedDesc: 'La parola chiave {name} è stata aggiunta con successo'
+      },
       analytics: {
         title: 'Analisi dei Trend',
         subtitle: 'Monitoraggio in tempo reale dei trend sui social media',
@@ -151,7 +162,7 @@ export default {
         sentiment: 'Sentiment'
       },
       content: {
-        title: 'Generatore Contenuti',
+        title: 'Generatore di Contenuti',
         subtitle: 'Suggerimenti per contenuti virali',
         input: {
           label: 'Il tuo contenuto',
@@ -159,7 +170,7 @@ export default {
         },
         button: {
           generate: 'Genera Varianti',
-          generating: 'Generazione...'
+          generating: 'Generazione in corso...'
         },
         variants: {
           title: 'Varianti Generate:',
