@@ -147,9 +147,9 @@ export default {
         keywordAddedDesc: 'La parola chiave {name} è stata aggiunta con successo'
       },
       analytics: {
-        title: 'Analisi delle Tendenze',
-        subtitle: 'Monitoraggio in tempo reale delle tendenze sui social media',
-        lastUpdate: 'Ultimo aggiornamento',
+        title: 'Trend Analysis',
+        subtitle: 'Real-time monitoring of social media trends',
+        lastUpdate: 'Last update',
         metrics: {
           engagement: 'Engagement nel Tempo',
           volume: 'Volume per Argomento'
