@@ -5,6 +5,7 @@ import { TrendingUp, BarChart2, Zap, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
+import { useTranslation } from "react-i18next";
 
 const trendData = [
   { name: 'Gen', value: 400 },
@@ -36,34 +37,34 @@ const reportData = [
 ];
 
 const Index = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section - reduced padding */}
         <section className="py-12 md:py-16 container">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Domina i Trend Social con l'Intelligenza Artificiale
+              {t('home.hero.title')}
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground">
-              Analizza, predici e crea contenuti virali con la potenza dell'AI
+              {t('home.hero.subtitle')}
             </p>
           </div>
         </section>
 
-        {/* Features Section - reduced top padding */}
         <section className="py-12 bg-accent/10">
           <div className="container">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Funzionalità Principali
+              {t('home.features.title')}
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
               <FeatureCard
                 icon={<TrendingUp className="h-8 w-8 text-primary" />}
-                title="Monitoraggio Real-time"
-                description="Monitora hashtag e trend in tempo reale su tutti i social media principali"
+                title={t('home.features.realtime.title')}
+                description={t('home.features.realtime.description')}
                 chart={
                   <ResponsiveContainer width="100%" height={120}>
                     <AreaChart data={trendData}>
@@ -75,8 +76,8 @@ const Index = () => {
               />
               <FeatureCard
                 icon={<BarChart2 className="h-8 w-8 text-primary" />}
-                title="Analisi Predittiva"
-                description="Anticipa i trend futuri con la nostra AI avanzata"
+                title={t('home.features.predictive.title')}
+                description={t('home.features.predictive.description')}
                 chart={
                   <ResponsiveContainer width="100%" height={120}>
                     <LineChart data={predictiveData}>
@@ -88,8 +89,8 @@ const Index = () => {
               />
               <FeatureCard
                 icon={<Zap className="h-8 w-8 text-primary" />}
-                title="Contenuti Virali"
-                description="Genera contenuti ottimizzati per massimizzare l'engagement"
+                title={t('home.features.viral.title')}
+                description={t('home.features.viral.description')}
                 chart={
                   <ResponsiveContainer width="100%" height={120}>
                     <PieChart>
@@ -101,8 +102,8 @@ const Index = () => {
               />
               <FeatureCard
                 icon={<Users className="h-8 w-8 text-primary" />}
-                title="Report Personalizzati"
-                description="Ottieni insights dettagliati sul tuo pubblico target"
+                title={t('home.features.reports.title')}
+                description={t('home.features.reports.description')}
                 chart={
                   <ResponsiveContainer width="100%" height={120}>
                     <BarChart data={reportData}>
@@ -114,16 +115,15 @@ const Index = () => {
               />
             </div>
             
-            {/* CTA Buttons moved here */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
               <Button size="lg" asChild>
                 <Link to="/register">
-                  Inizia Gratuitamente
+                  {t('home.cta.start')}
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link to="/demo">
-                  Richiedi una Demo
+                  {t('home.cta.demo')}
                 </Link>
               </Button>
             </div>
