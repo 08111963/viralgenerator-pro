@@ -1,4 +1,3 @@
-
 import { Navigation } from "@/components/Navigation";
 import { TrendingCard } from "@/components/dashboard/TrendingCard";
 import { TrendAnalytics } from "@/components/dashboard/TrendAnalytics";
@@ -7,6 +6,8 @@ import { ContentGenerator } from "@/components/dashboard/ContentGenerator";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { AddTrendForm } from "@/components/dashboard/AddTrendForm";
+import { useState } from "react";
 
 // Mock data per le card dei trend
 const mockTrendingHashtags = [
@@ -35,11 +36,29 @@ const mockTrendingTopics = [
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const [trendingHashtags, setTrendingHashtags] = useState(mockTrendingHashtags);
+  const [trendingKeywords, setTrendingKeywords] = useState(mockTrendingKeywords);
 
   const handleNotificationToggle = () => {
     toast({
       title: "Notifiche attivate",
       description: "Riceverai aggiornamenti sui trend più rilevanti",
+    });
+  };
+
+  const handleAddHashtag = (newHashtag) => {
+    setTrendingHashtags((prev) => [...prev, newHashtag]);
+    toast({
+      title: "Hashtag aggiunto",
+      description: `${newHashtag.name} è stato aggiunto ai trend monitorati`,
+    });
+  };
+
+  const handleAddKeyword = (newKeyword) => {
+    setTrendingKeywords((prev) => [...prev, newKeyword]);
+    toast({
+      title: "Parola chiave aggiunta",
+      description: `${newKeyword.name} è stata aggiunta ai trend monitorati`,
     });
   };
 
@@ -58,12 +77,12 @@ const Dashboard = () => {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
           <TrendingCard
             title="Hashtag Trending"
-            items={mockTrendingHashtags}
+            items={trendingHashtags}
             icon="hashtag"
           />
           <TrendingCard
             title="Parole Chiave"
-            items={mockTrendingKeywords}
+            items={trendingKeywords}
             icon="keyword"
           />
           <TrendingCard
@@ -71,6 +90,11 @@ const Dashboard = () => {
             items={mockTrendingTopics}
             icon="topic"
           />
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
+          <AddTrendForm type="hashtag" onAdd={handleAddHashtag} />
+          <AddTrendForm type="keyword" onAdd={handleAddKeyword} />
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

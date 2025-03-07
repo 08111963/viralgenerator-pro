@@ -1,0 +1,70 @@
+
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Plus, Hash, Search } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+interface TrendItem {
+  id: string;
+  name: string;
+  volume: number;
+  change: number;
+}
+
+export const AddTrendForm = ({ 
+  onAdd, 
+  type 
+}: { 
+  onAdd: (item: TrendItem) => void;
+  type: "hashtag" | "keyword";
+}) => {
+  const [name, setName] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+
+    const newItem: TrendItem = {
+      id: Date.now().toString(),
+      name: type === "hashtag" ? (name.startsWith("#") ? name : `#${name}`) : name,
+      volume: 0,
+      change: 0
+    };
+
+    onAdd(newItem);
+    setName("");
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          {type === "hashtag" ? <Hash className="h-4 w-4" /> : <Search className="h-4 w-4" />}
+          Aggiungi {type === "hashtag" ? "Hashtag" : "Parola Chiave"}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">
+              {type === "hashtag" ? "Nuovo Hashtag" : "Nuova Parola Chiave"}
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={type === "hashtag" ? "Es: #trend" : "Es: tendenza"}
+              />
+              <Button type="submit" size="icon">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
