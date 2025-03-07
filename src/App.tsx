@@ -11,6 +11,7 @@ import Features from "./pages/Features";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import Admin from "./pages/Admin";
+import "./i18n/config";
 
 const queryClient = new QueryClient();
 

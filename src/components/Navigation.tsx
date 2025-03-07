@@ -3,8 +3,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TrendingUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export const Navigation = () => {
+  const { t } = useTranslation();
+
   return (
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b">
       <div className="container flex h-16 items-center justify-between">
@@ -15,22 +19,23 @@ export const Navigation = () => {
         
         <div className="hidden md:flex items-center space-x-6">
           <Link to="/" className="text-foreground/60 hover:text-foreground transition-colors">
-            Home
+            {t('navigation.home')}
           </Link>
           <Link to="/dashboard" className="text-foreground/60 hover:text-foreground transition-colors">
-            Dashboard
+            {t('navigation.dashboard')}
           </Link>
           <Link to="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">
-            Prezzi
+            {t('navigation.pricing')}
           </Link>
           <Link to="/admin" className="text-foreground/60 hover:text-foreground transition-colors">
-            Admin
+            {t('navigation.admin')}
           </Link>
+          <LanguageSwitcher />
           <Button variant="outline" asChild>
-            <Link to="/login">Accedi</Link>
+            <Link to="/login">{t('navigation.login')}</Link>
           </Button>
           <Button asChild>
-            <Link to="/register">Inizia Ora</Link>
+            <Link to="/register">{t('navigation.register')}</Link>
           </Button>
         </div>
       </div>
