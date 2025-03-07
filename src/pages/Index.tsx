@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -48,21 +47,9 @@ const Index = () => {
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Domina i Trend Social con l'Intelligenza Artificiale
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8">
+            <p className="text-xl md:text-2xl text-muted-foreground">
               Analizza, predici e crea contenuti virali con la potenza dell'AI
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
-                <Link to="/register">
-                  Inizia Gratuitamente
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link to="/demo">
-                  Richiedi una Demo
-                </Link>
-              </Button>
-            </div>
           </div>
         </section>
 
@@ -72,7 +59,7 @@ const Index = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
               Funzionalità Principali
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
               <FeatureCard
                 icon={<TrendingUp className="h-8 w-8 text-primary" />}
                 title="Monitoraggio Real-time"
@@ -126,6 +113,20 @@ const Index = () => {
                 }
               />
             </div>
+            
+            {/* CTA Buttons moved here */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
+              <Button size="lg" asChild>
+                <Link to="/register">
+                  Inizia Gratuitamente
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link to="/demo">
+                  Richiedi una Demo
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
       </main>
@@ -157,4 +158,3 @@ const FeatureCard = ({
 };
 
 export default Index;
-
