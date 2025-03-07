@@ -5,16 +5,48 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Implementeremo la logica di registrazione con Supabase qui
-    console.log("Registration attempted with:", { email, password, name });
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Registrazione completata",
+        description: "Controlla la tua email per confermare l'account",
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Errore",
+        description: "Impossibile completare la registrazione",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,6 +69,7 @@ const Register = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  disabled={loading}
                 />
               </div>
               <div className="space-y-2">
@@ -48,6 +81,7 @@ const Register = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={loading}
                 />
               </div>
               <div className="space-y-2">
@@ -58,10 +92,11 @@ const Register = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={loading}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Registrati
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Registrazione in corso..." : "Registrati"}
               </Button>
             </form>
           </CardContent>
