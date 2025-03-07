@@ -162,15 +162,15 @@ export default {
         sentiment: 'Sentiment'
       },
       content: {
-        title: 'Generatore di Contenuti',
-        subtitle: 'Suggerimenti per contenuti virali',
+        title: 'Content Generator',
+        subtitle: 'Suggestions for viral content',
         input: {
-          label: 'Il tuo contenuto',
-          placeholder: 'Inserisci il tuo contenuto qui...'
+          label: 'Your content',
+          placeholder: 'Enter your content here...'
         },
         button: {
-          generate: 'Genera Varianti',
-          generating: 'Generazione in corso...'
+          generate: 'Generate Variants',
+          generating: 'Generating...'
         },
         variants: {
           title: 'Varianti Generate:',
