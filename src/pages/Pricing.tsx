@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ const Pricing = () => {
   const tiers = [
     {
       name: "Base",
-      price: "€49",
+      price: "€12",
       description: "Perfetto per creator individuali e piccoli business",
       features: [
         "Analisi di base dei trend",
@@ -56,7 +57,7 @@ const Pricing = () => {
     },
     {
       name: "Pro",
-      price: "€99",
+      price: "€26,99",
       description: "Ideale per professionisti e team in crescita",
       features: [
         "Tutte le funzionalità Base",
