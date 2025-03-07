@@ -23,9 +23,6 @@ export const Navigation = () => {
           <Link to="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">
             Prezzi
           </Link>
-          <Link to="/about" className="text-foreground/60 hover:text-foreground transition-colors">
-            Chi Siamo
-          </Link>
           <Link to="/admin" className="text-foreground/60 hover:text-foreground transition-colors">
             Admin
           </Link>
