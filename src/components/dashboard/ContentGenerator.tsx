@@ -4,23 +4,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const ContentGenerator = () => {
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
   const [variants, setVariants] = useState<string[]>([]);
+  const [userContent, setUserContent] = useState("");
 
   const generateVariants = async () => {
+    if (!userContent.trim()) {
+      toast({
+        title: "Errore",
+        description: "Inserisci un contenuto per generare le varianti",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsGenerating(true);
     try {
       // Simula il tempo di generazione
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Per ora generiamo delle varianti statiche 
+      // Per ora generiamo delle varianti basate sul contenuto dell'utente
       const newVariants = [
-        "Come l'AI sta trasformando il futuro del lavoro 🚀 #AIRevolution #FutureOfWork",
-        "5 modi in cui l'AI sta cambiando il mondo del lavoro 💡 #ArtificialIntelligence #Innovation",
-        "L'impatto dell'AI sul mondo professionale: trend e opportunità 📈 #AITechnology #WorkTrends"
+        `${userContent} 🚀 #Innovation #Tech`,
+        `${userContent} 💡 #Business #Growth`,
+        `${userContent} 📈 #Success #Development`
       ];
       
       setVariants(newVariants);
@@ -52,23 +64,27 @@ export const ContentGenerator = () => {
       <CardContent>
         <div className="space-y-4">
           <div className="p-4 border rounded-lg">
-            <div className="flex justify-between items-start mb-2">
-              <h4 className="font-medium">Idea Post #1</h4>
-              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Trending</span>
-            </div>
-            <p className="text-sm text-muted-foreground mb-3">
-              "Come l'AI sta rivoluzionando il modo in cui lavoriamo 🚀 #AITechnology #Innovation"
-            </p>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={generateVariants}
-                disabled={isGenerating}
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                {isGenerating ? "Generazione..." : "Genera Varianti"}
-              </Button>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="content">Il tuo contenuto</Label>
+                <Input
+                  id="content"
+                  placeholder="Inserisci il tuo contenuto qui..."
+                  value={userContent}
+                  onChange={(e) => setUserContent(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={generateVariants}
+                  disabled={isGenerating || !userContent.trim()}
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  {isGenerating ? "Generazione..." : "Genera Varianti"}
+                </Button>
+              </div>
             </div>
           </div>
 
