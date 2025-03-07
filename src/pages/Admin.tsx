@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import SubscribersList from "@/components/admin/SubscribersList";
 
 const ADMIN_PASSWORD = "admin123"; // In a real app, this should be stored securely
 
@@ -40,10 +41,10 @@ const Admin = () => {
           <div className="grid gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Statistiche</CardTitle>
+                <CardTitle>Lista Abbonati</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Pannello in costruzione...</p>
+                <SubscribersList />
               </CardContent>
             </Card>
           </div>
