@@ -2,9 +2,33 @@
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { TrendingUp, Hash, FileText, UserRound, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+const FeatureItem = ({ text, icon: Icon }: { text: string; icon: React.ElementType }) => (
+  <li className="flex items-start">
+    <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mr-2" />
+    <span className="flex items-center gap-2">
+      <Icon className="h-4 w-4 text-muted-foreground" />
+      {text}
+    </span>
+  </li>
+);
+
+const getFeatureIcon = (feature: string) => {
+  const iconMap: { [key: string]: React.ElementType } = {
+    'Analisi di base dei trend': TrendingUp,
+    'Basic trend analysis': TrendingUp,
+    'Monitoraggio hashtag': Hash,
+    'Hashtag monitoring': Hash,
+    'Report settimanali': FileText,
+    'Weekly reports': FileText,
+    '1 account social': UserRound,
+    '1 social account': UserRound,
+  };
+  return iconMap[feature] || CheckCircle2;
+};
 
 const PricingTier = ({
   name,
@@ -31,10 +55,7 @@ const PricingTier = ({
       <p className="mt-4 text-muted-foreground">{description}</p>
       <ul className="mt-6 space-y-4">
         {features.map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <Check className="h-5 w-5 text-primary shrink-0 mr-2" />
-            <span>{feature}</span>
-          </li>
+          <FeatureItem key={index} text={feature} icon={getFeatureIcon(feature)} />
         ))}
       </ul>
       <Button className="w-full mt-8" variant={highlighted ? "default" : "outline"} asChild>
@@ -84,20 +105,6 @@ const Pricing = () => {
             {tiers.map((tier) => (
               <PricingTier key={tier.name} {...tier} />
             ))}
-          </div>
-
-          <div className="mt-20 text-center">
-            <h2 className="text-2xl font-bold mb-4">
-              {t('pricing.questions.title')}
-            </h2>
-            <p className="text-muted-foreground mb-8">
-              {t('pricing.questions.description')}
-            </p>
-            <Button variant="outline" asChild>
-              <Link to="/demo">
-                {t('home.cta.demo')}
-              </Link>
-            </Button>
           </div>
         </div>
       </main>
