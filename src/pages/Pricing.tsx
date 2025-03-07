@@ -46,7 +46,7 @@ const Pricing = () => {
     {
       name: "Base",
       price: "€12",
-      description: "Perfetto per creator individuali e piccoli business",
+      description: "Inizia con 7 giorni di prova gratuita",
       features: [
         "Analisi di base dei trend",
         "Monitoraggio hashtag",
@@ -82,7 +82,7 @@ const Pricing = () => {
               Prezzi semplici e trasparenti
             </h1>
             <p className="text-xl text-muted-foreground">
-              Scegli il piano più adatto alle tue esigenze. Tutti i piani includono una prova gratuita di 14 giorni.
+              Prova il piano Base gratuitamente per 7 giorni. Nessuna carta di credito richiesta.
             </p>
           </div>
 
