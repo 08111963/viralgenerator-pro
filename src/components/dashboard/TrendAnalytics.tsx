@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,19 +6,25 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, 
 
 const platformData = {
   twitter: [
-    { topic: "AI Technology", sentiment: 0.8, growth: "+25%", volume: "125K", hashtags: ["#AI", "#Tech", "#Innovation"] },
-    { topic: "Climate Action", sentiment: 0.6, growth: "+15%", volume: "89K", hashtags: ["#ClimateChange", "#Sustainability"] },
-    { topic: "Digital Marketing", sentiment: 0.75, growth: "+20%", volume: "95K", hashtags: ["#Marketing", "#Digital"] }
+    { topic: "AI Technology", sentiment: 0.8, growth: "+25%", volume: "125K", hashtags: ["#AI", "#Tech", "#Innovation", "#MachineLearning", "#FutureOfWork"] },
+    { topic: "Climate Action", sentiment: 0.6, growth: "+15%", volume: "89K", hashtags: ["#ClimateChange", "#Sustainability", "#GreenTech", "#Renewable", "#Environment"] },
+    { topic: "Digital Marketing", sentiment: 0.75, growth: "+20%", volume: "95K", hashtags: ["#Marketing", "#Digital", "#SocialMedia", "#ContentStrategy", "#Growth"] },
+    { topic: "Remote Work", sentiment: 0.82, growth: "+18%", volume: "78K", hashtags: ["#RemoteWork", "#WFH", "#FutureOfWork", "#Productivity", "#WorkLife"] },
+    { topic: "Blockchain", sentiment: 0.7, growth: "+30%", volume: "110K", hashtags: ["#Blockchain", "#Crypto", "#Web3", "#DeFi", "#NFT"] }
   ],
   instagram: [
-    { topic: "Sustainable Fashion", sentiment: 0.9, growth: "+40%", volume: "200K", hashtags: ["#SustainableFashion", "#EcoFashion"] },
-    { topic: "Mental Health", sentiment: 0.7, growth: "+30%", volume: "150K", hashtags: ["#MentalHealth", "#Wellness"] },
-    { topic: "Food & Cooking", sentiment: 0.85, growth: "+35%", volume: "180K", hashtags: ["#FoodLover", "#Cooking"] }
+    { topic: "Sustainable Fashion", sentiment: 0.9, growth: "+40%", volume: "200K", hashtags: ["#SustainableFashion", "#EcoFashion", "#SlowFashion", "#Sustainable", "#EthicalFashion"] },
+    { topic: "Mental Health", sentiment: 0.7, growth: "+30%", volume: "150K", hashtags: ["#MentalHealth", "#Wellness", "#SelfCare", "#MindfulLiving", "#HealthyMind"] },
+    { topic: "Food & Cooking", sentiment: 0.85, growth: "+35%", volume: "180K", hashtags: ["#FoodLover", "#Cooking", "#Foodie", "#HomeCooking", "#Recipe"] },
+    { topic: "Fitness & Wellness", sentiment: 0.88, growth: "+28%", volume: "165K", hashtags: ["#Fitness", "#Wellness", "#HealthyLifestyle", "#Workout", "#FitLife"] },
+    { topic: "Travel", sentiment: 0.92, growth: "+45%", volume: "220K", hashtags: ["#Travel", "#Wanderlust", "#Explore", "#Adventure", "#TravelPhotography"] }
   ],
   tiktok: [
-    { topic: "Dance Challenge", sentiment: 0.95, growth: "+60%", volume: "500K", hashtags: ["#DanceChallenge", "#Viral"] },
-    { topic: "Educational Content", sentiment: 0.85, growth: "+45%", volume: "300K", hashtags: ["#LearnOnTikTok", "#Education"] },
-    { topic: "Life Hacks", sentiment: 0.9, growth: "+50%", volume: "400K", hashtags: ["#LifeHack", "#Tricks"] }
+    { topic: "Dance Challenge", sentiment: 0.95, growth: "+60%", volume: "500K", hashtags: ["#DanceChallenge", "#Viral", "#Dance", "#TikTokDance", "#Trending"] },
+    { topic: "Educational Content", sentiment: 0.85, growth: "+45%", volume: "300K", hashtags: ["#LearnOnTikTok", "#Education", "#DidYouKnow", "#Facts", "#Learning"] },
+    { topic: "Life Hacks", sentiment: 0.9, growth: "+50%", volume: "400K", hashtags: ["#LifeHack", "#Tricks", "#HowTo", "#DIY", "#Hack"] },
+    { topic: "Beauty Tips", sentiment: 0.87, growth: "+42%", volume: "350K", hashtags: ["#Beauty", "#Makeup", "#Skincare", "#BeautyHacks", "#GlamLook"] },
+    { topic: "Comedy Skits", sentiment: 0.93, growth: "+55%", volume: "450K", hashtags: ["#Comedy", "#Funny", "#Humor", "#Sketch", "#Entertainment"] }
   ],
 };
 
