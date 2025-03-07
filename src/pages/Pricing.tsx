@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -132,15 +131,15 @@ const Pricing = () => {
       name: t('pricing.tiers.base.name'),
       price: "€12",
       description: t('pricing.tiers.base.description'),
-      features: t('pricing.features.base', { returnObjects: true }) as string[],
-      priceId: "price_H5UGwp7kdHw2Xr"  // Inserisci qui il tuo Price ID di Stripe
+      features: t('pricing.features.base', { returnObjects: true }),
+      priceId: "price_1OvKv8KCRGitJMKFPlxnOxiR"  // Sostituito con il vero Price ID del piano Base
     },
     {
       name: t('pricing.tiers.pro.name'),
       price: "€26,99",
       description: t('pricing.tiers.pro.description'),
-      features: t('pricing.features.pro', { returnObjects: true }) as string[],
-      priceId: "price_H5UGwp7kdHw2Xs",  // Inserisci qui il tuo Price ID di Stripe
+      features: t('pricing.features.pro', { returnObjects: true }),
+      priceId: "price_1OvKv8KCRGitJMKF7YtP8V9x",  // Sostituito con il vero Price ID del piano Pro
       highlighted: true
     }
   ];
@@ -169,7 +168,7 @@ const Pricing = () => {
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold text-center mb-8">{t('pricing.faq.title')}</h2>
             <Accordion type="single" collapsible className="w-full">
-              {t('pricing.faq.questions', { returnObjects: true }).map((faq: { q: string; a: string }, index: number) => (
+              {(t('pricing.faq.questions', { returnObjects: true }) as Array<{ q: string; a: string }>).map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="text-left">{faq.q}</AccordionTrigger>
                   <AccordionContent>{faq.a}</AccordionContent>
