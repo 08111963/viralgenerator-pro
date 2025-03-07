@@ -1,4 +1,3 @@
-
 export default {
   translation: {
     navigation: {
@@ -156,8 +155,8 @@ export default {
         }
       },
       predictions: {
-        title: 'Previsioni AI',
-        subtitle: 'Trend previsti nelle prossime 72 ore',
+        title: 'AI Predictions',
+        subtitle: 'Predicted trends in the next 72 hours',
         growth: 'Trend in crescita',
         volume: 'Volume',
         sentiment: 'Sentiment'
