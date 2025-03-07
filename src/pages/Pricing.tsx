@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -68,19 +67,6 @@ const Pricing = () => {
         "API access"
       ],
       highlighted: true
-    },
-    {
-      name: "Enterprise",
-      price: "Personalizzato",
-      description: "Soluzioni su misura per grandi organizzazioni",
-      features: [
-        "Tutte le funzionalità Pro",
-        "Account social illimitati",
-        "Formazione dedicata",
-        "Account manager dedicato",
-        "SLA garantito",
-        "Hosting dedicato"
-      ]
     }
   ];
 
@@ -99,7 +85,7 @@ const Pricing = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {tiers.map((tier) => (
               <PricingTier key={tier.name} {...tier} />
             ))}
