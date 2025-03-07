@@ -134,10 +134,10 @@ export default {
         lastDay: 'Ultime 24 ore'
       },
       addTrend: {
-        hashtag: 'Aggiungi Hashtag',
-        keyword: 'Aggiungi Parola Chiave',
-        newHashtag: 'Nuovo Hashtag',
-        newKeyword: 'Nuova Parola Chiave',
+        hashtag: 'Add Hashtag',
+        keyword: 'Add Keyword',
+        newHashtag: 'New Hashtag',
+        newKeyword: 'New Keyword',
         hashtagPlaceholder: 'Inserisci un hashtag...',
         keywordPlaceholder: 'Inserisci una parola chiave...',
         hashtagAdded: 'Hashtag Aggiunto',
