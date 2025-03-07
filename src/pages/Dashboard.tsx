@@ -1,12 +1,15 @@
 import { Navigation } from "@/components/Navigation";
 import { TrendingCard } from "@/components/dashboard/TrendingCard";
 import { TrendAnalytics } from "@/components/dashboard/TrendAnalytics";
-import { Bell } from "lucide-react";
+import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
+import { ContentGenerator } from "@/components/dashboard/ContentGenerator";
+import { Bell, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { AddTrendForm } from "@/components/dashboard/AddTrendForm";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const mockTrendingHashtags = [
   { id: "1", name: "#AI", volume: 25000, change: 12 },
@@ -22,6 +25,14 @@ const mockTrendingKeywords = [
   { id: "3", name: "Big Data", volume: 18000, change: -3 },
   { id: "4", name: "Cloud Computing", volume: 15000, change: 4 },
   { id: "5", name: "Digital Marketing", volume: 12000, change: 10 },
+];
+
+const mockTrendingTopics = [
+  { id: "1", name: "Sostenibilità", volume: 45000, change: 20 },
+  { id: "2", name: "Smart Working", volume: 30000, change: 8 },
+  { id: "3", name: "Cybersecurity", volume: 25000, change: 12 },
+  { id: "4", name: "5G", volume: 20000, change: -5 },
+  { id: "5", name: "E-commerce", volume: 18000, change: 9 },
 ];
 
 const Dashboard = () => {
@@ -53,6 +64,21 @@ const Dashboard = () => {
     });
   };
 
+  const PremiumFeatureOverlay = ({ children }) => (
+    <div className="relative">
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-10">
+        <div className="text-center p-4">
+          <Lock className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground mb-2">{t('dashboard.premium.locked')}</p>
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/pricing">{t('dashboard.premium.upgrade')}</Link>
+          </Button>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -65,7 +91,7 @@ const Dashboard = () => {
           </Button>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 mb-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
           <TrendingCard
             title={t('dashboard.trends.hashtags')}
             items={trendingHashtags}
@@ -76,15 +102,28 @@ const Dashboard = () => {
             items={trendingKeywords}
             icon="keyword"
           />
+          <PremiumFeatureOverlay>
+            <TrendingCard
+              title={t('dashboard.trends.topics')}
+              items={mockTrendingTopics}
+              icon="topic"
+            />
+          </PremiumFeatureOverlay>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 mb-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
           <AddTrendForm type="hashtag" onAdd={handleAddHashtag} />
           <AddTrendForm type="keyword" onAdd={handleAddKeyword} />
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <TrendAnalytics />
+          <PremiumFeatureOverlay>
+            <PredictiveTrends />
+          </PremiumFeatureOverlay>
+          <PremiumFeatureOverlay>
+            <ContentGenerator />
+          </PremiumFeatureOverlay>
         </div>
       </div>
     </div>

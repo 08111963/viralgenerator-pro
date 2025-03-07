@@ -110,6 +110,10 @@ export default {
         keywordAdded: 'Parola Chiave Aggiunta',
         keywordAddedDesc: 'La parola chiave {name} è stata aggiunta con successo'
       },
+      premium: {
+        locked: "Funzionalità disponibile solo nel piano Pro",
+        upgrade: "Passa a Pro"
+      },
       analytics: {
         title: 'Trend Analysis',
         subtitle: 'Real-time monitoring of social media trends',

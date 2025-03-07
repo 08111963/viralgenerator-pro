@@ -50,6 +50,44 @@ export default {
         hashtag: 'Add Hashtag',
         keyword: 'Add Keyword',
       },
+      premium: {
+        locked: "Feature available in Pro plan only",
+        upgrade: "Upgrade to Pro"
+      },
+      analytics: {
+        title: 'Trend Analysis',
+        subtitle: 'Real-time monitoring of social media trends',
+        lastUpdate: 'Last update',
+        metrics: {
+          engagement: 'Engagement Over Time',
+          volume: 'Volume by Topic'
+        }
+      },
+      predictions: {
+        title: 'AI Predictions',
+        subtitle: 'Predicted trends in the next 72 hours',
+        growth: 'Growing trend',
+        volume: 'Volume',
+        sentiment: 'Sentiment'
+      },
+      content: {
+        title: 'Content Generator',
+        subtitle: 'Suggestions for viral content',
+        input: {
+          label: 'Your content',
+          placeholder: 'Enter your content here...'
+        },
+        button: {
+          generate: 'Generate Variants',
+          generating: 'Generating...'
+        },
+        variants: {
+          title: 'Generated Variants:',
+          error: 'Please enter content to generate variants',
+          success: 'New content variants have been created',
+          added: 'Variants Generated'
+        }
+      }
     },
     pricing: {
       title: 'Simple and transparent pricing',
