@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslation } from "react-i18next";
 
 const followerData = [
   { time: '12h', followers: 1200 },
@@ -34,6 +34,7 @@ const hashtagData = [
 
 export const PredictiveTrends = () => {
   const [activeMetric, setActiveMetric] = useState("followers");
+  const { t } = useTranslation();
 
   const getMetricDetails = (metric: string) => {
     switch (metric) {
@@ -73,9 +74,9 @@ export const PredictiveTrends = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Zap className="h-5 w-5" />
-          Previsioni AI
+          {t('dashboard.predictions.title')}
         </CardTitle>
-        <CardDescription>Trend previsti nelle prossime 72 ore</CardDescription>
+        <CardDescription>{t('dashboard.predictions.subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
@@ -117,4 +118,3 @@ export const PredictiveTrends = () => {
     </Card>
   );
 };
-

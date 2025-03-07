@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTranslation } from "react-i18next";
 
 export const ContentGenerator = () => {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [isGenerating, setIsGenerating] = useState(false);
   const [variants, setVariants] = useState<string[]>([]);
   const [userContent, setUserContent] = useState("");
@@ -16,8 +18,8 @@ export const ContentGenerator = () => {
   const generateVariants = async () => {
     if (!userContent.trim()) {
       toast({
-        title: "Errore",
-        description: "Inserisci un contenuto per generare le varianti",
+        title: t('dashboard.content.variants.error'),
+        description: t('dashboard.content.variants.error'),
         variant: "destructive",
       });
       return;
@@ -41,13 +43,13 @@ export const ContentGenerator = () => {
       setVariants(newVariants);
       
       toast({
-        title: "Varianti Generate",
-        description: "Nuove varianti di contenuto sono state create",
+        title: t('dashboard.content.variants.added'),
+        description: t('dashboard.content.variants.success'),
       });
     } catch (error) {
       toast({
-        title: "Errore",
-        description: "Impossibile generare le varianti",
+        title: t('Error'),
+        description: t('dashboard.content.variants.error'),
         variant: "destructive",
       });
     } finally {
@@ -60,19 +62,19 @@ export const ContentGenerator = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5" />
-          Generatore Contenuti
+          {t('dashboard.content.title')}
         </CardTitle>
-        <CardDescription>Suggerimenti per contenuti virali</CardDescription>
+        <CardDescription>{t('dashboard.content.subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="p-4 border rounded-lg">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="content">Il tuo contenuto</Label>
+                <Label htmlFor="content">{t('dashboard.content.input.label')}</Label>
                 <Input
                   id="content"
-                  placeholder="Inserisci il tuo contenuto qui..."
+                  placeholder={t('dashboard.content.input.placeholder')}
                   value={userContent}
                   onChange={(e) => setUserContent(e.target.value)}
                 />
@@ -85,7 +87,7 @@ export const ContentGenerator = () => {
                   disabled={isGenerating || !userContent.trim()}
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
-                  {isGenerating ? "Generazione..." : "Genera Varianti"}
+                  {isGenerating ? t('dashboard.content.button.generating') : t('dashboard.content.button.generate')}
                 </Button>
               </div>
             </div>
@@ -93,7 +95,7 @@ export const ContentGenerator = () => {
 
           {variants.length > 0 && (
             <div className="space-y-3">
-              <h5 className="font-medium text-sm">Varianti Generate:</h5>
+              <h5 className="font-medium text-sm">{t('dashboard.content.variants.title')}</h5>
               {variants.map((variant, index) => (
                 <div key={index} className="p-3 border rounded-lg bg-muted/50">
                   <p className="text-sm">{variant}</p>

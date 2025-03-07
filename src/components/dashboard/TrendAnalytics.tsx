@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, Instagram, Twitter, Video, ArrowUp, ArrowDown } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const platformData = {
   twitter: [
@@ -55,6 +56,7 @@ const engagementData = {
 
 export const TrendAnalytics = () => {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   
   useEffect(() => {
@@ -77,12 +79,12 @@ export const TrendAnalytics = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5" />
-          Analisi dei Trend
+          {t('dashboard.analytics.title')}
         </CardTitle>
         <CardDescription>
-          Monitoraggio in tempo reale dei trend sui social media
+          {t('dashboard.analytics.subtitle')}
           <div className="text-xs text-muted-foreground mt-1">
-            Ultimo aggiornamento: {lastUpdate.toLocaleTimeString()}
+            {t('dashboard.analytics.lastUpdate')}: {lastUpdate.toLocaleTimeString()}
           </div>
         </CardDescription>
       </CardHeader>
@@ -107,7 +109,7 @@ export const TrendAnalytics = () => {
             <TabsContent key={platform} value={platform}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="h-[200px]">
-                  <p className="text-sm font-medium mb-2">Engagement nel Tempo</p>
+                  <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.engagement')}</p>
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={engagementData[platform]}>
                       <XAxis dataKey="name" />
@@ -118,7 +120,7 @@ export const TrendAnalytics = () => {
                   </ResponsiveContainer>
                 </div>
                 <div className="h-[200px]">
-                  <p className="text-sm font-medium mb-2">Volume per Argomento</p>
+                  <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.volume')}</p>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data}>
                       <XAxis dataKey="topic" />

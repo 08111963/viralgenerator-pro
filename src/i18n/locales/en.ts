@@ -132,6 +132,40 @@ export default {
     auth: {
       welcome: "Welcome back",
       checkEmail: "Check your email to confirm your account"
+    },
+    analytics: {
+      title: 'Trend Analysis',
+      subtitle: 'Real-time monitoring of social media trends',
+      lastUpdate: 'Last update',
+      metrics: {
+        engagement: 'Engagement Over Time',
+        volume: 'Volume by Topic'
+      }
+    },
+    predictions: {
+      title: 'AI Predictions',
+      subtitle: 'Predicted trends in the next 72 hours',
+      growth: 'Growing trend',
+      volume: 'Volume',
+      sentiment: 'Sentiment'
+    },
+    content: {
+      title: 'Content Generator',
+      subtitle: 'Suggestions for viral content',
+      input: {
+        label: 'Your content',
+        placeholder: 'Enter your content here...'
+      },
+      button: {
+        generate: 'Generate Variants',
+        generating: 'Generating...'
+      },
+      variants: {
+        title: 'Generated Variants:',
+        error: 'Please enter content to generate variants',
+        success: 'New content variants have been created',
+        added: 'Variants Generated'
+      }
     }
   }
-};
+}

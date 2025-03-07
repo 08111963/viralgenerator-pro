@@ -132,6 +132,42 @@ export default {
     auth: {
       welcome: "Bentornato",
       checkEmail: "Controlla la tua email per confermare l'account"
+    },
+    dashboard: {
+      analytics: {
+        title: 'Analisi dei Trend',
+        subtitle: 'Monitoraggio in tempo reale dei trend sui social media',
+        lastUpdate: 'Ultimo aggiornamento',
+        metrics: {
+          engagement: 'Engagement nel Tempo',
+          volume: 'Volume per Argomento'
+        }
+      },
+      predictions: {
+        title: 'Previsioni AI',
+        subtitle: 'Trend previsti nelle prossime 72 ore',
+        growth: 'Trend in crescita',
+        volume: 'Volume',
+        sentiment: 'Sentiment'
+      },
+      content: {
+        title: 'Generatore Contenuti',
+        subtitle: 'Suggerimenti per contenuti virali',
+        input: {
+          label: 'Il tuo contenuto',
+          placeholder: 'Inserisci il tuo contenuto qui...'
+        },
+        button: {
+          generate: 'Genera Varianti',
+          generating: 'Generazione...'
+        },
+        variants: {
+          title: 'Varianti Generate:',
+          error: 'Inserisci un contenuto per generare le varianti',
+          success: 'Nuove varianti di contenuto sono state create',
+          added: 'Varianti Generate'
+        }
+      }
     }
   }
 };
