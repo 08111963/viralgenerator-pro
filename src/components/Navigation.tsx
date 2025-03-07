@@ -14,11 +14,11 @@ export const Navigation = () => {
         </Link>
         
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/dashboard" className="text-foreground/60 hover:text-foreground transition-colors">
-            Dashboard
-          </Link>
           <Link to="/features" className="text-foreground/60 hover:text-foreground transition-colors">
             Funzionalità
+          </Link>
+          <Link to="/dashboard" className="text-foreground/60 hover:text-foreground transition-colors">
+            Dashboard
           </Link>
           <Link to="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">
             Prezzi
