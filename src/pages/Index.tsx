@@ -41,8 +41,8 @@ const Index = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="py-20 md:py-28 container">
+        {/* Hero Section - reduced padding */}
+        <section className="py-12 md:py-16 container">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Domina i Trend Social con l'Intelligenza Artificiale
@@ -53,8 +53,8 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section className="py-20 bg-accent/10">
+        {/* Features Section - reduced top padding */}
+        <section className="py-12 bg-accent/10">
           <div className="container">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
               Funzionalità Principali
