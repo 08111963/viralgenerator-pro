@@ -112,8 +112,12 @@ const Dashboard = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
-          <AddTrendForm type="hashtag" onAdd={handleAddHashtag} />
-          <AddTrendForm type="keyword" onAdd={handleAddKeyword} />
+          <PremiumFeatureOverlay>
+            <AddTrendForm type="hashtag" onAdd={handleAddHashtag} />
+          </PremiumFeatureOverlay>
+          <PremiumFeatureOverlay>
+            <AddTrendForm type="keyword" onAdd={handleAddKeyword} />
+          </PremiumFeatureOverlay>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
