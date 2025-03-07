@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,15 +30,15 @@ const Login = () => {
       if (error) throw error;
       
       toast({
-        title: "Accesso effettuato",
-        description: "Benvenuto nel tuo account",
+        title: t('login.success'),
+        description: t('auth.welcome'),
       });
       navigate("/");
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Errore",
-        description: "Credenziali non valide",
+        title: t('login.error'),
+        description: t('login.error'),
       });
     } finally {
       setLoading(false);
@@ -49,17 +51,17 @@ const Login = () => {
       <div className="flex-1 container flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Accedi</CardTitle>
-            <CardDescription>Inserisci le tue credenziali per accedere</CardDescription>
+            <CardTitle>{t('login.title')}</CardTitle>
+            <CardDescription>{t('login.description')}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('login.emailLabel')}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="nome@esempio.com"
+                  placeholder={t('login.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -67,7 +69,7 @@ const Login = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t('login.passwordLabel')}</Label>
                 <Input
                   id="password"
                   type="password"
@@ -78,7 +80,7 @@ const Login = () => {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Accesso in corso..." : "Accedi"}
+                {loading ? t('login.loading') : t('login.submitButton')}
               </Button>
             </form>
           </CardContent>

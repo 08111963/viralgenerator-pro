@@ -104,6 +104,34 @@ export default {
         title: 'Artificial Intelligence',
         description: 'Use AI to predict trends and optimize content'
       }
+    },
+    login: {
+      title: "Login",
+      description: "Enter your credentials to access",
+      emailLabel: "Email",
+      emailPlaceholder: "name@example.com",
+      passwordLabel: "Password",
+      submitButton: "Login",
+      loading: "Logging in...",
+      success: "Welcome back",
+      error: "Invalid credentials"
+    },
+    register: {
+      title: "Register",
+      description: "Create your TrendAI account",
+      nameLabel: "Name",
+      namePlaceholder: "Your name",
+      emailLabel: "Email",
+      emailPlaceholder: "name@example.com",
+      passwordLabel: "Password",
+      submitButton: "Register",
+      loading: "Registering...",
+      success: "Registration completed",
+      error: "Unable to complete registration"
+    },
+    auth: {
+      welcome: "Welcome back",
+      checkEmail: "Check your email to confirm your account"
     }
   }
 };

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,15 +36,15 @@ const Register = () => {
       if (error) throw error;
 
       toast({
-        title: "Registrazione completata",
-        description: "Controlla la tua email per confermare l'account",
+        title: t('register.success'),
+        description: t('auth.checkEmail'),
       });
       navigate("/login");
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Errore",
-        description: "Impossibile completare la registrazione",
+        title: t('register.error'),
+        description: t('register.error'),
       });
     } finally {
       setLoading(false);
@@ -55,17 +57,17 @@ const Register = () => {
       <div className="flex-1 container flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Registrati</CardTitle>
-            <CardDescription>Crea il tuo account su TrendAI</CardDescription>
+            <CardTitle>{t('register.title')}</CardTitle>
+            <CardDescription>{t('register.description')}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleRegister} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nome</Label>
+                <Label htmlFor="name">{t('register.nameLabel')}</Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Il tuo nome"
+                  placeholder={t('register.namePlaceholder')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -73,11 +75,11 @@ const Register = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('register.emailLabel')}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="nome@esempio.com"
+                  placeholder={t('register.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -85,7 +87,7 @@ const Register = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t('register.passwordLabel')}</Label>
                 <Input
                   id="password"
                   type="password"
@@ -96,7 +98,7 @@ const Register = () => {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Registrazione in corso..." : "Registrati"}
+                {loading ? t('register.loading') : t('register.submitButton')}
               </Button>
             </form>
           </CardContent>
