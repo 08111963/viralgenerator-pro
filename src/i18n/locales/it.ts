@@ -37,41 +37,6 @@ export default {
         demo: 'Richiedi una Demo',
       },
     },
-    pricing: {
-      title: 'Prezzi semplici e trasparenti',
-      subtitle: 'Prova il piano Base gratuitamente per 7 giorni. Nessuna carta di credito richiesta.',
-      tiers: {
-        base: {
-          name: 'Base',
-          description: 'Inizia con 7 giorni di prova gratuita',
-        },
-        pro: {
-          name: 'Pro',
-          description: 'Ideale per professionisti e team in crescita',
-        },
-      },
-      features: {
-        base: [
-          'Analisi di base dei trend',
-          'Monitoraggio hashtag',
-          'Report settimanali',
-          '1 account social',
-          'Supporto email',
-        ],
-        pro: [
-          'Tutte le funzionalità Base',
-          'Analisi predittiva avanzata',
-          'Generazione contenuti AI',
-          '5 account social',
-          'Supporto prioritario',
-          'API access',
-        ],
-      },
-      cta: {
-        free: 'Prova Gratuita',
-        start: 'Inizia Ora',
-      },
-    },
     features: {
       title: 'Funzionalità',
       realtime: {
@@ -173,12 +138,47 @@ export default {
           generating: 'Generating...'
         },
         variants: {
-          title: 'Varianti Generate:',
-          error: 'Inserisci un contenuto per generare le varianti',
-          success: 'Nuove varianti di contenuto sono state create',
-          added: 'Varianti Generate'
+          title: 'Generated Variants:',
+          error: 'Please enter content to generate variants',
+          success: 'New content variants have been created',
+          added: 'Variants Generated'
         }
       }
-    }
+    },
+    pricing: {
+      title: 'Prezzi semplici e trasparenti',
+      subtitle: 'Prova il piano Base gratuitamente per 7 giorni. Nessuna carta di credito richiesta.',
+      tiers: {
+        base: {
+          name: 'Base',
+          description: 'Inizia con 7 giorni di prova gratuita',
+        },
+        pro: {
+          name: 'Pro',
+          description: 'Ideale per professionisti e team in crescita',
+        },
+      },
+      features: {
+        base: [
+          'Analisi di base dei trend',
+          'Monitoraggio hashtag',
+          'Report settimanali',
+          '1 account social',
+          'Supporto email',
+        ],
+        pro: [
+          'Tutte le funzionalità Base',
+          'Analisi predittiva avanzata',
+          'Generazione contenuti AI',
+          '5 account social',
+          'Supporto prioritario',
+          'API access',
+        ],
+      },
+      cta: {
+        free: 'Prova Gratuita',
+        start: 'Inizia Ora',
+      },
+    },
   }
 };
