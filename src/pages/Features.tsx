@@ -1,28 +1,31 @@
 
 import { Navigation } from "@/components/Navigation";
+import { useTranslation } from "react-i18next";
 
 const Features = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
       <div className="container py-12">
-        <h1 className="text-4xl font-bold mb-8">Funzionalità</h1>
+        <h1 className="text-4xl font-bold mb-8">{t('features.title')}</h1>
         <div className="grid md:grid-cols-2 gap-8">
           <FeatureCard
-            title="Analisi in Tempo Reale"
-            description="Monitora i trend social media in tempo reale con aggiornamenti istantanei"
+            title={t('features.realtime.title')}
+            description={t('features.realtime.description')}
           />
           <FeatureCard
-            title="Dashboard Personalizzabile"
-            description="Crea dashboard personalizzate per monitorare le metriche più importanti per te"
+            title={t('features.customDashboard.title')}
+            description={t('features.customDashboard.description')}
           />
           <FeatureCard
-            title="Report Automatizzati"
-            description="Genera report dettagliati automaticamente con i dati più rilevanti"
+            title={t('features.reports.title')}
+            description={t('features.reports.description')}
           />
           <FeatureCard
-            title="Intelligenza Artificiale"
-            description="Utilizza l'AI per prevedere trend e ottimizzare i contenuti"
+            title={t('features.ai.title')}
+            description={t('features.ai.description')}
           />
         </div>
       </div>

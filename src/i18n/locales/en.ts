@@ -1,4 +1,3 @@
-
 export default {
   translation: {
     navigation: {
@@ -87,5 +86,24 @@ export default {
         start: 'Get Started',
       },
     },
-  },
+    features: {
+      title: 'Features',
+      realtime: {
+        title: 'Real-time Analysis',
+        description: 'Monitor social media trends in real-time with instant updates'
+      },
+      customDashboard: {
+        title: 'Customizable Dashboard',
+        description: 'Create custom dashboards to monitor your most important metrics'
+      },
+      reports: {
+        title: 'Automated Reports',
+        description: 'Generate detailed reports automatically with the most relevant data'
+      },
+      ai: {
+        title: 'Artificial Intelligence',
+        description: 'Use AI to predict trends and optimize content'
+      }
+    }
+  }
 };
