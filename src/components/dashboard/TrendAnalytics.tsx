@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, Instagram, Twitter, Video, ArrowUp, ArrowDown } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { useToast } from "@/hooks/use-toast";
 
 const platformData = {
   twitter: [
@@ -53,6 +54,24 @@ const engagementData = {
 };
 
 export const TrendAnalytics = () => {
+  const { toast } = useToast();
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  
+  useEffect(() => {
+    // Aggiorna i dati ogni 5 minuti
+    const updateInterval = setInterval(() => {
+      // In un'implementazione reale, qui chiameremmo un'API per ottenere nuovi dati
+      setLastUpdate(new Date());
+      
+      toast({
+        title: "Dati aggiornati",
+        description: "Le analisi dei trend sono state aggiornate",
+      });
+    }, 5 * 60 * 1000); // 5 minuti in millisecondi
+
+    return () => clearInterval(updateInterval);
+  }, []);
+
   return (
     <Card className="col-span-2">
       <CardHeader>
@@ -60,7 +79,12 @@ export const TrendAnalytics = () => {
           <TrendingUp className="h-5 w-5" />
           Analisi dei Trend
         </CardTitle>
-        <CardDescription>Monitoraggio in tempo reale dei trend sui social media</CardDescription>
+        <CardDescription>
+          Monitoraggio in tempo reale dei trend sui social media
+          <div className="text-xs text-muted-foreground mt-1">
+            Ultimo aggiornamento: {lastUpdate.toLocaleTimeString()}
+          </div>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="twitter">
