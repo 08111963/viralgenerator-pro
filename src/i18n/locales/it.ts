@@ -1,3 +1,4 @@
+
 export default {
   translation: {
     navigation: {
@@ -146,8 +147,8 @@ export default {
         keywordAddedDesc: 'La parola chiave {name} è stata aggiunta con successo'
       },
       analytics: {
-        title: 'Analisi dei Trend',
-        subtitle: 'Monitoraggio in tempo reale dei trend sui social media',
+        title: 'Analisi delle Tendenze',
+        subtitle: 'Monitoraggio in tempo reale delle tendenze sui social media',
         lastUpdate: 'Ultimo aggiornamento',
         metrics: {
           engagement: 'Engagement nel Tempo',
