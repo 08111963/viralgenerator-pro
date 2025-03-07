@@ -25,14 +25,17 @@ export const ContentGenerator = () => {
 
     setIsGenerating(true);
     try {
-      // Simula il tempo di generazione
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Per ora generiamo delle varianti basate sul contenuto dell'utente
       const newVariants = [
-        `${userContent} 🚀 #Innovation #Tech`,
-        `${userContent} 💡 #Business #Growth`,
-        `${userContent} 📈 #Success #Development`
+        `${userContent} 🚀 #Innovation #Tech #Future`,
+        `${userContent} 💡 #Business #Growth #Success`,
+        `${userContent} 📈 #Development #Progress #Goals`,
+        `${userContent} 🌟 #Inspiration #Motivation #Achievement`,
+        `${userContent} 💪 #Leadership #Excellence #Vision`,
+        `${userContent} 🎯 #Strategy #Planning #Results`,
+        `${userContent} 🔥 #Passion #Drive #Ambition`,
+        `${userContent} 🌍 #Global #Impact #Change`,
       ];
       
       setVariants(newVariants);
