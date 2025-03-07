@@ -15,9 +15,11 @@ export const LanguageSwitcher = () => {
       variant="outline" 
       size="sm" 
       onClick={toggleLanguage}
-      className="w-16"
+      className="w-24 gap-1"
     >
-      {i18n.language.toUpperCase()}
+      <span className={i18n.language === 'it' ? 'font-bold' : 'text-muted-foreground'}>IT</span>
+      <span className="text-muted-foreground">/</span>
+      <span className={i18n.language === 'en' ? 'font-bold' : 'text-muted-foreground'}>EN</span>
     </Button>
   );
 };
