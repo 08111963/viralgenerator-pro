@@ -87,7 +87,7 @@ export default {
         description: 'Genera report dettagliati automaticamente con i dati più rilevanti'
       },
       ai: {
-        title: 'Intelligenza Artificiale',
+        title: 'Artificial Intelligence',
         description: 'Utilizza l\'AI per prevedere trend e ottimizzare i contenuti'
       }
     },
