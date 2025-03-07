@@ -151,7 +151,7 @@ export default {
         lastUpdate: 'Last update',
         metrics: {
           engagement: 'Engagement nel Tempo',
-          volume: 'Volume per Argomento'
+          volume: 'Volume by Topic'
         }
       },
       predictions: {
