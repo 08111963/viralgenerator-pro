@@ -1,9 +1,12 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Hash, FileText, UserRound, CheckCircle2, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabase";
 import {
   Accordion,
   AccordionContent,
@@ -40,16 +43,56 @@ const PricingTier = ({
   price,
   description,
   features,
+  priceId,
   highlighted = false,
 }: {
   name: string;
   price: string;
   description: string;
   features: string[];
+  priceId?: string;
   highlighted?: boolean;
 }) => {
   const { t } = useTranslation();
+  const { toast } = useToast();
   
+  const handleCheckout = async () => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        toast({
+          title: "Accesso richiesto",
+          description: "Per favore accedi prima di procedere con l'acquisto",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const response = await fetch('/functions/v1/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ priceId }),
+      });
+
+      const { url, error } = await response.json();
+      
+      if (error) throw new Error(error);
+      if (url) window.location.href = url;
+    } catch (error) {
+      toast({
+        title: "Errore",
+        description: "Si è verificato un errore durante il checkout",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className={`p-6 rounded-lg ${highlighted ? 'border-2 border-primary ring-2 ring-primary/10' : 'border'} bg-background`}>
       <h3 className="text-2xl font-bold">{name}</h3>
@@ -63,10 +106,19 @@ const PricingTier = ({
           <FeatureItem key={index} text={feature} icon={getFeatureIcon(feature)} />
         ))}
       </ul>
-      <Button className="w-full mt-8" variant={highlighted ? "default" : "outline"} asChild>
-        <Link to="/register">
-          {highlighted ? t('pricing.cta.start') : t('pricing.cta.free')}
-        </Link>
+      <Button 
+        className="w-full mt-8" 
+        variant={highlighted ? "default" : "outline"}
+        onClick={priceId ? handleCheckout : undefined}
+        asChild={!priceId}
+      >
+        {priceId ? (
+          <span>{highlighted ? t('pricing.cta.start') : t('pricing.cta.free')}</span>
+        ) : (
+          <Link to="/register">
+            {highlighted ? t('pricing.cta.start') : t('pricing.cta.free')}
+          </Link>
+        )}
       </Button>
     </div>
   );
@@ -80,13 +132,15 @@ const Pricing = () => {
       name: t('pricing.tiers.base.name'),
       price: "€12",
       description: t('pricing.tiers.base.description'),
-      features: t('pricing.features.base', { returnObjects: true }) as string[]
+      features: t('pricing.features.base', { returnObjects: true }) as string[],
+      priceId: "price_H5UGwp7kdHw2Xr"  // Inserisci qui il tuo Price ID di Stripe
     },
     {
       name: t('pricing.tiers.pro.name'),
       price: "€26,99",
       description: t('pricing.tiers.pro.description'),
       features: t('pricing.features.pro', { returnObjects: true }) as string[],
+      priceId: "price_H5UGwp7kdHw2Xs",  // Inserisci qui il tuo Price ID di Stripe
       highlighted: true
     }
   ];
