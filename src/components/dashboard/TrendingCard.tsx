@@ -1,7 +1,7 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { useTranslation } from "react-i18next";
 
 interface TrendingItem {
   id: string;
@@ -26,6 +26,8 @@ const generateHistoricalData = (items: TrendingItem[]) => {
 };
 
 export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
+  const { t } = useTranslation();
+  
   const getIcon = () => {
     switch (icon) {
       case "hashtag":
@@ -48,7 +50,7 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
           {getIcon()}
           {title}
         </CardTitle>
-        <CardDescription>Trend delle ultime 24 ore</CardDescription>
+        <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -81,7 +83,7 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
               <div className="flex items-center gap-2">
                 <span className="font-medium">{item.name}</span>
                 <span className="text-sm text-muted-foreground">
-                  {item.volume.toLocaleString()} menzioni
+                  {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
                 </span>
               </div>
               <span className={`text-sm ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>

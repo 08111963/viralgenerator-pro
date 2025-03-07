@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { AddTrendForm } from "@/components/dashboard/AddTrendForm";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // Mock data per le card dei trend
 const mockTrendingHashtags = [
@@ -51,29 +52,30 @@ const mockTrendingTopics = [
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [trendingHashtags, setTrendingHashtags] = useState(mockTrendingHashtags);
   const [trendingKeywords, setTrendingKeywords] = useState(mockTrendingKeywords);
 
   const handleNotificationToggle = () => {
     toast({
-      title: "Notifiche attivate",
-      description: "Riceverai aggiornamenti sui trend più rilevanti",
+      title: t('dashboard.notifications.enabled'),
+      description: t('dashboard.notifications.description'),
     });
   };
 
   const handleAddHashtag = (newHashtag) => {
     setTrendingHashtags((prev) => [...prev, newHashtag]);
     toast({
-      title: "Hashtag aggiunto",
-      description: `${newHashtag.name} è stato aggiunto ai trend monitorati`,
+      title: t('dashboard.addTrend.hashtagAdded'),
+      description: t('dashboard.addTrend.hashtagAddedDesc', { name: newHashtag.name }),
     });
   };
 
   const handleAddKeyword = (newKeyword) => {
     setTrendingKeywords((prev) => [...prev, newKeyword]);
     toast({
-      title: "Parola chiave aggiunta",
-      description: `${newKeyword.name} è stata aggiunta ai trend monitorati`,
+      title: t('dashboard.addTrend.keywordAdded'),
+      description: t('dashboard.addTrend.keywordAddedDesc', { name: newKeyword.name }),
     });
   };
 
@@ -82,26 +84,26 @@ const Dashboard = () => {
       <Navigation />
       <div className="container py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-3xl font-bold">{t('dashboard.title')}</h1>
           <Button onClick={handleNotificationToggle} variant="outline">
             <Bell className="h-4 w-4 mr-2" />
-            Attiva Notifiche
+            {t('dashboard.notifications.enable')}
           </Button>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
           <TrendingCard
-            title="Hashtag Trending"
+            title={t('dashboard.trends.hashtags')}
             items={trendingHashtags}
             icon="hashtag"
           />
           <TrendingCard
-            title="Parole Chiave"
+            title={t('dashboard.trends.keywords')}
             items={trendingKeywords}
             icon="keyword"
           />
           <TrendingCard
-            title="Argomenti Trending"
+            title={t('dashboard.trends.topics')}
             items={mockTrendingTopics}
             icon="topic"
           />
