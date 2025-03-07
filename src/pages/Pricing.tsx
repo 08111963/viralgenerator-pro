@@ -1,10 +1,15 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Hash, FileText, UserRound, CheckCircle2 } from "lucide-react";
+import { TrendingUp, Hash, FileText, UserRound, CheckCircle2, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const FeatureItem = ({ text, icon: Icon }: { text: string; icon: React.ElementType }) => (
   <li className="flex items-start">
@@ -101,10 +106,22 @@ const Pricing = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
             {tiers.map((tier) => (
               <PricingTier key={tier.name} {...tier} />
             ))}
+          </div>
+
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-8">{t('pricing.faq.title')}</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {t('pricing.faq.questions', { returnObjects: true }).map((faq: { q: string; a: string }, index: number) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left">{faq.q}</AccordionTrigger>
+                  <AccordionContent>{faq.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </main>

@@ -123,6 +123,27 @@ export default {
         free: 'Free Trial',
         start: 'Get Started',
       },
+      faq: {
+        title: 'Frequently Asked Questions',
+        questions: [
+          {
+            q: 'Can I change plans at any time?',
+            a: 'Yes, you can upgrade from Basic to Pro plan at any time. The change will be effective immediately.'
+          },
+          {
+            q: 'How does the free trial work?',
+            a: 'The Basic plan includes a 7-day free trial with access to all basic features. No credit card required.'
+          },
+          {
+            q: 'What payment methods do you accept?',
+            a: 'We accept all major credit cards (Visa, Mastercard, American Express) and PayPal.'
+          },
+          {
+            q: 'Can I cancel at any time?',
+            a: 'Yes, you can cancel your subscription at any time. There are no long-term commitments.'
+          }
+        ]
+      },
     },
     features: {
       title: 'Features',

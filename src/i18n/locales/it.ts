@@ -183,6 +183,27 @@ export default {
         free: 'Prova Gratuita',
         start: 'Inizia Ora',
       },
+      faq: {
+        title: 'Domande Frequenti',
+        questions: [
+          {
+            q: 'Posso cambiare piano in qualsiasi momento?',
+            a: 'Sì, puoi passare dal piano Base a Pro in qualsiasi momento. Il cambio sarà effettivo immediatamente.'
+          },
+          {
+            q: 'Come funziona il periodo di prova gratuito?',
+            a: 'Il piano Base include 7 giorni di prova gratuita con accesso a tutte le funzionalità base. Non è richiesta alcuna carta di credito.'
+          },
+          {
+            q: 'Quali metodi di pagamento accettate?',
+            a: 'Accettiamo tutte le principali carte di credito (Visa, Mastercard, American Express) e PayPal.'
+          },
+          {
+            q: 'Posso annullare in qualsiasi momento?',
+            a: 'Sì, puoi annullare il tuo abbonamento in qualsiasi momento. Non ci sono vincoli di durata.'
+          }
+        ]
+      },
     },
   }
 };
