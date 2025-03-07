@@ -87,7 +87,7 @@ export default {
     dashboard: {
       title: 'Dashboard',
       notifications: {
-        enable: 'Attiva notifiche',
+        enable: 'Enable notifications',
         enabled: 'Notifiche attivate',
         description: 'Riceverai notifiche sui nuovi trend'
       },
