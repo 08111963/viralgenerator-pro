@@ -64,9 +64,10 @@ const Dashboard = () => {
     });
   };
 
-  const PremiumFeatureOverlay = ({ children, title }) => (
+  const PremiumFeatureOverlay = ({ children }: { children: React.ReactNode }) => (
     <div className="relative">
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center z-10">
+      {children}
+      <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
         <div className="text-center p-4">
           <Lock className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
           <p className="text-sm text-muted-foreground mb-2">{t('dashboard.premium.locked')}</p>
@@ -75,7 +76,6 @@ const Dashboard = () => {
           </Button>
         </div>
       </div>
-      {children}
     </div>
   );
 
