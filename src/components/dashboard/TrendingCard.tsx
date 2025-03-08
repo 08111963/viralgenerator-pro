@@ -50,7 +50,7 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     queryFn: async () => {
       console.log(`Fetching trending ${icon}s from ${tableName}...`);
       
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from(tableName)
         .select('*')
         .order('volume', { ascending: false })
@@ -62,9 +62,8 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
       }
 
       if (!data || data.length === 0) {
-        console.log(`No ${icon}s found in the database`);
+        console.log(`No ${icon}s found in the database, adding initial data...`);
         if (icon === 'hashtag') {
-          // Add some initial hashtag data if none exists
           const initialHashtags = [
             { name: '#AI', volume: 50000, change_percentage: 25 },
             { name: '#Tech', volume: 45000, change_percentage: 15 },
@@ -73,38 +72,44 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
             { name: '#Future', volume: 30000, change_percentage: 5 }
           ];
 
+          // Insert initial hashtags one by one to avoid potential batch insert issues
           for (const hashtag of initialHashtags) {
-            await supabase.from('trending_hashtags').insert([hashtag]);
+            const { error: insertError } = await supabase
+              .from('trending_hashtags')
+              .insert([hashtag]);
+            
+            if (insertError) {
+              console.error('Error inserting hashtag:', insertError);
+            }
           }
 
-          const { data: newData } = await supabase
+          // Fetch the newly inserted data
+          const { data: newData, error: fetchError } = await supabase
             .from(tableName)
             .select('*')
             .order('volume', { ascending: false })
             .limit(10);
 
-          return newData ? newData.map(item => ({
-            id: item.id,
-            name: item.name,
-            volume: item.volume,
-            change: Number(item.change_percentage)
-          })) : [];
+          if (fetchError) {
+            console.error('Error fetching new data:', fetchError);
+            return [];
+          }
+
+          data = newData;
         }
-        return [];
       }
 
-      const transformedData = data.map(item => ({
+      if (!data) return [];
+
+      return data.map(item => ({
         id: item.id,
         name: item.name,
         volume: item.volume,
         change: Number(item.change_percentage)
       }));
-
-      console.log(`Transformed ${icon}s data:`, transformedData);
-      return transformedData;
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
-    staleTime: 25000 // Consider data fresh for 25 seconds
+    refetchInterval: 30000,
+    staleTime: 25000
   });
 
   // Debug log to check final processed data
