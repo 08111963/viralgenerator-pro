@@ -11,6 +11,8 @@ import { AddTrendForm } from "@/components/dashboard/AddTrendForm";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 
 const mockTrendingHashtags = [
   { id: "1", name: "#AI", volume: 25000, change: 12 },
@@ -42,6 +44,24 @@ const Dashboard = () => {
   const [trendingHashtags, setTrendingHashtags] = useState(mockTrendingHashtags);
   const [trendingKeywords, setTrendingKeywords] = useState(mockTrendingKeywords);
 
+  const { data: isAdmin } = useQuery({
+    queryKey: ["admin-status"],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return false;
+
+      const { data, error } = await supabase
+        .rpc('is_admin', { user_id: session.user.id });
+
+      if (error) {
+        console.error("Error checking admin status:", error);
+        return false;
+      }
+      
+      return !!data;
+    },
+  });
+
   const handleNotificationToggle = () => {
     toast({
       title: t('dashboard.notifications.enabled'),
@@ -65,20 +85,27 @@ const Dashboard = () => {
     });
   };
 
-  const PremiumFeatureOverlay = ({ children }: { children: React.ReactNode }) => (
-    <div className="relative">
-      {children}
-      <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
-        <div className="text-center p-4">
-          <Lock className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground mb-2">{t('dashboard.premium.locked')}</p>
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/pricing">{t('dashboard.premium.upgrade')}</Link>
-          </Button>
+  const PremiumFeatureOverlay = ({ children }: { children: React.ReactNode }) => {
+    // Don't show overlay if user is admin
+    if (isAdmin) {
+      return <>{children}</>;
+    }
+
+    return (
+      <div className="relative">
+        {children}
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
+          <div className="text-center p-4">
+            <Lock className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground mb-2">{t('dashboard.premium.locked')}</p>
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/pricing">{t('dashboard.premium.upgrade')}</Link>
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen flex flex-col">

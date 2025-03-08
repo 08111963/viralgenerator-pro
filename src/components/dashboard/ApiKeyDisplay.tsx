@@ -12,6 +12,24 @@ const ApiKeyDisplay = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
+  const { data: isAdmin } = useQuery({
+    queryKey: ["admin-status"],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return false;
+
+      const { data, error } = await supabase
+        .rpc('is_admin', { user_id: session.user.id });
+
+      if (error) {
+        console.error("Error checking admin status:", error);
+        return false;
+      }
+      
+      return !!data;
+    },
+  });
+
   const { data: subscription, isLoading } = useQuery({
     queryKey: ["api-key"],
     queryFn: async () => {
@@ -72,7 +90,8 @@ const ApiKeyDisplay = () => {
     </Card>
   );
 
-  if (!subscription?.api_key || subscription.status !== 'active') {
+  // Allow access if user is admin or has active subscription
+  if ((!subscription?.api_key || subscription.status !== 'active') && !isAdmin) {
     return (
       <div className="relative">
         <ApiKeyCard />
