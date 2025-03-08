@@ -1,4 +1,3 @@
-
 import { default as ApiKeyDisplay } from "@/components/dashboard/ApiKeyDisplay";
 import { AddTrendForm } from "@/components/dashboard/AddTrendForm";
 import { PremiumFeatureOverlay } from "./PremiumFeatureOverlay";
@@ -20,6 +19,17 @@ export const FeatureSection = () => {
 
   const addHashtagMutation = useMutation({
     mutationFn: async (newHashtag: TrendItem) => {
+      // First check if hashtag already exists
+      const { data: existingHashtag } = await supabase
+        .from("trending_hashtags")
+        .select("name")
+        .eq("name", newHashtag.name)
+        .maybeSingle();
+
+      if (existingHashtag) {
+        throw new Error("duplicate");
+      }
+
       const { error } = await supabase
         .from("trending_hashtags")
         .insert([{
@@ -38,11 +48,19 @@ export const FeatureSection = () => {
     },
     onError: (error) => {
       console.error("Error adding hashtag:", error);
-      toast({
-        title: t('Error'),
-        description: t('dashboard.addTrend.error'),
-        variant: "destructive",
-      });
+      if (error.message === "duplicate") {
+        toast({
+          title: t('Error'),
+          description: t('Hashtag già esistente'),
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: t('Error'),
+          description: t('dashboard.addTrend.error'),
+          variant: "destructive",
+        });
+      }
     }
   });
 
