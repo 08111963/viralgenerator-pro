@@ -27,6 +27,9 @@ export const Navigation = () => {
           <Link to="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">
             {t('navigation.pricing')}
           </Link>
+          <Link to="/guide" className="text-foreground/60 hover:text-foreground transition-colors">
+            Guida
+          </Link>
           <Link to="/admin" className="text-foreground/60 hover:text-foreground transition-colors">
             {t('navigation.admin')}
           </Link>
