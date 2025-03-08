@@ -7,13 +7,19 @@ import { supabase } from "@/lib/supabase";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+interface TrendItem {
+  name: string;
+  volume: number;
+  change: number;
+}
+
 export const FeatureSection = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const addHashtagMutation = useMutation({
-    mutationFn: async (newHashtag) => {
+    mutationFn: async (newHashtag: TrendItem) => {
       const { error } = await supabase
         .from("trending_hashtags")
         .insert([{
@@ -41,7 +47,7 @@ export const FeatureSection = () => {
   });
 
   const addKeywordMutation = useMutation({
-    mutationFn: async (newKeyword) => {
+    mutationFn: async (newKeyword: TrendItem) => {
       const { error } = await supabase
         .from("trending_keywords")
         .insert([{
@@ -68,7 +74,7 @@ export const FeatureSection = () => {
     }
   });
 
-  const handleAddHashtag = async (newHashtag) => {
+  const handleAddHashtag = async (newHashtag: TrendItem) => {
     addHashtagMutation.mutate(newHashtag);
     toast({
       title: t('dashboard.addTrend.hashtagAdded'),
@@ -76,7 +82,7 @@ export const FeatureSection = () => {
     });
   };
 
-  const handleAddKeyword = async (newKeyword) => {
+  const handleAddKeyword = async (newKeyword: TrendItem) => {
     addKeywordMutation.mutate(newKeyword);
     toast({
       title: t('dashboard.addTrend.keywordAdded'),
