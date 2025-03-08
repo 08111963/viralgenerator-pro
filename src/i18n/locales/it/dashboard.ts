@@ -1,4 +1,3 @@
-
 export const dashboard = {
   title: 'Dashboard',
   notifications: {
@@ -25,6 +24,10 @@ export const dashboard = {
     hashtagAddedDesc: 'L\'hashtag {name} è stato aggiunto con successo',
     keywordAdded: 'Parola Chiave Aggiunta',
     keywordAddedDesc: 'La parola chiave {name} è stata aggiunta con successo'
+  },
+  social: {
+    title: 'Gestione Account Social',
+    description: 'Gestisci i tuoi account social collegati'
   },
   premium: {
     locked: "Funzionalità disponibile solo nel piano Pro",
