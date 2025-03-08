@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageCircle, Sparkles } from "lucide-react";
@@ -16,9 +17,12 @@ export const ContentGenerator = () => {
   const [userContent, setUserContent] = useState("");
 
   const generateVariants = async () => {
-    if (!userContent.trim()) {
+    // Rimuovi gli spazi vuoti all'inizio e alla fine
+    const trimmedContent = userContent.trim();
+    
+    if (!trimmedContent) {
       toast({
-        title: t('dashboard.content.variants.error'),
+        title: t('Error'),
         description: t('dashboard.content.variants.error'),
         variant: "destructive",
       });
@@ -28,7 +32,7 @@ export const ContentGenerator = () => {
     setIsGenerating(true);
     try {
       const { data, error } = await supabase.functions.invoke('generate-content', {
-        body: { content: userContent }
+        body: { content: trimmedContent }
       });
 
       if (error) throw error;
