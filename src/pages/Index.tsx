@@ -115,18 +115,6 @@ const Index = () => {
               />
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-              <Button size="lg" asChild>
-                <Link to="/register">
-                  {t('home.cta.start')}
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link to="/demo">
-                  {t('home.cta.demo')}
-                </Link>
-              </Button>
-            </div>
           </div>
         </section>
       </main>
