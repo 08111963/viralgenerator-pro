@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -31,7 +30,7 @@ const generateHistoricalData = (items: TrendingItem[]) => {
 export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
 
-  const { data: trendingHashtags } = useQuery({
+  const { data: trendingHashtags, isLoading } = useQuery({
     queryKey: ["trending-hashtags"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -51,6 +50,23 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
         volume: hashtag.volume,
         change: Number(hashtag.change_percentage)
       }));
+    },
+    enabled: icon === "hashtag"
+  });
+
+  const { data: totalHashtags } = useQuery({
+    queryKey: ["total-hashtags"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("trending_hashtags")
+        .select("*", { count: 'exact', head: true });
+
+      if (error) {
+        console.error("Error fetching total hashtags:", error);
+        return 0;
+      }
+
+      return count || 0;
     },
     enabled: icon === "hashtag"
   });
@@ -77,6 +93,11 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
         <CardTitle className="flex items-center gap-2">
           {getIcon()}
           {title}
+          {icon === "hashtag" && totalHashtags !== undefined && (
+            <span className="ml-2 text-sm font-normal text-muted-foreground">
+              ({totalHashtags} {t('dashboard.trends.total')})
+            </span>
+          )}
         </CardTitle>
         <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
       </CardHeader>
