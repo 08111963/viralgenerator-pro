@@ -1,7 +1,10 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 
 interface TrendingItem {
   id: string;
@@ -16,7 +19,7 @@ interface TrendingCardProps {
   icon: "hashtag" | "keyword" | "topic";
 }
 
-// Funzione per generare dati storici simulati
+// Function to generate historical data
 const generateHistoricalData = (items: TrendingItem[]) => {
   return items.slice(0, 5).map((item) => ({
     name: item.name,
@@ -27,6 +30,30 @@ const generateHistoricalData = (items: TrendingItem[]) => {
 
 export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
+
+  const { data: trendingHashtags } = useQuery({
+    queryKey: ["trending-hashtags"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("trending_hashtags")
+        .select("*")
+        .order("volume", { ascending: false })
+        .limit(5);
+
+      if (error) {
+        console.error("Error fetching trending hashtags:", error);
+        return [];
+      }
+
+      return data.map(hashtag => ({
+        id: hashtag.id,
+        name: hashtag.name,
+        volume: hashtag.volume,
+        change: Number(hashtag.change_percentage)
+      }));
+    },
+    enabled: icon === "hashtag"
+  });
   
   const getIcon = () => {
     switch (icon) {
@@ -41,7 +68,8 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
     }
   };
 
-  const chartData = generateHistoricalData(items);
+  const itemsToDisplay = icon === "hashtag" ? trendingHashtags || [] : items;
+  const chartData = generateHistoricalData(itemsToDisplay);
 
   return (
     <Card>
@@ -78,7 +106,7 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
             )}
           </div>
 
-          {items.map((item) => (
+          {itemsToDisplay.map((item) => (
             <div key={item.id} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="font-medium">{item.name}</span>
