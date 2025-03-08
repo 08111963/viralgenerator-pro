@@ -19,11 +19,15 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
   return useQuery({
     queryKey: [`trending-${icon}s`],
     queryFn: async () => {
-      console.log(`Fetching trending ${icon}s from ${tableName}...`);
+      console.log(`Fetching trending ${icon}s from ${tableName} for last 12 hours...`);
+      
+      const twelveHoursAgo = new Date();
+      twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
       
       let { data, error } = await supabase
         .from(tableName)
         .select('*')
+        .gte('created_at', twelveHoursAgo.toISOString())
         .order('volume', { ascending: false })
         .limit(10);
 
