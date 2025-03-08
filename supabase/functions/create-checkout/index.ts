@@ -48,13 +48,15 @@ serve(async (req) => {
       customerId = customer.id
     }
 
+    const origin = new URL(req.headers.get('origin') || req.headers.get('referer') || 'http://localhost:3000').origin
+
     // Crea la sessione di checkout
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${req.headers.get('origin')}/dashboard?success=true`,
-      cancel_url: `${req.headers.get('origin')}/pricing?canceled=true`,
+      success_url: `${origin}/dashboard?success=true`,
+      cancel_url: `${origin}/pricing?canceled=true`,
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
@@ -70,6 +72,7 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    console.error('Checkout error:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       {
