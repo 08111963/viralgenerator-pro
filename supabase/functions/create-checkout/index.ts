@@ -48,15 +48,16 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    const origin = new URL(req.headers.get('origin') || req.headers.get('referer') || 'http://localhost:3000').origin
+    // Use https for success/cancel URLs
+    const baseUrl = 'https://preview--viralgenerator-pro.lovable.app'
 
     // Crea la sessione di checkout
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${origin}/dashboard?success=true`,
-      cancel_url: `${origin}/pricing?canceled=true`,
+      success_url: `${baseUrl}/dashboard?success=true`,
+      cancel_url: `${baseUrl}/pricing?canceled=true`,
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
