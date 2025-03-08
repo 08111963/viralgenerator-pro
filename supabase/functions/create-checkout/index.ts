@@ -48,8 +48,10 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Use https for success/cancel URLs
-    const baseUrl = 'https://preview--viralgenerator-pro.lovable.app'
+    // Use the request origin for success/cancel URLs, defaulting to a secure URL if not available
+    const origin = req.headers.get('origin') || req.headers.get('referer') || 'https://viralgenerator-pro.lovable.app'
+    const url = new URL(origin)
+    const baseUrl = url.protocol === 'https:' ? url.origin : 'https://viralgenerator-pro.lovable.app'
 
     // Crea la sessione di checkout
     const session = await stripe.checkout.sessions.create({
@@ -83,3 +85,4 @@ serve(async (req) => {
     )
   }
 })
+

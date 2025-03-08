@@ -136,15 +136,15 @@ const Pricing = () => {
       name: t('pricing.tiers.base.name'),
       price: "€12",
       description: t('pricing.tiers.base.description'),
-      features: Array.from(t('pricing.features.base', { returnObjects: true })),
-      priceId: "price_1OvKv8KCRGitJMKFPlxnOxiR"  // Sostituito con il vero Price ID del piano Base
+      features: t('pricing.features.base', { returnObjects: true }) as string[],
+      priceId: "price_1OvKv8KCRGitJMKFPlxnOxiR"
     },
     {
       name: t('pricing.tiers.pro.name'),
       price: "€26,99",
       description: t('pricing.tiers.pro.description'),
-      features: Array.from(t('pricing.features.pro', { returnObjects: true })),
-      priceId: "price_1OvKv8KCRGitJMKF7YtP8V9x",  // Sostituito con il vero Price ID del piano Pro
+      features: t('pricing.features.pro', { returnObjects: true }) as string[],
+      priceId: "price_1OvKv8KCRGitJMKF7YtP8V9x",
       highlighted: true
     }
   ];
