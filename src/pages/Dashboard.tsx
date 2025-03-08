@@ -1,44 +1,22 @@
-
+import React from "react";
 import { Navigation } from "@/components/Navigation";
-import { Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { useTranslation } from "react-i18next";
-import { useAuth } from "@/lib/auth";
-import { TrendingSection } from "@/components/dashboard/TrendingSection";
-import { FeatureSection } from "@/components/dashboard/FeatureSection";
-import { AnalyticsSection } from "@/components/dashboard/AnalyticsSection";
+import { TrendAnalytics } from "@/components/dashboard/TrendAnalytics";
+import { SocialAccountsManager } from "@/components/dashboard/SocialAccountsManager";
+import { ContentGenerator } from "@/components/dashboard/ContentGenerator";
+import { ShareSection } from "@/components/ShareSection";
 
 const Dashboard = () => {
-  const { toast } = useToast();
-  const { t } = useTranslation();
-  const { session } = useAuth();
-
-  const handleNotificationToggle = () => {
-    toast({
-      title: t('dashboard.notifications.enabled'),
-      description: t('dashboard.notifications.description'),
-    });
-  };
-
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-background">
       <Navigation />
-      <div className="container py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">{t('dashboard.title')}</h1>
-          {session && (
-            <Button onClick={handleNotificationToggle} variant="outline">
-              <Bell className="h-4 w-4 mr-2" />
-              {t('dashboard.notifications.enable')}
-            </Button>
-          )}
+      <main className="container py-6">
+        <div className="grid gap-6">
+          <TrendAnalytics />
+          <SocialAccountsManager />
+          <ContentGenerator />
+          <ShareSection />
         </div>
-
-        <TrendingSection />
-        <FeatureSection />
-        <AnalyticsSection />
-      </div>
+      </main>
     </div>
   );
 };
