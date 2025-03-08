@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -62,11 +63,36 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
 
       if (!data || data.length === 0) {
         console.log(`No ${icon}s found in the database`);
+        if (icon === 'hashtag') {
+          // Add some initial hashtag data if none exists
+          const initialHashtags = [
+            { name: '#AI', volume: 50000, change_percentage: 25 },
+            { name: '#Tech', volume: 45000, change_percentage: 15 },
+            { name: '#Innovation', volume: 40000, change_percentage: 10 },
+            { name: '#Digital', volume: 35000, change_percentage: 8 },
+            { name: '#Future', volume: 30000, change_percentage: 5 }
+          ];
+
+          for (const hashtag of initialHashtags) {
+            await supabase.from('trending_hashtags').insert([hashtag]);
+          }
+
+          const { data: newData } = await supabase
+            .from(tableName)
+            .select('*')
+            .order('volume', { ascending: false })
+            .limit(10);
+
+          return newData ? newData.map(item => ({
+            id: item.id,
+            name: item.name,
+            volume: item.volume,
+            change: Number(item.change_percentage)
+          })) : [];
+        }
         return [];
       }
 
-      console.log(`Successfully fetched ${data.length} ${icon}s:`, data);
-      
       const transformedData = data.map(item => ({
         id: item.id,
         name: item.name,
@@ -138,48 +164,55 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="h-[200px] w-full mb-4">
-            {icon === "hashtag" ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area type="monotone" dataKey="volume" stroke="#9b87f5" fill="#D6BCFA" />
-                  <Area type="monotone" dataKey="previous" stroke="#1A1F2C" fill="#F1F0FB" />
-                </AreaChart>
-              </ResponsiveContainer>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData}>
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="volume" fill="#9b87f5" />
-                  <Bar dataKey="previous" fill="#D6BCFA" />
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-
-          <div className="max-h-[300px] overflow-y-auto">
-            {items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{item.name}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
-                  </span>
-                </div>
-                <span className={`text-sm ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                  {item.change >= 0 ? '+' : ''}{item.change}%
-                </span>
+          {(!items || items.length === 0) ? (
+            <div className="flex items-center justify-center h-[200px] text-muted-foreground">
+              {t('dashboard.trends.noData')}
+            </div>
+          ) : (
+            <>
+              <div className="h-[200px] w-full mb-4">
+                {icon === "hashtag" ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={generateHistoricalData(items)}>
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="volume" stroke="#9b87f5" fill="#D6BCFA" />
+                      <Area type="monotone" dataKey="previous" stroke="#1A1F2C" fill="#F1F0FB" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={generateHistoricalData(items)}>
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="volume" fill="#9b87f5" />
+                      <Bar dataKey="previous" fill="#D6BCFA" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
-            ))}
-          </div>
+
+              <div className="max-h-[300px] overflow-y-auto">
+                {items.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between py-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
+                      </span>
+                    </div>
+                    <span className={`text-sm ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {item.change >= 0 ? '+' : ''}{item.change}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </CardContent>
     </Card>
   );
 };
-
