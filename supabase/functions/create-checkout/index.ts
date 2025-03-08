@@ -9,6 +9,7 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
@@ -48,22 +49,28 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Always use production URL for redirects
-    const baseUrl = 'https://viralgenerator-pro.lovable.app'
-    console.log('Creating checkout session with base URL:', baseUrl)
+    // Get the origin from the request headers, with a fallback
+    const origin = req.headers.get('origin') || 'https://preview--viralgenerator-pro.lovable.app'
+    console.log('Creating checkout session with origin:', origin)
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${baseUrl}/dashboard?success=true`,
-      cancel_url: `${baseUrl}/pricing?canceled=true`,
+      success_url: `${origin}/dashboard?success=true`,
+      cancel_url: `${origin}/pricing?canceled=true`,
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
         },
       },
+    })
+
+    console.log('Checkout session created:', {
+      id: session.id,
+      success_url: session.success_url,
+      cancel_url: session.cancel_url
     })
 
     return new Response(
@@ -84,3 +91,4 @@ serve(async (req) => {
     )
   }
 })
+
