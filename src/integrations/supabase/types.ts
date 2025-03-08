@@ -192,6 +192,33 @@ export type Database = {
         }
         Relationships: []
       }
+      trending_topics: {
+        Row: {
+          change_percentage: number
+          created_at: string | null
+          id: string
+          name: string
+          updated_at: string | null
+          volume: number
+        }
+        Insert: {
+          change_percentage?: number
+          created_at?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+          volume?: number
+        }
+        Update: {
+          change_percentage?: number
+          created_at?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+          volume?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

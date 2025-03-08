@@ -75,6 +75,29 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
     },
     enabled: icon === "keyword"
   });
+
+  const { data: trendingTopics, isLoading: isLoadingTopics } = useQuery({
+    queryKey: ["trending-topics"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("trending_topics")
+        .select("*")
+        .order("volume", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching trending topics:", error);
+        return [];
+      }
+      
+      return data.map(topic => ({
+        id: topic.id,
+        name: topic.name,
+        volume: topic.volume,
+        change: Number(topic.change_percentage)
+      }));
+    },
+    enabled: icon === "topic"
+  });
   
   const getIcon = () => {
     switch (icon) {
@@ -92,12 +115,15 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
   const itemsToDisplay = (() => {
     if (icon === "hashtag") return trendingHashtags || [];
     if (icon === "keyword") return trendingKeywords || [];
+    if (icon === "topic") return trendingTopics || [];
     return items;
   })();
 
   const chartData = generateHistoricalData(itemsToDisplay);
 
-  const isLoading = icon === "hashtag" ? isLoadingHashtags : icon === "keyword" ? isLoadingKeywords : false;
+  const isLoading = icon === "hashtag" ? isLoadingHashtags : 
+                   icon === "keyword" ? isLoadingKeywords : 
+                   icon === "topic" ? isLoadingTopics : false;
 
   if (isLoading) {
     return (
