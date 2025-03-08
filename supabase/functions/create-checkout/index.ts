@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { stripe } from "../_shared/stripe.ts"
 import { supabase } from "../_shared/supabase.ts"
@@ -47,8 +48,14 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Always use HTTPS production URL for Stripe checkout
-    const baseUrl = 'https://viralgenerator-pro.lovable.app'
+    // Always use HTTPS URLs
+    const origin = req.headers.get('origin') || req.headers.get('referer')
+    let baseUrl = 'https://viralgenerator-pro.lovable.app'
+
+    // If in development, use the secure development URL
+    if (origin?.includes('localhost') || origin?.includes('127.0.0.1')) {
+      baseUrl = 'https://localhost:8080'
+    }
 
     console.log('Creating checkout session with base URL:', baseUrl)
 
