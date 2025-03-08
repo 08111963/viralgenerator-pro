@@ -101,4 +101,5 @@ export const SocialAccountsManager = () => {
         </CardContent>
       </Card>
     </PremiumFeatureOverlay>
-  </Card>
+  );
+};
