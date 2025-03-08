@@ -4,22 +4,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Share2, Twitter, Facebook, Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useToast } from "@/hooks/use-toast";
 
 export const ShareSection = () => {
   const { t } = useTranslation();
-  const appUrl = window.location.origin;
-  const shareText = "Ho scoperto ViralGenerator Pro - uno strumento incredibile per l'analisi dei trend social! 📈";
+  const { toast } = useToast();
+  const appUrl = window.location.href;
 
-  const shareOnTwitter = () => {
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(appUrl)}`, '_blank');
-  };
+  const handleShare = (platform: string) => {
+    console.log(`Sharing on ${platform}`);
+    let shareUrl = '';
+    const shareText = encodeURIComponent("Check out ViralGenerator Pro - an amazing tool for social trend analysis! 📈");
+    
+    switch (platform) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(appUrl)}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(appUrl)}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(appUrl)}`;
+        break;
+    }
 
-  const shareOnFacebook = () => {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(appUrl)}`, '_blank');
-  };
-
-  const shareOnLinkedIn = () => {
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(appUrl)}`, '_blank');
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'noopener,noreferrer');
+      toast({
+        title: t('Condivisione avviata'),
+        description: t(`Condivisione su ${platform} in corso`),
+      });
+    }
   };
 
   return (
@@ -38,7 +53,7 @@ export const ShareSection = () => {
           <Button
             variant="outline"
             className="flex items-center gap-2"
-            onClick={shareOnTwitter}
+            onClick={() => handleShare('twitter')}
           >
             <Twitter className="h-4 w-4" />
             Twitter
@@ -46,7 +61,7 @@ export const ShareSection = () => {
           <Button
             variant="outline"
             className="flex items-center gap-2"
-            onClick={shareOnFacebook}
+            onClick={() => handleShare('facebook')}
           >
             <Facebook className="h-4 w-4" />
             Facebook
@@ -54,7 +69,7 @@ export const ShareSection = () => {
           <Button
             variant="outline"
             className="flex items-center gap-2"
-            onClick={shareOnLinkedIn}
+            onClick={() => handleShare('linkedin')}
           >
             <Linkedin className="h-4 w-4" />
             LinkedIn
@@ -64,3 +79,4 @@ export const ShareSection = () => {
     </Card>
   );
 };
+
