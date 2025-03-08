@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -137,14 +138,14 @@ const Pricing = () => {
       price: "€12",
       description: t('pricing.tiers.base.description'),
       features: t('pricing.features.base', { returnObjects: true }) as string[],
-      priceId: "prod_RtyT077ZJdWYHr"
+      priceId: "price_1R0AW8CyM0TeKm79DfnZE2ib"
     },
     {
       name: t('pricing.tiers.pro.name'),
       price: "€26,99",
       description: t('pricing.tiers.pro.description'),
       features: t('pricing.features.pro', { returnObjects: true }) as string[],
-      priceId: "prod_RtyVHC1efonsaK",
+      priceId: "price_1R0AYtCyM0TeKm797UxFHTHh",
       highlighted: true
     }
   ];
@@ -188,3 +189,4 @@ const Pricing = () => {
 };
 
 export default Pricing;
+
