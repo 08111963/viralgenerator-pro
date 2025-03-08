@@ -48,18 +48,12 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Always use HTTPS URLs
-    const origin = req.headers.get('origin') || req.headers.get('referer')
-    let baseUrl = 'https://viralgenerator-pro.lovable.app'
-
-    // If in development, use the secure development URL
-    if (origin?.includes('localhost') || origin?.includes('127.0.0.1')) {
-      baseUrl = 'https://localhost:8080'
-    }
+    // Use production URL for all environments
+    const baseUrl = 'https://viralgenerator-pro.lovable.app'
 
     console.log('Creating checkout session with base URL:', baseUrl)
 
-    // Create Stripe checkout session with HTTPS URLs
+    // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
@@ -91,3 +85,4 @@ serve(async (req) => {
     )
   }
 })
+
