@@ -15,36 +15,79 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 
-const mockTrendingHashtags = [
-  { id: "1", name: "#AI", volume: 25000, change: 12 },
-  { id: "2", name: "#Digital", volume: 18000, change: 5 },
-  { id: "3", name: "#Innovation", volume: 15000, change: -2 },
-  { id: "4", name: "#Tech", volume: 12000, change: 8 },
-  { id: "5", name: "#Marketing", volume: 10000, change: 15 },
-];
-
-const mockTrendingKeywords = [
-  { id: "1", name: "Intelligenza Artificiale", volume: 35000, change: 15 },
-  { id: "2", name: "Machine Learning", volume: 22000, change: 7 },
-  { id: "3", name: "Big Data", volume: 18000, change: -3 },
-  { id: "4", name: "Cloud Computing", volume: 15000, change: 4 },
-  { id: "5", name: "Digital Marketing", volume: 12000, change: 10 },
-];
-
-const mockTrendingTopics = [
-  { id: "1", name: "Sostenibilità", volume: 45000, change: 20 },
-  { id: "2", name: "Smart Working", volume: 30000, change: 8 },
-  { id: "3", name: "Cybersecurity", volume: 25000, change: 12 },
-  { id: "4", name: "5G", volume: 20000, change: -5 },
-  { id: "5", name: "E-commerce", volume: 18000, change: 9 },
-];
-
 const Dashboard = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { session } = useAuth();
-  const [trendingHashtags, setTrendingHashtags] = useState(mockTrendingHashtags);
-  const [trendingKeywords, setTrendingKeywords] = useState(mockTrendingKeywords);
+
+  const { data: trendingHashtags = [] } = useQuery({
+    queryKey: ["trending-hashtags"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("trending_hashtags")
+        .select("*")
+        .order("volume", { ascending: false })
+        .limit(5);
+
+      if (error) {
+        console.error("Error fetching trending hashtags:", error);
+        return [];
+      }
+
+      return data.map(hashtag => ({
+        id: hashtag.id,
+        name: hashtag.name,
+        volume: hashtag.volume,
+        change: Number(hashtag.change_percentage)
+      }));
+    }
+  });
+
+  const { data: trendingKeywords = [] } = useQuery({
+    queryKey: ["trending-keywords"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("trending_keywords")
+        .select("*")
+        .order("volume", { ascending: false })
+        .limit(5);
+
+      if (error) {
+        console.error("Error fetching trending keywords:", error);
+        return [];
+      }
+
+      return data.map(keyword => ({
+        id: keyword.id,
+        name: keyword.name,
+        volume: keyword.volume,
+        change: Number(keyword.change_percentage)
+      }));
+    }
+  });
+
+  const { data: trendingTopics = [] } = useQuery({
+    queryKey: ["trending-topics"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("trending_topics")
+        .select("*")
+        .order("volume", { ascending: false })
+        .limit(5);
+
+      if (error) {
+        console.error("Error fetching trending topics:", error);
+        return [];
+      }
+
+      return data.map(topic => ({
+        id: topic.id,
+        name: topic.name,
+        volume: topic.volume,
+        change: Number(topic.change_percentage)
+      }));
+    }
+  });
 
   const { data: isAdmin } = useQuery({
     queryKey: ["admin-status"],
@@ -71,16 +114,40 @@ const Dashboard = () => {
     });
   };
 
-  const handleAddHashtag = (newHashtag) => {
-    setTrendingHashtags((prev) => [...prev, newHashtag]);
+  const handleAddHashtag = async (newHashtag) => {
+    const { error } = await supabase
+      .from("trending_hashtags")
+      .insert([{
+        name: newHashtag.name,
+        volume: newHashtag.volume,
+        change_percentage: newHashtag.change
+      }]);
+
+    if (error) {
+      console.error("Error adding hashtag:", error);
+      return;
+    }
+
     toast({
       title: t('dashboard.addTrend.hashtagAdded'),
       description: t('dashboard.addTrend.hashtagAddedDesc', { name: newHashtag.name }),
     });
   };
 
-  const handleAddKeyword = (newKeyword) => {
-    setTrendingKeywords((prev) => [...prev, newKeyword]);
+  const handleAddKeyword = async (newKeyword) => {
+    const { error } = await supabase
+      .from("trending_keywords")
+      .insert([{
+        name: newKeyword.name,
+        volume: newKeyword.volume,
+        change_percentage: newKeyword.change
+      }]);
+
+    if (error) {
+      console.error("Error adding keyword:", error);
+      return;
+    }
+
     toast({
       title: t('dashboard.addTrend.keywordAdded'),
       description: t('dashboard.addTrend.keywordAddedDesc', { name: newKeyword.name }),
@@ -154,7 +221,7 @@ const Dashboard = () => {
           <PremiumFeatureOverlay>
             <TrendingCard
               title={t('dashboard.trends.topics')}
-              items={mockTrendingTopics}
+              items={trendingTopics}
               icon="topic"
             />
           </PremiumFeatureOverlay>
