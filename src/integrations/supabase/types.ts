@@ -77,6 +77,8 @@ export type Database = {
       }
       subscriptions: {
         Row: {
+          api_key: string | null
+          api_key_created_at: string | null
           cancel_at_period_end: boolean | null
           created_at: string
           current_period_end: string | null
@@ -89,6 +91,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          api_key?: string | null
+          api_key_created_at?: string | null
           cancel_at_period_end?: boolean | null
           created_at?: string
           current_period_end?: string | null
@@ -101,6 +105,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          api_key?: string | null
+          api_key_created_at?: string | null
           cancel_at_period_end?: boolean | null
           created_at?: string
           current_period_end?: string | null
@@ -119,7 +125,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_api_key: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

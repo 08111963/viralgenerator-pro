@@ -3,6 +3,7 @@ import { TrendingCard } from "@/components/dashboard/TrendingCard";
 import { TrendAnalytics } from "@/components/dashboard/TrendAnalytics";
 import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ContentGenerator } from "@/components/dashboard/ContentGenerator";
+import ApiKeyDisplay from "@/components/dashboard/ApiKeyDisplay";
 import { Bell, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -112,6 +113,7 @@ const Dashboard = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
+          <ApiKeyDisplay />
           <PremiumFeatureOverlay>
             <AddTrendForm type="hashtag" onAdd={handleAddHashtag} />
           </PremiumFeatureOverlay>

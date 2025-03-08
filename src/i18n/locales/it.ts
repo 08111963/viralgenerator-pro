@@ -147,6 +147,14 @@ export default {
           success: 'New content variants have been created',
           added: 'Variants Generated'
         }
+      },
+      apiKey: {
+        title: 'Chiave API',
+        description: 'Usa questa chiave per accedere alla nostra API programmaticamente',
+        upgradeDesc: 'Passa a Pro per ottenere accesso alle API',
+        copied: 'Chiave API Copiata',
+        copiedDesc: 'La chiave API è stata copiata negli appunti',
+        createdAt: 'Creata il'
       }
     },
     pricing: {

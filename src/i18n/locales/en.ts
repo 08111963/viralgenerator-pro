@@ -87,6 +87,14 @@ export default {
           success: 'New content variants have been created',
           added: 'Variants Generated'
         }
+      },
+      apiKey: {
+        title: 'API Key',
+        description: 'Use this key to access our API programmatically',
+        upgradeDesc: 'Upgrade to Pro to get API access',
+        copied: 'API Key Copied',
+        copiedDesc: 'The API key has been copied to your clipboard',
+        createdAt: 'Created at'
       }
     },
     pricing: {
