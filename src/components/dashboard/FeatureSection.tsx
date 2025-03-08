@@ -1,5 +1,4 @@
-
-import { ApiKeyDisplay } from "@/components/ui/api-key-display";
+import { default as ApiKeyDisplay } from "@/components/dashboard/ApiKeyDisplay";
 import { AddTrendForm } from "@/components/dashboard/AddTrendForm";
 import { PremiumFeatureOverlay } from "./PremiumFeatureOverlay";
 import { useToast } from "@/hooks/use-toast";
