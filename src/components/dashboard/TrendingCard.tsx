@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
@@ -27,7 +26,9 @@ const getIcon = (icon: "hashtag" | "keyword" | "topic") => {
 
 export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
-  const { data: items = [], isLoading } = useTrendingItems(icon);
+  const { data: items = [], isLoading, isError } = useTrendingItems(icon);
+
+  console.log(`Rendering TrendingCard for ${icon}s with ${items.length} items:`, items);
 
   if (isLoading) {
     return (
@@ -42,6 +43,25 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
         <CardContent>
           <div className="flex items-center justify-center h-[200px]">
             <div className="animate-pulse h-4 w-24 bg-muted rounded" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            {getIcon(icon)}
+            {title}
+          </CardTitle>
+          <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[200px] text-red-500">
+            {t('dashboard.trends.error')}
           </div>
         </CardContent>
       </Card>

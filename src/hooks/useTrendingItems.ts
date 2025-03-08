@@ -19,16 +19,12 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
   return useQuery({
     queryKey: [`trending-${icon}s`],
     queryFn: async () => {
-      console.log(`Fetching trending ${icon}s from ${tableName} for last 12 hours...`);
-      
-      const twelveHoursAgo = new Date();
-      twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
+      console.log(`Fetching trending ${icon}s from ${tableName}...`);
       
       let { data, error } = await supabase
         .from(tableName)
         .select('*')
-        .gte('created_at', twelveHoursAgo.toISOString())
-        .order('volume', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(10);
 
       if (error) {
@@ -41,53 +37,7 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
         return [];
       }
 
-      if (!data || data.length === 0) {
-        console.log(`No ${icon}s found in the database, adding initial data...`);
-        if (icon === 'hashtag') {
-          const initialHashtags = [
-            { name: '#AI', volume: 50000, change_percentage: 25 },
-            { name: '#Tech', volume: 45000, change_percentage: 15 },
-            { name: '#Innovation', volume: 40000, change_percentage: 10 },
-            { name: '#Digital', volume: 35000, change_percentage: 8 },
-            { name: '#Future', volume: 30000, change_percentage: 5 }
-          ];
-
-          for (const hashtag of initialHashtags) {
-            const { error: insertError } = await supabase
-              .from('trending_hashtags')
-              .insert([hashtag]);
-            
-            if (insertError) {
-              console.error('Error inserting hashtag:', insertError);
-              toast({
-                title: t('Error'),
-                description: `Failed to insert initial hashtag: ${hashtag.name}`,
-                variant: "destructive",
-              });
-              continue;
-            }
-          }
-
-          // Fetch the newly inserted data
-          const { data: newData, error: fetchError } = await supabase
-            .from(tableName)
-            .select('*')
-            .order('volume', { ascending: false })
-            .limit(10);
-
-          if (fetchError) {
-            console.error('Error fetching new data:', fetchError);
-            toast({
-              title: t('Error'),
-              description: 'Failed to fetch updated data',
-              variant: "destructive",
-            });
-            return [];
-          }
-
-          data = newData;
-        }
-      }
+      console.log(`Found ${data?.length || 0} ${icon}s:`, data);
 
       if (!data) return [];
 
@@ -95,10 +45,10 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
         id: item.id,
         name: item.name,
         volume: item.volume,
-        change: Number(item.change_percentage)
+        change: item.change_percentage
       }));
     },
-    refetchInterval: 30000,
-    staleTime: 25000
+    refetchInterval: 5000, // Refresh every 5 seconds
+    staleTime: 3000
   });
 };
