@@ -68,25 +68,16 @@ serve(async (req) => {
       console.log('New customer created:', customer.id);
     }
 
-    // Use window location for redirects
-    const successUrl = new URL('/dashboard', req.headers.get('origin') || 'https://lovable.dev')
-    const cancelUrl = new URL('/pricing', req.headers.get('origin') || 'https://lovable.dev')
-    
-    successUrl.searchParams.append('success', 'true')
-    cancelUrl.searchParams.append('canceled', 'true')
-
-    console.log('Redirect URLs:', {
-      success: successUrl.toString(),
-      cancel: cancelUrl.toString()
-    })
+    const origin = req.headers.get('origin') || 'https://preview--viralgenerator-pro.lovable.app'
+    console.log('Using origin for redirects:', origin);
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: successUrl.toString(),
-      cancel_url: cancelUrl.toString(),
+      success_url: `${origin}/dashboard?success=true`,
+      cancel_url: `${origin}/pricing?canceled=true`,
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
