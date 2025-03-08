@@ -39,6 +39,11 @@ const reportData = [
 const Index = () => {
   const { t } = useTranslation();
 
+  // Update document title for SEO
+  React.useEffect(() => {
+    document.title = "ViralGenerator Pro - Analisi dei Trend Social con AI";
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />

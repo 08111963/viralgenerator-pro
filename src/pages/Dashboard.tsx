@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -18,6 +17,11 @@ const Dashboard = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { session } = useAuth();
+
+  // Update document title for SEO
+  React.useEffect(() => {
+    document.title = "Dashboard - ViralGenerator Pro | Analisi Trend Social";
+  }, []);
 
   const handleNotificationToggle = () => {
     console.log("Notification toggle clicked");
