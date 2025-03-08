@@ -70,7 +70,7 @@ const PricingTier = ({
         return;
       }
 
-      const response = await fetch('/functions/v1/create-checkout', {
+      const response = await fetch('https://vpgwwpiqwbxgsovjpzhh.supabase.co/functions/v1/create-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,11 +79,16 @@ const PricingTier = ({
         body: JSON.stringify({ priceId }),
       });
 
+      if (!response.ok) {
+        throw new Error('Errore durante il checkout');
+      }
+
       const { url, error } = await response.json();
       
       if (error) throw new Error(error);
       if (url) window.location.href = url;
     } catch (error) {
+      console.error('Checkout error:', error);
       toast({
         title: "Errore",
         description: "Si è verificato un errore durante il checkout",
