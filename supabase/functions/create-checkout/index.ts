@@ -68,45 +68,62 @@ serve(async (req) => {
       console.log('New customer created:', customer.id);
     }
 
-    const origin = req.headers.get('origin') || 'https://preview--viralgenerator-pro.lovable.app'
+    const origin = new URL(req.url).origin;
     console.log('Using origin for redirects:', origin);
 
-    // Create Stripe checkout session
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      line_items: [{ price: priceId, quantity: 1 }],
-      mode: 'subscription',
-      success_url: `${origin}/dashboard?success=true`,
-      cancel_url: `${origin}/pricing?canceled=true`,
-      subscription_data: {
-        metadata: {
-          supabase_user_id: user.id,
+    // Create Stripe checkout session with better error handling
+    try {
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        line_items: [{ price: priceId, quantity: 1 }],
+        mode: 'subscription',
+        success_url: `${origin}/dashboard?success=true`,
+        cancel_url: `${origin}/pricing?canceled=true`,
+        subscription_data: {
+          metadata: {
+            supabase_user_id: user.id,
+          },
         },
-      },
-      allow_promotion_codes: true
-    })
+        allow_promotion_codes: true
+      })
 
-    console.log('Checkout session created:', {
-      id: session.id,
-      success_url: session.success_url,
-      cancel_url: session.cancel_url,
-      url: session.url
-    })
+      console.log('Checkout session created:', {
+        id: session.id,
+        success_url: session.success_url,
+        cancel_url: session.cancel_url,
+        url: session.url
+      })
 
-    return new Response(
-      JSON.stringify({ url: session.url }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      }
-    )
+      return new Response(
+        JSON.stringify({ url: session.url }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        }
+      )
+    } catch (stripeError) {
+      console.error('Stripe session creation error:', stripeError);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Failed to create checkout session',
+          details: stripeError.message 
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      )
+    }
   } catch (error) {
-    console.error('Checkout error:', {
+    console.error('General error:', {
       message: error.message,
       stack: error.stack
     });
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: 'Checkout failed',
+        details: error.message 
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,
