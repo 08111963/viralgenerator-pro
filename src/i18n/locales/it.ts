@@ -96,7 +96,8 @@ export default {
         keywords: 'Parole Chiave',
         topics: 'Argomenti in Tendenza',
         mentions: 'menzioni',
-        lastDay: 'Ultime 24 ore'
+        lastDay: 'Ultime 24 ore',
+        noData: 'Nessun dato disponibile'
       },
       addTrend: {
         hashtag: 'Add Hashtag',

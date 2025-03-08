@@ -45,6 +45,8 @@ export default {
         keywords: 'Keywords',
         topics: 'Trending Topics',
         mentions: 'mentions',
+        lastDay: 'Last 24 hours',
+        noData: 'No data available'
       },
       addTrend: {
         hashtag: 'Add Hashtag',
