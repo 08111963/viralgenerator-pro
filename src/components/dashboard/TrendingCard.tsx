@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -15,7 +14,6 @@ interface TrendingItem {
 
 interface TrendingCardProps {
   title: string;
-  items: TrendingItem[];
   icon: "hashtag" | "keyword" | "topic";
 }
 
@@ -27,78 +25,32 @@ const generateHistoricalData = (items: TrendingItem[]) => {
   }));
 };
 
-export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
+export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
 
-  const { data: trendingHashtags, isLoading: isLoadingHashtags } = useQuery({
-    queryKey: ["trending-hashtags"],
+  const { data: items = [], isLoading } = useQuery({
+    queryKey: [`trending-${icon}s`],
     queryFn: async () => {
+      const tableName = `trending_${icon}s`;
       const { data, error } = await supabase
-        .from("trending_hashtags")
+        .from(tableName)
         .select("*")
         .order("volume", { ascending: false });
 
       if (error) {
-        console.error("Error fetching trending hashtags:", error);
-        return [];
-      }
-
-      return data.map(hashtag => ({
-        id: hashtag.id,
-        name: hashtag.name,
-        volume: hashtag.volume,
-        change: Number(hashtag.change_percentage)
-      }));
-    },
-    enabled: icon === "hashtag"
-  });
-
-  const { data: trendingKeywords, isLoading: isLoadingKeywords } = useQuery({
-    queryKey: ["trending-keywords"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("trending_keywords")
-        .select("*")
-        .order("volume", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching trending keywords:", error);
+        console.error(`Error fetching trending ${icon}s:`, error);
         return [];
       }
       
-      return data.map(keyword => ({
-        id: keyword.id,
-        name: keyword.name,
-        volume: keyword.volume,
-        change: Number(keyword.change_percentage)
+      return data.map(item => ({
+        id: item.id,
+        name: item.name,
+        volume: item.volume,
+        change: Number(item.change_percentage)
       }));
-    },
-    enabled: icon === "keyword"
+    }
   });
 
-  const { data: trendingTopics, isLoading: isLoadingTopics } = useQuery({
-    queryKey: ["trending-topics"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("trending_topics")
-        .select("*")
-        .order("volume", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching trending topics:", error);
-        return [];
-      }
-      
-      return data.map(topic => ({
-        id: topic.id,
-        name: topic.name,
-        volume: topic.volume,
-        change: Number(topic.change_percentage)
-      }));
-    },
-    enabled: icon === "topic"
-  });
-  
   const getIcon = () => {
     switch (icon) {
       case "hashtag":
@@ -111,19 +63,6 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
         return null;
     }
   };
-
-  const itemsToDisplay = (() => {
-    if (icon === "hashtag") return trendingHashtags || [];
-    if (icon === "keyword") return trendingKeywords || [];
-    if (icon === "topic") return trendingTopics || [];
-    return items;
-  })();
-
-  const chartData = generateHistoricalData(itemsToDisplay);
-
-  const isLoading = icon === "hashtag" ? isLoadingHashtags : 
-                   icon === "keyword" ? isLoadingKeywords : 
-                   icon === "topic" ? isLoadingTopics : false;
 
   if (isLoading) {
     return (
@@ -143,6 +82,8 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
       </Card>
     );
   }
+
+  const chartData = generateHistoricalData(items);
 
   return (
     <Card>
@@ -180,7 +121,7 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
           </div>
 
           <div className="max-h-[300px] overflow-y-auto">
-            {itemsToDisplay.map((item) => (
+            {items.map((item) => (
               <div key={item.id} className="flex items-center justify-between py-2">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{item.name}</span>
