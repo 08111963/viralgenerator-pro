@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import SubscribersList from "@/components/admin/SubscribersList";
 import { LogOut, KeyRound } from "lucide-react";
 
-const ADMIN_PASSWORD = "SuperSecurePassword123!"; // Updated to a more secure password
+const ADMIN_PASSWORD = "SuperSecurePassword123!"; // Questa è la password corretta da usare
 
 const Admin = () => {
   const [password, setPassword] = useState("");
@@ -47,15 +47,13 @@ const Admin = () => {
 
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword) {
-      // In una vera app, questo dovrebbe essere gestito in modo più sicuro
-      toast({
-        title: "Password aggiornata",
-        description: "La password è stata modificata con successo",
-      });
-      setIsChangingPassword(false);
-      setNewPassword("");
-    }
+    toast({
+      variant: "destructive",
+      title: "Funzionalità non disponibile",
+      description: "Il cambio password non è attualmente implementato. Usa la password predefinita: SuperSecurePassword123!",
+    });
+    setIsChangingPassword(false);
+    setNewPassword("");
   };
 
   if (isAuthenticated) {
