@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { stripe } from "../_shared/stripe.ts"
 import { supabase } from "../_shared/supabase.ts"
@@ -14,7 +15,6 @@ serve(async (req) => {
     headers: Object.fromEntries(req.headers.entries())
   });
 
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     console.log('Handling CORS preflight request');
     return new Response(null, { headers: corsHeaders })
@@ -43,7 +43,6 @@ serve(async (req) => {
       throw new Error('Invalid token')
     }
 
-    // Check if user already has a customer ID
     const { data: subscriptions, error: subError } = await supabase
       .from('subscriptions')
       .select('stripe_customer_id')
@@ -57,7 +56,6 @@ serve(async (req) => {
 
     let customerId = subscriptions?.stripe_customer_id
 
-    // Create a new customer if doesn't exist
     if (!customerId) {
       console.log('Creating new Stripe customer for user:', user.email);
       const customer = await stripe.customers.create({
@@ -70,17 +68,17 @@ serve(async (req) => {
       console.log('New customer created:', customer.id);
     }
 
-    // Use preview URL
-    const baseUrl = 'https://preview--viralgenerator-pro.lovable.app'
-    console.log('Using base URL for redirects:', baseUrl)
+    // Usa l'URL della richiesta per determinare l'origine
+    const origin = new URL(req.url).origin
+    console.log('Using origin for redirects:', origin)
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${baseUrl}/dashboard?success=true`,
-      cancel_url: `${baseUrl}/pricing?canceled=true`,
+      success_url: `${origin}/dashboard?success=true`,
+      cancel_url: `${origin}/pricing?canceled=true`,
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
