@@ -49,22 +49,23 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Get the origin from the request headers, with a fallback
-    const origin = req.headers.get('origin') || 'https://preview--viralgenerator-pro.lovable.app'
-    console.log('Creating checkout session with origin:', origin)
+    // Use consistent URLs for both development and production
+    const baseUrl = 'https://viralgenerator-pro.lovable.app'
+    console.log('Creating checkout session with base URL:', baseUrl)
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${origin}/dashboard?success=true`,
-      cancel_url: `${origin}/pricing?canceled=true`,
+      success_url: `${baseUrl}/dashboard?success=true`,
+      cancel_url: `${baseUrl}/pricing?canceled=true`,
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
         },
       },
+      allow_promotion_codes: true
     })
 
     console.log('Checkout session created:', {
@@ -91,4 +92,3 @@ serve(async (req) => {
     )
   }
 })
-
