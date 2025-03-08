@@ -23,7 +23,10 @@ const ApiKeyDisplay = () => {
         .eq("user_id", session.user.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching subscription:", error);
+        throw error;
+      }
       return data;
     },
   });
