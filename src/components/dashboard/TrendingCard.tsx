@@ -26,6 +26,19 @@ const generateHistoricalData = (items: TrendingItem[]) => {
   }));
 };
 
+const getIcon = (icon: "hashtag" | "keyword" | "topic") => {
+  switch (icon) {
+    case "hashtag":
+      return <Hash className="h-4 w-4" />;
+    case "keyword":
+      return <MessageCircle className="h-4 w-4" />;
+    case "topic":
+      return <TrendingUp className="h-4 w-4" />;
+    default:
+      return null;
+  }
+};
+
 export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
   
@@ -76,7 +89,7 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            {getIcon()}
+            {getIcon(icon)}
             {title}
           </CardTitle>
           <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
@@ -97,7 +110,7 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            {getIcon()}
+            {getIcon(icon)}
             {title}
           </CardTitle>
           <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
@@ -114,24 +127,11 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const chartData = generateHistoricalData(items);
   console.log(`Generated chart data for ${icon}s:`, chartData);
 
-  const getIcon = () => {
-    switch (icon) {
-      case "hashtag":
-        return <Hash className="h-4 w-4" />;
-      case "keyword":
-        return <MessageCircle className="h-4 w-4" />;
-      case "topic":
-        return <TrendingUp className="h-4 w-4" />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          {getIcon()}
+          {getIcon(icon)}
           {title}
         </CardTitle>
         <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
@@ -182,3 +182,4 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     </Card>
   );
 };
+
