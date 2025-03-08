@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -8,7 +9,6 @@ import { useAuth } from "@/lib/auth";
 import { TrendingSection } from "@/components/dashboard/TrendingSection";
 import { FeatureSection } from "@/components/dashboard/FeatureSection";
 import { AnalyticsSection } from "@/components/dashboard/AnalyticsSection";
-import ApiKeyDisplay from "@/components/dashboard/ApiKeyDisplay";
 import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ShareSection } from "@/components/ShareSection";
 
