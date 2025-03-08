@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { stripe } from "../_shared/stripe.ts"
 import { supabase } from "../_shared/supabase.ts"
@@ -48,18 +47,17 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Use production URL for all environments
-    const baseUrl = 'https://viralgenerator-pro.lovable.app'
-
-    console.log('Creating checkout session with base URL:', baseUrl)
+    // Use the request origin for the redirect URLs
+    const origin = req.headers.get('origin') || 'https://viralgenerator-pro.lovable.app'
+    console.log('Creating checkout session with origin:', origin)
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${baseUrl}/dashboard?success=true`,
-      cancel_url: `${baseUrl}/pricing?canceled=true`,
+      success_url: `${origin}/dashboard?success=true`,
+      cancel_url: `${origin}/pricing?canceled=true`,
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
@@ -85,4 +83,3 @@ serve(async (req) => {
     )
   }
 })
-
