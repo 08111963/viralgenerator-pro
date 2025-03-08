@@ -68,7 +68,7 @@ serve(async (req) => {
       console.log('New customer created:', customer.id);
     }
 
-    // Usa l'URL della richiesta per determinare l'origine
+    // Get the origin from the request URL
     const origin = new URL(req.url).origin
     console.log('Using origin for redirects:', origin)
 
