@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,7 @@ const PricingTier = ({
         return;
       }
 
-      const response = await fetch('https://vpgwwpiqwbxgsovjpzhh.supabase.co/functions/v1/create-checkout', {
+      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/create-checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -189,4 +188,3 @@ const Pricing = () => {
 };
 
 export default Pricing;
-
