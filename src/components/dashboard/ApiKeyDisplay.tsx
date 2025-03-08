@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
@@ -36,6 +35,35 @@ const ApiKeyDisplay = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error("Not authenticated");
 
+      // If user is admin and no subscription exists, create a dummy one for display
+      if (isAdmin) {
+        const { data: existingSubscription } = await supabase
+          .from("subscriptions")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+
+        if (!existingSubscription) {
+          const { data: newSubscription, error } = await supabase
+            .from("subscriptions")
+            .insert({
+              user_id: session.user.id,
+              status: 'active',
+              api_key: 'admin_' + crypto.randomUUID().replace(/-/g, ''),
+              api_key_created_at: new Date().toISOString()
+            })
+            .select()
+            .single();
+
+          if (error) {
+            console.error("Error creating admin subscription:", error);
+            throw error;
+          }
+          return newSubscription;
+        }
+        return existingSubscription;
+      }
+
       const { data, error } = await supabase
         .from("subscriptions")
         .select("api_key, api_key_created_at, status")
@@ -48,6 +76,7 @@ const ApiKeyDisplay = () => {
       }
       return data;
     },
+    enabled: !!isAdmin // Only run this query if we know the admin status
   });
 
   const copyApiKey = async () => {
@@ -59,10 +88,6 @@ const ApiKeyDisplay = () => {
       });
     }
   };
-
-  if (isLoading) {
-    return <div className="p-4">Loading...</div>;
-  }
 
   const ApiKeyCard = () => (
     <Card>
@@ -89,6 +114,11 @@ const ApiKeyDisplay = () => {
       </CardContent>
     </Card>
   );
+
+  // Show loading state while checking admin status and fetching subscription
+  if (isLoading) {
+    return <div className="p-4">Loading...</div>;
+  }
 
   // Allow access if user is admin or has active subscription
   if ((!subscription?.api_key || subscription.status !== 'active') && !isAdmin) {
