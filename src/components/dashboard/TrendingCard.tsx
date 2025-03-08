@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
@@ -6,6 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, 
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 
 interface TrendingItem {
   id: string;
@@ -42,7 +42,7 @@ const getIcon = (icon: "hashtag" | "keyword" | "topic") => {
 
 export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
-  
+  const { toast } = useToast();
   const tableName = `trending_${icon}s`;
 
   const { data: items = [], isLoading } = useQuery({
@@ -58,7 +58,12 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
 
       if (error) {
         console.error(`Error fetching trending ${icon}s:`, error);
-        throw error;
+        toast({
+          title: t('Error'),
+          description: `Failed to fetch trending ${icon}s`,
+          variant: "destructive",
+        });
+        return [];
       }
 
       if (!data || data.length === 0) {
@@ -72,7 +77,6 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
             { name: '#Future', volume: 30000, change_percentage: 5 }
           ];
 
-          // Insert initial hashtags one by one to avoid potential batch insert issues
           for (const hashtag of initialHashtags) {
             const { error: insertError } = await supabase
               .from('trending_hashtags')
@@ -80,6 +84,12 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
             
             if (insertError) {
               console.error('Error inserting hashtag:', insertError);
+              toast({
+                title: t('Error'),
+                description: `Failed to insert initial hashtag: ${hashtag.name}`,
+                variant: "destructive",
+              });
+              continue;
             }
           }
 
@@ -92,6 +102,11 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
 
           if (fetchError) {
             console.error('Error fetching new data:', fetchError);
+            toast({
+              title: t('Error'),
+              description: 'Failed to fetch updated data',
+              variant: "destructive",
+            });
             return [];
           }
 
