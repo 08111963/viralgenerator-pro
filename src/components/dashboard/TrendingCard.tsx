@@ -39,7 +39,8 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
       const { data, error } = await supabase
         .from(tableName)
         .select('*')
-        .order('volume', { ascending: false });
+        .order('volume', { ascending: false })
+        .limit(10);
 
       if (error) {
         console.error(`Error fetching trending ${icon}s:`, error);
@@ -51,7 +52,7 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
         return [];
       }
 
-      console.log(`Successfully fetched ${data.length} ${icon}s`);
+      console.log(`Successfully fetched ${data.length} ${icon}s:`, data);
       
       return data.map(item => ({
         id: item.id,
@@ -60,7 +61,8 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
         change: Number(item.change_percentage)
       }));
     },
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    staleTime: 60000 // Consider data fresh for 1 minute
   });
 
   // Debug log to check final processed data
