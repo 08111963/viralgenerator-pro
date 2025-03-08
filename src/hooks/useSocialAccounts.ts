@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
@@ -15,6 +14,28 @@ export const useSocialAccounts = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+
+  // Get current subscription status
+  const { data: subscription } = useQuery({
+    queryKey: ['subscription'],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return null;
+
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching subscription:', error);
+        return null;
+      }
+
+      return data;
+    }
+  });
 
   const { data: accounts = [], isLoading } = useQuery({
     queryKey: ['social-accounts'],
@@ -39,6 +60,11 @@ export const useSocialAccounts = () => {
 
   const addAccount = useMutation({
     mutationFn: async ({ platform, accountName }: { platform: string, accountName: string }) => {
+      // Check account limit based on subscription status
+      if (accounts.length >= (subscription?.status === 'active' ? 5 : 1)) {
+        throw new Error(t('dashboard.social.limitReached'));
+      }
+
       const { error } = await supabase
         .from('social_accounts')
         .insert([{ platform, account_name: accountName }]);
@@ -52,10 +78,10 @@ export const useSocialAccounts = () => {
         description: t('Social account added successfully'),
       });
     },
-    onError: () => {
+    onError: (error: Error) => {
       toast({
         title: t('Error'),
-        description: t('Failed to add social account'),
+        description: error.message || t('Failed to add social account'),
         variant: "destructive",
       });
     }
