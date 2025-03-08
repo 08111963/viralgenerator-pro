@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -13,14 +14,31 @@ import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ShareSection } from "@/components/ShareSection";
 
 const Dashboard = () => {
-  console.log("Dashboard component rendering");
   const { toast } = useToast();
   const { t } = useTranslation();
   const { session } = useAuth();
 
-  // Update document title for SEO
+  // Update document title and meta tags for SEO
   React.useEffect(() => {
     document.title = "Dashboard - ViralGenerator Pro | Analisi Trend Social";
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', 'Accedi alla dashboard di ViralGenerator Pro per analizzare i trend social in tempo reale, generare contenuti virali e visualizzare previsioni AI personalizzate.');
+    
+    // Update meta keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.setAttribute('content', 'dashboard social media, analisi trend, contenuti virali, AI marketing, social media analytics, trend prediction');
   }, []);
 
   const handleNotificationToggle = () => {
