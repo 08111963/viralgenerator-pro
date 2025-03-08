@@ -71,9 +71,9 @@ serve(async (req) => {
       console.log('New customer created:', customer.id);
     }
 
-    // Use consistent URLs for both development and production
-    const baseUrl = 'https://viralgenerator-pro.lovable.app'
-    console.log('Creating checkout session with base URL:', baseUrl)
+    // Use preview URL for development
+    const baseUrl = req.headers.get('origin') || 'https://viralgenerator-pro.lovable.app'
+    console.log('Using base URL for redirects:', baseUrl)
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
@@ -118,3 +118,4 @@ serve(async (req) => {
     )
   }
 })
+
