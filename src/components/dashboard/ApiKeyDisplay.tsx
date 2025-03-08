@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Key, Copy } from "lucide-react";
+import { Key, Copy, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const ApiKeyDisplay = () => {
@@ -49,7 +49,10 @@ const ApiKeyDisplay = () => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{t('dashboard.apiKey.title')}</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Lock className="h-5 w-5" />
+            {t('dashboard.apiKey.title')}
+          </CardTitle>
           <CardDescription>{t('dashboard.apiKey.upgradeDesc')}</CardDescription>
         </CardHeader>
       </Card>
@@ -84,3 +87,4 @@ const ApiKeyDisplay = () => {
 };
 
 export default ApiKeyDisplay;
+
