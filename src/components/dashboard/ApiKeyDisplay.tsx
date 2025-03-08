@@ -46,26 +46,7 @@ const ApiKeyDisplay = () => {
     return <div className="p-4">Loading...</div>;
   }
 
-  if (!subscription?.api_key || subscription.status !== 'active') {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Lock className="h-5 w-5" />
-            {t('dashboard.apiKey.title')}
-          </CardTitle>
-          <CardDescription>{t('dashboard.apiKey.upgradeDesc')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/pricing">{t('dashboard.premium.upgrade')}</Link>
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
+  const ApiKeyCard = () => (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -77,7 +58,7 @@ const ApiKeyDisplay = () => {
       <CardContent>
         <div className="flex items-center gap-2">
           <code className="flex-1 bg-muted p-2 rounded font-mono text-sm">
-            {subscription.api_key}
+            {subscription?.api_key}
           </code>
           <Button variant="outline" size="icon" onClick={copyApiKey}>
             <Copy className="h-4 w-4" />
@@ -85,11 +66,30 @@ const ApiKeyDisplay = () => {
         </div>
         <p className="text-sm text-muted-foreground mt-2">
           {t('dashboard.apiKey.createdAt')}: {' '}
-          {new Date(subscription.api_key_created_at).toLocaleDateString()}
+          {new Date(subscription?.api_key_created_at).toLocaleDateString()}
         </p>
       </CardContent>
     </Card>
   );
+
+  if (!subscription?.api_key || subscription.status !== 'active') {
+    return (
+      <div className="relative">
+        <ApiKeyCard />
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
+          <div className="text-center p-4">
+            <Lock className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground mb-2">{t('dashboard.premium.locked')}</p>
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/pricing">{t('dashboard.premium.upgrade')}</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <ApiKeyCard />;
 };
 
 export default ApiKeyDisplay;
