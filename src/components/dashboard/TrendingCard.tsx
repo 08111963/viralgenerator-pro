@@ -56,22 +56,6 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
     enabled: icon === "hashtag"
   });
 
-  const { data: totalHashtags } = useQuery({
-    queryKey: ["total-hashtags"],
-    queryFn: async () => {
-      const { count, error } = await supabase
-        .from("trending_hashtags")
-        .select("*", { count: 'exact', head: true });
-
-      if (error) {
-        console.error("Error fetching total hashtags:", error);
-        return 0;
-      }
-
-      return count || 0;
-    },
-    enabled: icon === "hashtag"
-  });
   
   const getIcon = () => {
     switch (icon) {
@@ -97,11 +81,6 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
         <CardTitle className="flex items-center gap-2">
           {getIcon()}
           {title}
-          {icon === "hashtag" && totalHashtags !== undefined && (
-            <span className="ml-2 text-sm font-normal text-muted-foreground">
-              ({totalHashtags} {t('dashboard.trends.total')})
-            </span>
-          )}
         </CardTitle>
         <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
       </CardHeader>
