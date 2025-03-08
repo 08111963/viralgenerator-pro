@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
@@ -6,28 +7,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Key, Copy, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
 
 const ApiKeyDisplay = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
-
-  const { data: isAdmin } = useQuery({
-    queryKey: ["admin-status"],
-    queryFn: async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return false;
-
-      const { data, error } = await supabase
-        .rpc('is_admin', { user_id: session.user.id });
-
-      if (error) {
-        console.error("Error checking admin status:", error);
-        return false;
-      }
-      
-      return !!data;
-    },
-  });
+  const isAdmin = useAdminStatus();
 
   const { data: subscription, isLoading } = useQuery({
     queryKey: ["api-key"],
@@ -76,7 +61,7 @@ const ApiKeyDisplay = () => {
       }
       return data;
     },
-    enabled: !!isAdmin // Only run this query if we know the admin status
+    enabled: true // Rimuoviamo la condizione che bloccava la query
   });
 
   const copyApiKey = async () => {
