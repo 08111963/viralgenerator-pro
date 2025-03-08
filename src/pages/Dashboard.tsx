@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/lib/auth";
 
 const mockTrendingHashtags = [
   { id: "1", name: "#AI", volume: 25000, change: 12 },
@@ -41,6 +42,7 @@ const mockTrendingTopics = [
 const Dashboard = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { session } = useAuth();
   const [trendingHashtags, setTrendingHashtags] = useState(mockTrendingHashtags);
   const [trendingKeywords, setTrendingKeywords] = useState(mockTrendingKeywords);
 
@@ -86,6 +88,23 @@ const Dashboard = () => {
   };
 
   const PremiumFeatureOverlay = ({ children }: { children: React.ReactNode }) => {
+    if (!session) {
+      return (
+        <div className="relative">
+          {children}
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
+            <div className="text-center p-4">
+              <Lock className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground mb-2">{t('dashboard.login.required')}</p>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/login">{t('navigation.login')}</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // Don't show overlay if user is admin
     if (isAdmin) {
       return <>{children}</>;
@@ -113,10 +132,12 @@ const Dashboard = () => {
       <div className="container py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">{t('dashboard.title')}</h1>
-          <Button onClick={handleNotificationToggle} variant="outline">
-            <Bell className="h-4 w-4 mr-2" />
-            {t('dashboard.notifications.enable')}
-          </Button>
+          {session && (
+            <Button onClick={handleNotificationToggle} variant="outline">
+              <Bell className="h-4 w-4 mr-2" />
+              {t('dashboard.notifications.enable')}
+            </Button>
+          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
@@ -140,7 +161,9 @@ const Dashboard = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
-          <ApiKeyDisplay />
+          <PremiumFeatureOverlay>
+            <ApiKeyDisplay />
+          </PremiumFeatureOverlay>
           <PremiumFeatureOverlay>
             <AddTrendForm type="hashtag" onAdd={handleAddHashtag} />
           </PremiumFeatureOverlay>
