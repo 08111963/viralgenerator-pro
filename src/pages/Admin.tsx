@@ -20,16 +20,27 @@ const Admin = () => {
     const checkAdminStatus = async () => {
       if (!session?.user?.id) {
         setIsAdmin(false);
+        navigate("/login");
         return;
       }
 
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('id')
-        .eq('id', session.user.id)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .rpc('is_admin', { user_id: session.user.id });
 
-      if (error) {
+        if (error) throw error;
+        
+        setIsAdmin(!!data);
+        
+        if (!data) {
+          toast({
+            variant: "destructive",
+            title: "Accesso negato",
+            description: "Non hai i permessi di amministratore",
+          });
+          navigate("/");
+        }
+      } catch (error) {
         console.error('Error checking admin status:', error);
         toast({
           variant: "destructive",
@@ -37,17 +48,15 @@ const Admin = () => {
           description: "Errore nel verificare i permessi di amministratore",
         });
         setIsAdmin(false);
-        return;
+        navigate("/");
       }
-
-      setIsAdmin(!!data);
     };
 
     checkAdminStatus();
-  }, [session, toast]);
+  }, [session, toast, navigate]);
 
-  const handleLogout = () => {
-    supabase.auth.signOut();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast({
       title: "Logout effettuato",
       description: "Sei uscito dal pannello amministratore",
