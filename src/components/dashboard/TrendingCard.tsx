@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -30,7 +31,7 @@ const generateHistoricalData = (items: TrendingItem[]) => {
 export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
 
-  const { data: trendingHashtags, isLoading } = useQuery({
+  const { data: trendingHashtags, isLoading: isLoadingHashtags } = useQuery({
     queryKey: ["trending-hashtags"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -44,8 +45,6 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
         return [];
       }
 
-      console.log('Raw data from Supabase:', data.length, data);
-
       return data.map(hashtag => ({
         id: hashtag.id,
         name: hashtag.name,
@@ -56,6 +55,29 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
     enabled: icon === "hashtag"
   });
 
+  const { data: trendingKeywords, isLoading: isLoadingKeywords } = useQuery({
+    queryKey: ["trending-keywords"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("trending_keywords")
+        .select("*")
+        .order("volume", { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error("Error fetching trending keywords:", error);
+        return [];
+      }
+
+      return data.map(keyword => ({
+        id: keyword.id,
+        name: keyword.name,
+        volume: keyword.volume,
+        change: Number(keyword.change_percentage)
+      }));
+    },
+    enabled: icon === "keyword"
+  });
   
   const getIcon = () => {
     switch (icon) {
@@ -70,10 +92,36 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
     }
   };
 
-  const itemsToDisplay = icon === "hashtag" ? trendingHashtags || [] : items;
+  const itemsToDisplay = (() => {
+    if (icon === "hashtag") return trendingHashtags || [];
+    if (icon === "keyword") return trendingKeywords || [];
+    return items;
+  })();
+
   const chartData = generateHistoricalData(itemsToDisplay);
   
   console.log('Final items to display:', itemsToDisplay?.length, itemsToDisplay);
+
+  const isLoading = icon === "hashtag" ? isLoadingHashtags : icon === "keyword" ? isLoadingKeywords : false;
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            {getIcon()}
+            {title}
+          </CardTitle>
+          <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[200px]">
+            <div className="animate-pulse h-4 w-24 bg-muted rounded" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
