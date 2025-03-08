@@ -9,6 +9,7 @@ export interface TrendingItem {
   name: string;
   volume: number;
   change: number;
+  isTrending?: boolean;
 }
 
 export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
@@ -19,7 +20,7 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
   return useQuery({
     queryKey: [`trending-${icon}s`],
     queryFn: async () => {
-      console.log(`Fetching trending ${icon}s from ${tableName} for last 12 hours...`);
+      console.log(`Fetching all ${icon}s from ${tableName}...`);
       
       const twelveHoursAgo = new Date();
       twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
@@ -27,21 +28,20 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
       let { data, error } = await supabase
         .from(tableName)
         .select('*')
-        .gte('created_at', twelveHoursAgo.toISOString())
         .order('created_at', { ascending: false })
         .limit(10);
 
       if (error) {
-        console.error(`Error fetching trending ${icon}s:`, error);
+        console.error(`Error fetching ${icon}s:`, error);
         toast({
           title: t('Error'),
-          description: `Failed to fetch trending ${icon}s`,
+          description: `Failed to fetch ${icon}s`,
           variant: "destructive",
         });
         return [];
       }
 
-      console.log(`Found ${data?.length || 0} ${icon}s in last 12 hours:`, data);
+      console.log(`Found ${data?.length || 0} ${icon}s:`, data);
 
       if (!data) return [];
 
@@ -49,10 +49,11 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
         id: item.id,
         name: item.name,
         volume: item.volume,
-        change: item.change_percentage
+        change: item.change_percentage,
+        isTrending: new Date(item.created_at) <= twelveHoursAgo && item.volume > 0
       }));
     },
-    refetchInterval: 5000, // Refresh every 5 seconds
+    refetchInterval: 5000,
     staleTime: 3000
   });
 };
