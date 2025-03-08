@@ -137,14 +137,14 @@ const Pricing = () => {
       price: "€12",
       description: t('pricing.tiers.base.description'),
       features: t('pricing.features.base', { returnObjects: true }) as string[],
-      priceId: "price_1OvKv8KCRGitJMKFPlxnOxiR"
+      priceId: "price_1OvQFMKCRGitJMKFvROtOJQa"
     },
     {
       name: t('pricing.tiers.pro.name'),
       price: "€26,99",
       description: t('pricing.tiers.pro.description'),
       features: t('pricing.features.pro', { returnObjects: true }) as string[],
-      priceId: "price_1OvKv8KCRGitJMKF7YtP8V9x",
+      priceId: "price_1OvQFMKCRGitJMKFGhvmk6Ne",
       highlighted: true
     }
   ];
