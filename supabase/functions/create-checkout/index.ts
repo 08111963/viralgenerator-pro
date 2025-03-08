@@ -48,14 +48,8 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Get the current URL from the request and ensure it uses HTTPS
-    const origin = req.headers.get('origin') || req.headers.get('referer')
-    if (!origin) {
-      throw new Error('Missing origin header')
-    }
-    
-    const url = new URL(origin)
-    const baseUrl = `https://${url.hostname}`
+    // Use HTTPS production URL for Stripe checkout
+    const baseUrl = 'https://viralgenerator-pro.lovable.app'
 
     // Crea la sessione di checkout
     const session = await stripe.checkout.sessions.create({
