@@ -30,15 +30,20 @@ export const ContentGenerator = () => {
 
     setIsGenerating(true);
     try {
+      console.log('Sending content to generate variants:', trimmedContent);
       const { data, error } = await supabase.functions.invoke('generate-content', {
         body: { content: trimmedContent }
       });
 
+      console.log('Response from generate-content:', { data, error });
+
       if (error) {
+        console.error('Supabase function error:', error);
         throw error;
       }
 
       if (!data?.variants || !Array.isArray(data.variants)) {
+        console.error('Invalid response format:', data);
         throw new Error('Invalid response format');
       }
       
@@ -52,7 +57,7 @@ export const ContentGenerator = () => {
       console.error('Error generating variants:', error);
       toast({
         title: t('Error'),
-        description: t('dashboard.content.variants.error'),
+        description: error.message || t('dashboard.content.variants.error'),
         variant: "destructive",
       });
     } finally {
@@ -111,4 +116,3 @@ export const ContentGenerator = () => {
     </Card>
   );
 };
-

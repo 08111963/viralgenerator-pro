@@ -15,12 +15,16 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Received request to generate content');
     const { content } = await req.json();
+    console.log('Received content:', content);
     
     if (!content || content.trim() === '') {
+      console.log('Content is empty or only whitespace');
       throw new Error('Content is required');
     }
 
+    console.log('Making request to OpenAI API...');
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -28,7 +32,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         messages: [
           { 
             role: 'system', 
@@ -49,7 +53,15 @@ serve(async (req) => {
     }
 
     const data = await response.json();
+    console.log('Received response from OpenAI:', data);
+
+    if (!data.choices?.[0]?.message?.content) {
+      console.error('Invalid response format from OpenAI:', data);
+      throw new Error('Invalid response from OpenAI API');
+    }
+
     const variants = data.choices[0].message.content.split('\n').filter(v => v.trim());
+    console.log('Generated variants:', variants);
 
     return new Response(JSON.stringify({ variants }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -62,4 +74,3 @@ serve(async (req) => {
     });
   }
 });
-
