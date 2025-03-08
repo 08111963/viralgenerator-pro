@@ -1,31 +1,16 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
-import { useToast } from "@/hooks/use-toast";
-
-interface TrendingItem {
-  id: string;
-  name: string;
-  volume: number;
-  change: number;
-}
+import { useTrendingItems } from "@/hooks/useTrendingItems";
+import { TrendingChart } from "./TrendingChart";
+import { TrendingList } from "./TrendingList";
 
 interface TrendingCardProps {
   title: string;
   icon: "hashtag" | "keyword" | "topic";
 }
-
-const generateHistoricalData = (items: TrendingItem[]) => {
-  return items.map((item) => ({
-    name: item.name,
-    volume: item.volume,
-    previous: item.volume - (item.volume * (item.change / 100))
-  }));
-};
 
 const getIcon = (icon: "hashtag" | "keyword" | "topic") => {
   switch (icon) {
@@ -42,93 +27,7 @@ const getIcon = (icon: "hashtag" | "keyword" | "topic") => {
 
 export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
-  const { toast } = useToast();
-  const tableName = `trending_${icon}s`;
-
-  const { data: items = [], isLoading } = useQuery({
-    queryKey: [`trending-${icon}s`],
-    queryFn: async () => {
-      console.log(`Fetching trending ${icon}s from ${tableName}...`);
-      
-      let { data, error } = await supabase
-        .from(tableName)
-        .select('*')
-        .order('volume', { ascending: false })
-        .limit(10);
-
-      if (error) {
-        console.error(`Error fetching trending ${icon}s:`, error);
-        toast({
-          title: t('Error'),
-          description: `Failed to fetch trending ${icon}s`,
-          variant: "destructive",
-        });
-        return [];
-      }
-
-      if (!data || data.length === 0) {
-        console.log(`No ${icon}s found in the database, adding initial data...`);
-        if (icon === 'hashtag') {
-          const initialHashtags = [
-            { name: '#AI', volume: 50000, change_percentage: 25 },
-            { name: '#Tech', volume: 45000, change_percentage: 15 },
-            { name: '#Innovation', volume: 40000, change_percentage: 10 },
-            { name: '#Digital', volume: 35000, change_percentage: 8 },
-            { name: '#Future', volume: 30000, change_percentage: 5 }
-          ];
-
-          for (const hashtag of initialHashtags) {
-            const { error: insertError } = await supabase
-              .from('trending_hashtags')
-              .insert([hashtag]);
-            
-            if (insertError) {
-              console.error('Error inserting hashtag:', insertError);
-              toast({
-                title: t('Error'),
-                description: `Failed to insert initial hashtag: ${hashtag.name}`,
-                variant: "destructive",
-              });
-              continue;
-            }
-          }
-
-          // Fetch the newly inserted data
-          const { data: newData, error: fetchError } = await supabase
-            .from(tableName)
-            .select('*')
-            .order('volume', { ascending: false })
-            .limit(10);
-
-          if (fetchError) {
-            console.error('Error fetching new data:', fetchError);
-            toast({
-              title: t('Error'),
-              description: 'Failed to fetch updated data',
-              variant: "destructive",
-            });
-            return [];
-          }
-
-          data = newData;
-        }
-      }
-
-      if (!data) return [];
-
-      return data.map(item => ({
-        id: item.id,
-        name: item.name,
-        volume: item.volume,
-        change: Number(item.change_percentage)
-      }));
-    },
-    refetchInterval: 30000,
-    staleTime: 25000
-  });
-
-  // Debug log to check final processed data
-  console.log(`Processed ${icon}s data:`, items);
+  const { data: items = [], isLoading } = useTrendingItems(icon);
 
   if (isLoading) {
     return (
@@ -149,9 +48,7 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     );
   }
 
-  // Debug log before rendering empty state
   if (!items || items.length === 0) {
-    console.log(`Rendering empty state for ${icon}s`);
     return (
       <Card>
         <CardHeader>
@@ -170,9 +67,6 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     );
   }
 
-  const chartData = generateHistoricalData(items);
-  console.log(`Generated chart data for ${icon}s:`, chartData);
-
   return (
     <Card>
       <CardHeader>
@@ -184,53 +78,10 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {(!items || items.length === 0) ? (
-            <div className="flex items-center justify-center h-[200px] text-muted-foreground">
-              {t('dashboard.trends.noData')}
-            </div>
-          ) : (
-            <>
-              <div className="h-[200px] w-full mb-4">
-                {icon === "hashtag" ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={generateHistoricalData(items)}>
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="volume" stroke="#9b87f5" fill="#D6BCFA" />
-                      <Area type="monotone" dataKey="previous" stroke="#1A1F2C" fill="#F1F0FB" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={generateHistoricalData(items)}>
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="volume" fill="#9b87f5" />
-                      <Bar dataKey="previous" fill="#D6BCFA" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                )}
-              </div>
-
-              <div className="max-h-[300px] overflow-y-auto">
-                {items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between py-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{item.name}</span>
-                      <span className="text-sm text-muted-foreground">
-                        {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
-                      </span>
-                    </div>
-                    <span className={`text-sm ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                      {item.change >= 0 ? '+' : ''}{item.change}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
+          <div className="h-[200px] w-full mb-4">
+            <TrendingChart items={items} type={icon} />
+          </div>
+          <TrendingList items={items} />
         </div>
       </CardContent>
     </Card>
