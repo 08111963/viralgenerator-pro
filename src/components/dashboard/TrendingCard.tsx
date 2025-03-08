@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -31,6 +32,7 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const { data: items = [], isLoading } = useQuery({
     queryKey: [`trending-${icon}s`],
     queryFn: async () => {
+      console.log(`Fetching trending ${icon}s...`);
       const tableName = `trending_${icon}s`;
       const { data, error } = await supabase
         .from(tableName)
@@ -41,6 +43,8 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
         console.error(`Error fetching trending ${icon}s:`, error);
         return [];
       }
+
+      console.log(`Received ${icon}s data:`, data);
       
       return data.map(item => ({
         id: item.id,
@@ -77,6 +81,25 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
         <CardContent>
           <div className="flex items-center justify-center h-[200px]">
             <div className="animate-pulse h-4 w-24 bg-muted rounded" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!items || items.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            {getIcon()}
+            {title}
+          </CardTitle>
+          <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[200px] text-muted-foreground">
+            {t('dashboard.trends.noData')}
           </div>
         </CardContent>
       </Card>
@@ -140,3 +163,4 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     </Card>
   );
 };
+
