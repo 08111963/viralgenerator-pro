@@ -9,14 +9,24 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  console.log('Request received:', {
+    method: req.method,
+    url: req.url,
+    headers: Object.fromEntries(req.headers.entries())
+  });
+
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
+    console.log('Handling CORS preflight request');
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
     const { priceId } = await req.json()
+    console.log('Received priceId:', priceId);
+    
     const authHeader = req.headers.get('Authorization')
+    console.log('Auth header present:', !!authHeader);
     
     if (!authHeader) {
       throw new Error('Missing auth header')
@@ -25,21 +35,32 @@ serve(async (req) => {
     const token = authHeader.replace('Bearer ', '')
     const { data: { user }, error: userError } = await supabase.auth.getUser(token)
     
+    console.log('User authentication result:', {
+      userFound: !!user,
+      error: userError?.message
+    });
+    
     if (userError || !user) {
       throw new Error('Invalid token')
     }
 
     // Check if user already has a customer ID
-    const { data: subscriptions } = await supabase
+    const { data: subscriptions, error: subError } = await supabase
       .from('subscriptions')
       .select('stripe_customer_id')
       .eq('user_id', user.id)
       .maybeSingle()
 
+    console.log('Subscription check:', {
+      existingCustomerId: subscriptions?.stripe_customer_id,
+      error: subError?.message
+    });
+
     let customerId = subscriptions?.stripe_customer_id
 
     // Create a new customer if doesn't exist
     if (!customerId) {
+      console.log('Creating new Stripe customer for user:', user.email);
       const customer = await stripe.customers.create({
         email: user.email,
         metadata: {
@@ -47,6 +68,7 @@ serve(async (req) => {
         },
       })
       customerId = customer.id
+      console.log('New customer created:', customer.id);
     }
 
     // Use consistent URLs for both development and production
@@ -71,7 +93,8 @@ serve(async (req) => {
     console.log('Checkout session created:', {
       id: session.id,
       success_url: session.success_url,
-      cancel_url: session.cancel_url
+      cancel_url: session.cancel_url,
+      url: session.url
     })
 
     return new Response(
@@ -82,7 +105,10 @@ serve(async (req) => {
       }
     )
   } catch (error) {
-    console.error('Checkout error:', error)
+    console.error('Checkout error:', {
+      message: error.message,
+      stack: error.stack
+    });
     return new Response(
       JSON.stringify({ error: error.message }),
       {
