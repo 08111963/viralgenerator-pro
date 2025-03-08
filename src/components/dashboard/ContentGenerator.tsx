@@ -17,7 +17,6 @@ export const ContentGenerator = () => {
   const [userContent, setUserContent] = useState("");
 
   const generateVariants = async () => {
-    // Rimuovi gli spazi vuoti all'inizio e alla fine
     const trimmedContent = userContent.trim();
     
     if (!trimmedContent) {
@@ -35,7 +34,13 @@ export const ContentGenerator = () => {
         body: { content: trimmedContent }
       });
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
+
+      if (!data?.variants || !Array.isArray(data.variants)) {
+        throw new Error('Invalid response format');
+      }
       
       setVariants(data.variants);
       
@@ -106,3 +111,4 @@ export const ContentGenerator = () => {
     </Card>
   );
 };
+

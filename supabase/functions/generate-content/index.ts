@@ -16,6 +16,10 @@ serve(async (req) => {
 
   try {
     const { content } = await req.json();
+    
+    if (!content || content.trim() === '') {
+      throw new Error('Content is required');
+    }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -38,6 +42,12 @@ serve(async (req) => {
       }),
     });
 
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('OpenAI API error:', error);
+      throw new Error('Error generating content');
+    }
+
     const data = await response.json();
     const variants = data.choices[0].message.content.split('\n').filter(v => v.trim());
 
@@ -52,3 +62,4 @@ serve(async (req) => {
     });
   }
 });
+
