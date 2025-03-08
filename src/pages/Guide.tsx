@@ -1,3 +1,4 @@
+
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -56,7 +57,6 @@ TrendAI - Guida Utente
 - Home: Pagina principale con panoramica delle funzionalità
 - Dashboard: Centro di controllo per il monitoraggio dei trend
 - Prezzi: Visualizzazione dei piani disponibili
-- Admin: Area riservata agli amministratori
 
 2. Dashboard
 La dashboard è divisa in tre sezioni principali:
@@ -112,19 +112,19 @@ Piano Pro:
       section: t('guide.sections.home.title'),
       icon: Home,
       description: t('guide.sections.home.description'),
-      benefits: t('guide.sections.home.benefits', { returnObjects: true })
+      benefits: t('guide.sections.home.benefits', { returnObjects: true }) as string[]
     },
     {
       section: t('guide.sections.dashboard.title'),
       icon: LayoutDashboard,
       description: t('guide.sections.dashboard.description'),
-      benefits: t('guide.sections.dashboard.benefits', { returnObjects: true })
+      benefits: t('guide.sections.dashboard.benefits', { returnObjects: true }) as string[]
     },
     {
       section: t('guide.sections.pricing.title'),
       icon: DollarSign,
       description: t('guide.sections.pricing.description'),
-      benefits: t('guide.sections.pricing.benefits', { returnObjects: true })
+      benefits: t('guide.sections.pricing.benefits', { returnObjects: true }) as string[]
     }
   ];
 
