@@ -1,73 +1,65 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from "react-i18next";
-
-const followerData = [
-  { time: '12h', followers: 1200 },
-  { time: '24h', followers: 1350 },
-  { time: '36h', followers: 1500 },
-  { time: '48h', followers: 1700 },
-  { time: '60h', followers: 1900 },
-  { time: '72h', followers: 2200 },
-];
-
-const contentData = [
-  { time: '12h', engagement: 45 },
-  { time: '24h', engagement: 52 },
-  { time: '36h', engagement: 58 },
-  { time: '48h', engagement: 65 },
-  { time: '60h', engagement: 72 },
-  { time: '72h', engagement: 80 },
-];
-
-const hashtagData = [
-  { time: '12h', popularity: 1000 },
-  { time: '24h', popularity: 1400 },
-  { time: '36h', popularity: 1800 },
-  { time: '48h', popularity: 2300 },
-  { time: '60h', popularity: 2800 },
-  { time: '72h', popularity: 3500 },
-];
+import { usePredictiveTrends } from "@/hooks/usePredictiveTrends";
 
 export const PredictiveTrends = () => {
   const [activeMetric, setActiveMetric] = useState("followers");
   const { t } = useTranslation();
+  const { data: trendsData, isLoading, error } = usePredictiveTrends();
 
   const getMetricDetails = (metric: string) => {
+    if (!trendsData || trendsData.length === 0) {
+      return {
+        data: [],
+        dataKey: "followers",
+        growth: "0%",
+        description: t('dashboard.trends.noData')
+      };
+    }
+
+    const firstValue = trendsData[0][metric as keyof typeof trendsData[0]] as number;
+    const lastValue = trendsData[trendsData.length - 1][metric as keyof typeof trendsData[0]] as number;
+    const growthPercentage = ((lastValue - firstValue) / firstValue) * 100;
+
+    let description = "";
     switch (metric) {
       case "followers":
-        return {
-          data: followerData,
-          dataKey: "followers",
-          growth: "+83%",
-          description: "Crescita prevista dei follower"
-        };
-      case "content":
-        return {
-          data: contentData,
-          dataKey: "engagement",
-          growth: "+77%",
-          description: "Tasso di engagement dei contenuti"
-        };
-      case "hashtags":
-        return {
-          data: hashtagData,
-          dataKey: "popularity",
-          growth: "+250%",
-          description: "Popolarità degli hashtag di tendenza"
-        };
-      default:
-        return {
-          data: followerData,
-          dataKey: "followers",
-          growth: "+83%",
-          description: "Crescita prevista dei follower"
-        };
+        description = "Crescita prevista dei follower";
+        break;
+      case "engagement":
+        description = "Tasso di engagement dei contenuti";
+        break;
+      case "popularity":
+        description = "Popolarità degli hashtag di tendenza";
+        break;
     }
+
+    return {
+      data: trendsData,
+      dataKey: metric,
+      growth: `${growthPercentage > 0 ? '+' : ''}${growthPercentage.toFixed(0)}%`,
+      description
+    };
   };
+
+  if (error) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Zap className="h-5 w-5" />
+            {t('dashboard.predictions.title')}
+          </CardTitle>
+          <CardDescription>{t('dashboard.trends.error')}</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -81,13 +73,13 @@ export const PredictiveTrends = () => {
       <CardContent>
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
           <TabsList className="w-full mb-4">
-            <TabsTrigger value="followers" className="flex-1">Follower</TabsTrigger>
-            <TabsTrigger value="content" className="flex-1">Contenuti</TabsTrigger>
-            <TabsTrigger value="hashtags" className="flex-1">Hashtag</TabsTrigger>
+            <TabsTrigger value="followers">Follower</TabsTrigger>
+            <TabsTrigger value="engagement">Contenuti</TabsTrigger>
+            <TabsTrigger value="popularity">Hashtag</TabsTrigger>
           </TabsList>
 
-          {["followers", "content", "hashtags"].map((metric) => (
-            <TabsContent key={metric} value={metric}>
+          {["followers", "engagement", "popularity"].map((metric) => (
+            <TabsContent key={metric} value={metric} className={isLoading ? "animate-pulse" : ""}>
               <div className="h-[200px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={getMetricDetails(metric).data}>
@@ -96,16 +88,19 @@ export const PredictiveTrends = () => {
                     <Tooltip />
                     <Line 
                       type="monotone" 
-                      dataKey={getMetricDetails(metric).dataKey} 
+                      dataKey={metric}
                       stroke="#8884d8" 
+                      strokeWidth={2}
                     />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
               <div className="mt-4 space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium">Trend in crescita</span>
-                  <span className="text-green-500">{getMetricDetails(metric).growth}</span>
+                  <span className="font-medium">{t('dashboard.predictions.growth')}</span>
+                  <span className={getMetricDetails(metric).growth.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
+                    {getMetricDetails(metric).growth}
+                  </span>
                 </div>
                 <div className="text-sm text-muted-foreground">
                   {getMetricDetails(metric).description}
