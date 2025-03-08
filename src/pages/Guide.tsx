@@ -50,7 +50,6 @@ Piano Pro:
 4. Funzionalità Aggiuntive
 - Notifiche per nuovi trend
 - Supporto multilingua (Italiano/Inglese)
-- Dashboard personalizzabile
 `;
 
     // Creiamo un Blob con il contenuto
@@ -254,7 +253,6 @@ Piano Pro:
                 <ul className="list-disc pl-6 space-y-2">
                   <li><strong>Notifiche:</strong> Attivazione notifiche per nuovi trend</li>
                   <li><strong>Multilingua:</strong> Supporto per italiano e inglese</li>
-                  <li><strong>Dashboard Personalizzabile:</strong> Organizzazione personalizzata dei widget</li>
                 </ul>
               </section>
             </div>
