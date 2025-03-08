@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageCircle, Sparkles } from "lucide-react";
@@ -7,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/lib/supabase";
 
 export const ContentGenerator = () => {
   const { toast } = useToast();
@@ -27,26 +27,20 @@ export const ContentGenerator = () => {
 
     setIsGenerating(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const { data, error } = await supabase.functions.invoke('generate-content', {
+        body: { content: userContent }
+      });
+
+      if (error) throw error;
       
-      const newVariants = [
-        `${userContent} 🚀 #Innovation #Tech #Future`,
-        `${userContent} 💡 #Business #Growth #Success`,
-        `${userContent} 📈 #Development #Progress #Goals`,
-        `${userContent} 🌟 #Inspiration #Motivation #Achievement`,
-        `${userContent} 💪 #Leadership #Excellence #Vision`,
-        `${userContent} 🎯 #Strategy #Planning #Results`,
-        `${userContent} 🔥 #Passion #Drive #Ambition`,
-        `${userContent} 🌍 #Global #Impact #Change`,
-      ];
-      
-      setVariants(newVariants);
+      setVariants(data.variants);
       
       toast({
         title: t('dashboard.content.variants.added'),
         description: t('dashboard.content.variants.success'),
       });
     } catch (error) {
+      console.error('Error generating variants:', error);
       toast({
         title: t('Error'),
         description: t('dashboard.content.variants.error'),

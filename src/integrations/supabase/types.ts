@@ -27,6 +27,36 @@ export type Database = {
         }
         Relationships: []
       }
+      predictive_trends: {
+        Row: {
+          created_at: string
+          engagement: number
+          followers: number
+          id: string
+          popularity: number
+          time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          engagement?: number
+          followers?: number
+          id?: string
+          popularity?: number
+          time?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          engagement?: number
+          followers?: number
+          id?: string
+          popularity?: number
+          time?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       prices: {
         Row: {
           active: boolean | null
