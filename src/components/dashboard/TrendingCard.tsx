@@ -54,32 +54,22 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
 
       console.log(`Successfully fetched ${data.length} ${icon}s:`, data);
       
-      return data.map(item => ({
+      const transformedData = data.map(item => ({
         id: item.id,
         name: item.name,
         volume: item.volume,
         change: Number(item.change_percentage)
       }));
+
+      console.log(`Transformed ${icon}s data:`, transformedData);
+      return transformedData;
     },
-    refetchOnWindowFocus: false,
-    staleTime: 60000 // Consider data fresh for 1 minute
+    refetchInterval: 30000, // Refresh every 30 seconds
+    staleTime: 25000 // Consider data fresh for 25 seconds
   });
 
   // Debug log to check final processed data
   console.log(`Processed ${icon}s data:`, items);
-
-  const getIcon = () => {
-    switch (icon) {
-      case "hashtag":
-        return <Hash className="h-4 w-4" />;
-      case "keyword":
-        return <MessageCircle className="h-4 w-4" />;
-      case "topic":
-        return <TrendingUp className="h-4 w-4" />;
-      default:
-        return null;
-    }
-  };
 
   if (isLoading) {
     return (
@@ -103,9 +93,6 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   // Debug log before rendering empty state
   if (!items || items.length === 0) {
     console.log(`Rendering empty state for ${icon}s`);
-  }
-
-  if (!items || items.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -125,6 +112,20 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   }
 
   const chartData = generateHistoricalData(items);
+  console.log(`Generated chart data for ${icon}s:`, chartData);
+
+  const getIcon = () => {
+    switch (icon) {
+      case "hashtag":
+        return <Hash className="h-4 w-4" />;
+      case "keyword":
+        return <MessageCircle className="h-4 w-4" />;
+      case "topic":
+        return <TrendingUp className="h-4 w-4" />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <Card>
