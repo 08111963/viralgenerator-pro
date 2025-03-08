@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
@@ -9,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import SubscribersList from "@/components/admin/SubscribersList";
 import { LogOut, KeyRound } from "lucide-react";
 
-const ADMIN_PASSWORD = "admin123"; // In a real app, this should be stored securely
+const ADMIN_PASSWORD = "SuperSecurePassword123!"; // Updated to a more secure password
 
 const Admin = () => {
   const [password, setPassword] = useState("");
