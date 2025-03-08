@@ -69,6 +69,8 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
         return [];
       }
 
+      console.log('Keywords fetched from DB:', data?.length, data);
+      
       return data.map(keyword => ({
         id: keyword.id,
         name: keyword.name,
