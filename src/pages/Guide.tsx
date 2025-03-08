@@ -5,11 +5,51 @@ import { FileDown, Home, LayoutDashboard, DollarSign, TrendingUp, Lightbulb, Clo
 import { useTranslation } from "react-i18next";
 
 const Guide = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleDownloadPDF = () => {
-    // Creiamo il contenuto del PDF utilizzando il testo formattato
-    const content = `
+    // Create PDF content using formatted text
+    const content = i18n.language === 'en' ? `
+TrendAI - User Guide
+
+1. Main Navigation
+- Home: Main page with features overview
+- Dashboard: Control center for trend monitoring
+- Pricing: View available plans
+
+2. Dashboard
+The dashboard is divided into three main sections:
+
+Trend Monitoring
+- Trending Hashtags: View most popular hashtags
+- Keywords: Monitor most used keywords
+- Trending Topics: Analysis of main topics (Premium)
+
+Premium Features
+- API Key: Programmatic data access
+- Content Generator: Optimized content creation
+- Predictive Analysis: Future trend forecasts
+
+3. Pricing and Plans
+Basic Plan:
+- Basic trend analysis
+- Hashtag monitoring
+- Weekly reports
+- 1 social account
+- Email support
+
+Pro Plan:
+- All Basic features
+- Advanced predictive analysis
+- AI content generation
+- 5 social accounts
+- Priority support
+- API access
+
+4. Additional Features
+- Notifications for new trends
+- Multilanguage support (Italian/English)
+` : `
 TrendAI - Guida Utente
 
 1. Navigazione Principale
@@ -52,79 +92,62 @@ Piano Pro:
 - Supporto multilingua (Italiano/Inglese)
 `;
 
-    // Creiamo un Blob con il contenuto
+    // Create a Blob with the content
     const blob = new Blob([content], { type: 'text/plain' });
-    
-    // Creiamo un URL per il download
     const url = window.URL.createObjectURL(blob);
     
-    // Creiamo un elemento <a> per il download
+    // Create download link
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'TrendAI-Guida-Utente.txt';
+    link.download = i18n.language === 'en' ? 'TrendAI-User-Guide.txt' : 'TrendAI-Guida-Utente.txt';
     
-    // Clicchiamo il link per avviare il download
     document.body.appendChild(link);
     link.click();
-    
-    // Puliamo
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   };
 
   const benefitsData = [
     {
-      section: "Home",
+      section: t('guide.sections.home.title'),
       icon: Home,
-      description: "Panoramica rapida delle funzionalità chiave dell'app, permettendoti di comprendere velocemente le sue capacità",
-      benefits: [
-        "Comprensione immediata delle funzionalità",
-        "Accesso rapido alle sezioni principali",
-        "Orientamento intuitivo nell'applicazione"
-      ]
+      description: t('guide.sections.home.description'),
+      benefits: t('guide.sections.home.benefits', { returnObjects: true })
     },
     {
-      section: "Dashboard",
+      section: t('guide.sections.dashboard.title'),
       icon: LayoutDashboard,
-      description: "Il tuo centro di controllo per il monitoraggio dei trend, che ti permette di prendere decisioni basate sui dati",
-      benefits: [
-        "Monitoraggio in tempo reale dei trend",
-        "Analisi dettagliate e insights",
-        "Gestione centralizzata degli hashtag"
-      ]
+      description: t('guide.sections.dashboard.description'),
+      benefits: t('guide.sections.dashboard.benefits', { returnObjects: true })
     },
     {
-      section: "Prezzi",
+      section: t('guide.sections.pricing.title'),
       icon: DollarSign,
-      description: "Scegli il piano più adatto alle tue esigenze e al tuo budget, assicurandoti di ottenere il massimo valore",
-      benefits: [
-        "Piani flessibili e scalabili",
-        "Funzionalità premium avanzate",
-        "Supporto dedicato per ogni livello"
-      ]
+      description: t('guide.sections.pricing.description'),
+      benefits: t('guide.sections.pricing.benefits', { returnObjects: true })
     }
   ];
 
   const appBenefits = [
     {
-      title: "Anticipa le Tendenze",
+      title: t('guide.appBenefits.anticipateTrends.title'),
       icon: TrendingUp,
-      description: "Resta sempre un passo avanti identificando i trend emergenti prima della concorrenza"
+      description: t('guide.appBenefits.anticipateTrends.description')
     },
     {
-      title: "Decisioni Informate",
+      title: t('guide.appBenefits.informedDecisions.title'),
       icon: Lightbulb,
-      description: "Prendi decisioni strategiche basate su dati in tempo reale e analisi predittive"
+      description: t('guide.appBenefits.informedDecisions.description')
     },
     {
-      title: "Risparmio di Tempo",
+      title: t('guide.appBenefits.timeSaving.title'),
       icon: Clock,
-      description: "Ottimizza il tuo workflow con la generazione automatica di contenuti basata su AI"
+      description: t('guide.appBenefits.timeSaving.description')
     },
     {
-      title: "Vantaggio Competitivo",
+      title: t('guide.appBenefits.competitiveAdvantage.title'),
       icon: Rocket,
-      description: "Mantieni un edge competitivo nel tuo settore con insights avanzati e strumenti all'avanguardia"
+      description: t('guide.appBenefits.competitiveAdvantage.description')
     }
   ];
 
@@ -133,17 +156,17 @@ Piano Pro:
       <Navigation />
       <div className="container py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Guida Utente</h1>
+          <h1 className="text-3xl font-bold">{t('guide.title')}</h1>
           <Button onClick={handleDownloadPDF} variant="outline">
             <FileDown className="h-4 w-4 mr-2" />
-            Scarica Guida
+            {t('guide.downloadButton')}
           </Button>
         </div>
 
         <div className="space-y-12">
-          {/* Benefici dell'App */}
+          {/* App Benefits */}
           <section>
-            <h2 className="text-2xl font-semibold mb-6">Vantaggi di TrendAI</h2>
+            <h2 className="text-2xl font-semibold mb-6">{t('guide.appBenefits.title')}</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {appBenefits.map((benefit, index) => (
                 <Card key={index}>
@@ -161,9 +184,9 @@ Piano Pro:
             </div>
           </section>
 
-          {/* Sezioni dell'App */}
+          {/* App Sections */}
           <section>
-            <h2 className="text-2xl font-semibold mb-6">Sezioni dell'Applicazione</h2>
+            <h2 className="text-2xl font-semibold mb-6">{t('guide.sections.title')}</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {benefitsData.map((section, index) => (
                 <Card key={index} className="flex flex-col">
@@ -176,7 +199,7 @@ Piano Pro:
                   </CardHeader>
                   <CardContent>
                     <ul className="list-disc pl-5 space-y-1">
-                      {section.benefits.map((benefit, idx) => (
+                      {section.benefits.map((benefit: string, idx: number) => (
                         <li key={idx} className="text-muted-foreground">{benefit}</li>
                       ))}
                     </ul>
@@ -186,73 +209,68 @@ Piano Pro:
             </div>
           </section>
 
-          {/* Guida Esistente */}
+          {/* Detailed Guide */}
           <section>
-            <h2 className="text-2xl font-semibold mb-6">Guida Dettagliata</h2>
+            <h2 className="text-2xl font-semibold mb-6">{t('guide.detailedGuide.title')}</h2>
             <div className="prose prose-slate max-w-none">
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">1. Navigazione Principale</h2>
+                <h2 className="text-2xl font-semibold mb-4">{t('guide.detailedGuide.mainNavigation.title')}</h2>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Home:</strong> Pagina principale con panoramica delle funzionalità</li>
-                  <li><strong>Dashboard:</strong> Centro di controllo per il monitoraggio dei trend</li>
-                  <li><strong>Prezzi:</strong> Visualizzazione dei piani disponibili</li>
-                  <li><strong>Admin:</strong> Area riservata agli amministratori</li>
+                  {t('guide.detailedGuide.mainNavigation.items', { returnObjects: true }).map((item: string, idx: number) => (
+                    <li key={idx}>{item}</li>
+                  ))}
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">2. Dashboard</h2>
-                <p className="mb-4">La dashboard è divisa in tre sezioni principali:</p>
+                <h2 className="text-2xl font-semibold mb-4">{t('guide.detailedGuide.dashboard.title')}</h2>
+                <p className="mb-4">{t('guide.detailedGuide.dashboard.description')}</p>
                 
-                <h3 className="text-xl font-semibold mb-3">Monitoraggio Trend</h3>
+                <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.dashboard.trendMonitoring.title')}</h3>
                 <ul className="list-disc pl-6 space-y-2 mb-4">
-                  <li><strong>Hashtag in Tendenza:</strong> Visualizza gli hashtag più popolari con grafici e statistiche</li>
-                  <li><strong>Parole Chiave:</strong> Monitora le keywords più utilizzate</li>
-                  <li><strong>Argomenti in Tendenza:</strong> (Premium) Analisi dei topic principali</li>
+                  {t('guide.detailedGuide.dashboard.trendMonitoring.items', { returnObjects: true }).map((item: string, idx: number) => (
+                    <li key={idx}>{item}</li>
+                  ))}
                 </ul>
 
-                <h3 className="text-xl font-semibold mb-3">Funzionalità Premium</h3>
+                <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.dashboard.premiumFeatures.title')}</h3>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>API Key:</strong> Accesso programmatico ai dati</li>
-                  <li><strong>Generatore di Contenuti:</strong> Creazione contenuti ottimizzati</li>
-                  <li><strong>Analisi Predittiva:</strong> Previsioni sui trend futuri</li>
+                  {t('guide.detailedGuide.dashboard.premiumFeatures.items', { returnObjects: true }).map((item: string, idx: number) => (
+                    <li key={idx}>{item}</li>
+                  ))}
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">3. Piani e Prezzi</h2>
+                <h2 className="text-2xl font-semibold mb-4">{t('guide.detailedGuide.pricing.title')}</h2>
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="border rounded-lg p-6">
-                    <h3 className="text-xl font-semibold mb-3">Piano Base</h3>
+                    <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.pricing.basic.title')}</h3>
                     <ul className="list-disc pl-6 space-y-2">
-                      <li>Analisi di base dei trend</li>
-                      <li>Monitoraggio hashtag</li>
-                      <li>Report settimanali</li>
-                      <li>1 account social</li>
-                      <li>Supporto email</li>
+                      {t('guide.detailedGuide.pricing.basic.items', { returnObjects: true }).map((item: string, idx: number) => (
+                        <li key={idx}>{item}</li>
+                      ))}
                     </ul>
                   </div>
 
                   <div className="border rounded-lg p-6">
-                    <h3 className="text-xl font-semibold mb-3">Piano Pro</h3>
+                    <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.pricing.pro.title')}</h3>
                     <ul className="list-disc pl-6 space-y-2">
-                      <li>Tutte le funzionalità Base</li>
-                      <li>Analisi predittiva avanzata</li>
-                      <li>Generazione contenuti AI</li>
-                      <li>5 account social</li>
-                      <li>Supporto prioritario</li>
-                      <li>Accesso API</li>
+                      {t('guide.detailedGuide.pricing.pro.items', { returnObjects: true }).map((item: string, idx: number) => (
+                        <li key={idx}>{item}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">4. Funzionalità Aggiuntive</h2>
+                <h2 className="text-2xl font-semibold mb-4">{t('guide.detailedGuide.additionalFeatures.title')}</h2>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Notifiche:</strong> Attivazione notifiche per nuovi trend</li>
-                  <li><strong>Multilingua:</strong> Supporto per italiano e inglese</li>
+                  {t('guide.detailedGuide.additionalFeatures.items', { returnObjects: true }).map((item: string, idx: number) => (
+                    <li key={idx}>{item}</li>
+                  ))}
                 </ul>
               </section>
             </div>

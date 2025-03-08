@@ -235,6 +235,122 @@ export default {
         success: 'New content variants have been created',
         added: 'Variants Generated'
       }
+    },
+    guide: {
+      title: 'User Guide',
+      downloadButton: 'Download Guide',
+      appBenefits: {
+        title: 'TrendAI Benefits',
+        anticipateTrends: {
+          title: 'Anticipate Trends',
+          description: 'Stay one step ahead by identifying emerging trends before your competitors'
+        },
+        informedDecisions: {
+          title: 'Informed Decisions',
+          description: 'Make strategic decisions based on real-time data and predictive analytics'
+        },
+        timeSaving: {
+          title: 'Time Saving',
+          description: 'Optimize your workflow with AI-powered automatic content generation'
+        },
+        competitiveAdvantage: {
+          title: 'Competitive Advantage',
+          description: 'Maintain a competitive edge in your industry with advanced insights and cutting-edge tools'
+        }
+      },
+      sections: {
+        title: 'Application Sections',
+        home: {
+          title: 'Home',
+          description: 'Quick overview of key app features, allowing you to quickly understand its capabilities',
+          benefits: [
+            'Immediate understanding of features',
+            'Quick access to main sections',
+            'Intuitive application orientation'
+          ]
+        },
+        dashboard: {
+          title: 'Dashboard',
+          description: 'Your control center for trend monitoring, enabling data-driven decisions',
+          benefits: [
+            'Real-time trend monitoring',
+            'Detailed analysis and insights',
+            'Centralized hashtag management'
+          ]
+        },
+        pricing: {
+          title: 'Pricing',
+          description: 'Choose the plan that best suits your needs and budget, ensuring maximum value',
+          benefits: [
+            'Flexible and scalable plans',
+            'Advanced premium features',
+            'Dedicated support for each level'
+          ]
+        }
+      },
+      detailedGuide: {
+        title: 'Detailed Guide',
+        mainNavigation: {
+          title: '1. Main Navigation',
+          description: 'Main navigation features overview',
+          items: [
+            'Home: Main page with features overview',
+            'Dashboard: Control center for trend monitoring',
+            'Pricing: View available plans'
+          ]
+        },
+        dashboard: {
+          title: '2. Dashboard',
+          description: 'The dashboard is divided into three main sections:',
+          trendMonitoring: {
+            title: 'Trend Monitoring',
+            items: [
+              'Trending Hashtags: View most popular hashtags',
+              'Keywords: Monitor most used keywords',
+              'Trending Topics: Analysis of main topics (Premium)'
+            ]
+          },
+          premiumFeatures: {
+            title: 'Premium Features',
+            items: [
+              'API Key: Programmatic data access',
+              'Content Generator: Optimized content creation',
+              'Predictive Analysis: Future trend forecasts'
+            ]
+          }
+        },
+        pricing: {
+          title: '3. Pricing and Plans',
+          basic: {
+            title: 'Basic Plan',
+            items: [
+              'Basic trend analysis',
+              'Hashtag monitoring',
+              'Weekly reports',
+              '1 social account',
+              'Email support'
+            ]
+          },
+          pro: {
+            title: 'Pro Plan',
+            items: [
+              'All Basic features',
+              'Advanced predictive analysis',
+              'AI content generation',
+              '5 social accounts',
+              'Priority support',
+              'API access'
+            ]
+          }
+        },
+        additionalFeatures: {
+          title: '4. Additional Features',
+          items: [
+            'Notifications for new trends',
+            'Multilanguage support (Italian/English)'
+          ]
+        }
+      }
     }
   }
 }
