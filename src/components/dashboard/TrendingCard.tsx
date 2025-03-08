@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -34,6 +33,10 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     queryFn: async () => {
       console.log(`Fetching trending ${icon}s...`);
       const tableName = `trending_${icon}s`;
+      
+      // Debug log to check query execution
+      console.log(`Querying table: ${tableName}`);
+      
       const { data, error } = await supabase
         .from(tableName)
         .select("*")
@@ -41,11 +44,16 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
 
       if (error) {
         console.error(`Error fetching trending ${icon}s:`, error);
-        return [];
+        throw error; // This will trigger the error state in useQuery
       }
 
       console.log(`Received ${icon}s data:`, data);
       
+      if (!data || data.length === 0) {
+        console.log(`No ${icon}s found in the database`);
+        return [];
+      }
+
       return data.map(item => ({
         id: item.id,
         name: item.name,
@@ -54,6 +62,9 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
       }));
     }
   });
+
+  // Debug log to check final processed data
+  console.log(`Processed ${icon}s data:`, items);
 
   const getIcon = () => {
     switch (icon) {
@@ -85,6 +96,11 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
         </CardContent>
       </Card>
     );
+  }
+
+  // Debug log before rendering empty state
+  if (!items || items.length === 0) {
+    console.log(`Rendering empty state for ${icon}s`);
   }
 
   if (!items || items.length === 0) {
@@ -163,4 +179,3 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     </Card>
   );
 };
-
