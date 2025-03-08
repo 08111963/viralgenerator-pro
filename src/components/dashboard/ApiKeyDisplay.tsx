@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { Key, Copy, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const ApiKeyDisplay = () => {
   const { toast } = useToast();
@@ -55,6 +56,11 @@ const ApiKeyDisplay = () => {
           </CardTitle>
           <CardDescription>{t('dashboard.apiKey.upgradeDesc')}</CardDescription>
         </CardHeader>
+        <CardContent>
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/pricing">{t('dashboard.premium.upgrade')}</Link>
+          </Button>
+        </CardContent>
       </Card>
     );
   }
@@ -87,4 +93,3 @@ const ApiKeyDisplay = () => {
 };
 
 export default ApiKeyDisplay;
-
