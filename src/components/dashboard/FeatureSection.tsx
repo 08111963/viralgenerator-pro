@@ -1,12 +1,14 @@
 
-import { ApiKeyDisplay } from "@/components/dashboard/ApiKeyDisplay";
+import { ApiKeyDisplay } from "@/components/ui/api-key-display";
 import { AddTrendForm } from "@/components/dashboard/AddTrendForm";
 import { PremiumFeatureOverlay } from "./PremiumFeatureOverlay";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useTranslation } from "react-i18next";
 
 export const FeatureSection = () => {
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleAddHashtag = async (newHashtag) => {
     const { error } = await supabase
