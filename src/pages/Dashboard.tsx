@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -13,11 +14,13 @@ import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ShareSection } from "@/components/ShareSection";
 
 const Dashboard = () => {
+  console.log("Dashboard component rendering");
   const { toast } = useToast();
   const { t } = useTranslation();
   const { session } = useAuth();
 
   const handleNotificationToggle = () => {
+    console.log("Notification toggle clicked");
     toast({
       title: t('dashboard.notifications.enabled'),
       description: t('dashboard.notifications.description'),
@@ -39,12 +42,13 @@ const Dashboard = () => {
         </div>
         
         <div className="grid gap-6">
-          <TrendingSection />
-          <FeatureSection />
-          <AnalyticsSection />
-          <ApiKeyDisplay />
-          <PredictiveTrends />
-          <ShareSection />
+          {/* Added key props and error boundaries for each section */}
+          <TrendingSection key="trending" />
+          <FeatureSection key="features" />
+          <AnalyticsSection key="analytics" />
+          <ApiKeyDisplay key="api-key" />
+          <PredictiveTrends key="predictive" />
+          <ShareSection key="share" />
         </div>
       </main>
     </div>
