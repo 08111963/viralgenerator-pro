@@ -70,7 +70,7 @@ const PricingTier = ({
         return;
       }
 
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/create-checkout`, {
+      const response = await fetch('https://vpgwwpiqwbxgsovjpzhh.functions.supabase.co/create-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
