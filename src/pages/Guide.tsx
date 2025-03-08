@@ -112,19 +112,19 @@ Piano Pro:
       section: t('guide.sections.home.title'),
       icon: Home,
       description: t('guide.sections.home.description'),
-      benefits: t('guide.sections.home.benefits', { returnObjects: true }) as string[]
+      benefits: (t('guide.sections.home.benefits', { returnObjects: true }) ?? []) as string[]
     },
     {
       section: t('guide.sections.dashboard.title'),
       icon: LayoutDashboard,
       description: t('guide.sections.dashboard.description'),
-      benefits: t('guide.sections.dashboard.benefits', { returnObjects: true }) as string[]
+      benefits: (t('guide.sections.dashboard.benefits', { returnObjects: true }) ?? []) as string[]
     },
     {
       section: t('guide.sections.pricing.title'),
       icon: DollarSign,
       description: t('guide.sections.pricing.description'),
-      benefits: t('guide.sections.pricing.benefits', { returnObjects: true }) as string[]
+      benefits: (t('guide.sections.pricing.benefits', { returnObjects: true }) ?? []) as string[]
     }
   ];
 
@@ -199,7 +199,7 @@ Piano Pro:
                   </CardHeader>
                   <CardContent>
                     <ul className="list-disc pl-5 space-y-1">
-                      {section.benefits.map((benefit: string, idx: number) => (
+                      {section.benefits?.map((benefit: string, idx: number) => (
                         <li key={idx} className="text-muted-foreground">{benefit}</li>
                       ))}
                     </ul>
@@ -216,7 +216,7 @@ Piano Pro:
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">{t('guide.detailedGuide.mainNavigation.title')}</h2>
                 <ul className="list-disc pl-6 space-y-2">
-                  {t('guide.detailedGuide.mainNavigation.items', { returnObjects: true }).map((item: string, idx: number) => (
+                  {(t('guide.detailedGuide.mainNavigation.items', { returnObjects: true }) as string[]).map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
                 </ul>
@@ -228,14 +228,14 @@ Piano Pro:
                 
                 <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.dashboard.trendMonitoring.title')}</h3>
                 <ul className="list-disc pl-6 space-y-2 mb-4">
-                  {t('guide.detailedGuide.dashboard.trendMonitoring.items', { returnObjects: true }).map((item: string, idx: number) => (
+                  {(t('guide.detailedGuide.dashboard.trendMonitoring.items', { returnObjects: true }) as string[]).map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
                 </ul>
 
                 <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.dashboard.premiumFeatures.title')}</h3>
                 <ul className="list-disc pl-6 space-y-2">
-                  {t('guide.detailedGuide.dashboard.premiumFeatures.items', { returnObjects: true }).map((item: string, idx: number) => (
+                  {(t('guide.detailedGuide.dashboard.premiumFeatures.items', { returnObjects: true }) as string[]).map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
                 </ul>
@@ -248,7 +248,7 @@ Piano Pro:
                   <div className="border rounded-lg p-6">
                     <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.pricing.basic.title')}</h3>
                     <ul className="list-disc pl-6 space-y-2">
-                      {t('guide.detailedGuide.pricing.basic.items', { returnObjects: true }).map((item: string, idx: number) => (
+                      {(t('guide.detailedGuide.pricing.basic.items', { returnObjects: true }) as string[]).map((item, idx) => (
                         <li key={idx}>{item}</li>
                       ))}
                     </ul>
@@ -257,7 +257,7 @@ Piano Pro:
                   <div className="border rounded-lg p-6">
                     <h3 className="text-xl font-semibold mb-3">{t('guide.detailedGuide.pricing.pro.title')}</h3>
                     <ul className="list-disc pl-6 space-y-2">
-                      {t('guide.detailedGuide.pricing.pro.items', { returnObjects: true }).map((item: string, idx: number) => (
+                      {(t('guide.detailedGuide.pricing.pro.items', { returnObjects: true }) as string[]).map((item, idx) => (
                         <li key={idx}>{item}</li>
                       ))}
                     </ul>
@@ -268,7 +268,7 @@ Piano Pro:
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">{t('guide.detailedGuide.additionalFeatures.title')}</h2>
                 <ul className="list-disc pl-6 space-y-2">
-                  {t('guide.detailedGuide.additionalFeatures.items', { returnObjects: true }).map((item: string, idx: number) => (
+                  {(t('guide.detailedGuide.additionalFeatures.items', { returnObjects: true }) as string[]).map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
                 </ul>
