@@ -1,7 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { FileDown, Home, LayoutDashboard, DollarSign, Settings, TrendingUp, Lightbulb, Clock, Rocket } from "lucide-react";
+import { FileDown, Home, LayoutDashboard, DollarSign, TrendingUp, Lightbulb, Clock, Rocket } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const Guide = () => {
@@ -102,16 +102,6 @@ Piano Pro:
         "Piani flessibili e scalabili",
         "Funzionalità premium avanzate",
         "Supporto dedicato per ogni livello"
-      ]
-    },
-    {
-      section: "Area Admin",
-      icon: Settings,
-      description: "Gestione completa dell'applicazione e degli utenti, garantendo un funzionamento ottimale",
-      benefits: [
-        "Controllo totale sulle impostazioni",
-        "Gestione utenti avanzata",
-        "Monitoraggio delle performance"
       ]
     }
   ];
