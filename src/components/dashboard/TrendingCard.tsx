@@ -20,7 +20,6 @@ interface TrendingCardProps {
 }
 
 const generateHistoricalData = (items: TrendingItem[]) => {
-  console.log('Items received in generateHistoricalData:', items.length, items);
   return items.map((item) => ({
     name: item.name,
     volume: item.volume,
@@ -37,8 +36,7 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
       const { data, error } = await supabase
         .from("trending_hashtags")
         .select("*")
-        .order("volume", { ascending: false })
-        .limit(10);
+        .order("volume", { ascending: false });
 
       if (error) {
         console.error("Error fetching trending hashtags:", error);
@@ -61,15 +59,12 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
       const { data, error } = await supabase
         .from("trending_keywords")
         .select("*")
-        .order("volume", { ascending: false })
-        .limit(10);
+        .order("volume", { ascending: false });
 
       if (error) {
         console.error("Error fetching trending keywords:", error);
         return [];
       }
-
-      console.log('Keywords fetched from DB:', data?.length, data);
       
       return data.map(keyword => ({
         id: keyword.id,
@@ -101,8 +96,6 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
   })();
 
   const chartData = generateHistoricalData(itemsToDisplay);
-  
-  console.log('Final items to display:', itemsToDisplay?.length, itemsToDisplay);
 
   const isLoading = icon === "hashtag" ? isLoadingHashtags : icon === "keyword" ? isLoadingKeywords : false;
 
@@ -160,19 +153,21 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
             )}
           </div>
 
-          {itemsToDisplay.map((item) => (
-            <div key={item.id} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="font-medium">{item.name}</span>
-                <span className="text-sm text-muted-foreground">
-                  {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
+          <div className="max-h-[300px] overflow-y-auto">
+            {itemsToDisplay.map((item) => (
+              <div key={item.id} className="flex items-center justify-between py-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{item.name}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
+                  </span>
+                </div>
+                <span className={`text-sm ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {item.change >= 0 ? '+' : ''}{item.change}%
                 </span>
               </div>
-              <span className={`text-sm ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {item.change >= 0 ? '+' : ''}{item.change}%
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
