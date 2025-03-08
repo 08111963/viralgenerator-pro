@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -19,9 +18,9 @@ interface TrendingCardProps {
   icon: "hashtag" | "keyword" | "topic";
 }
 
-// Function to generate historical data
 const generateHistoricalData = (items: TrendingItem[]) => {
-  return items.map((item) => ({  // Removed slice to show all items
+  console.log('Items received in generateHistoricalData:', items.length, items);
+  return items.map((item) => ({
     name: item.name,
     volume: item.volume,
     previous: item.volume - (item.volume * (item.change / 100))
@@ -44,6 +43,8 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
         console.error("Error fetching trending hashtags:", error);
         return [];
       }
+
+      console.log('Raw data from Supabase:', data.length, data);
 
       return data.map(hashtag => ({
         id: hashtag.id,
@@ -87,6 +88,8 @@ export const TrendingCard = ({ title, items, icon }: TrendingCardProps) => {
 
   const itemsToDisplay = icon === "hashtag" ? trendingHashtags || [] : items;
   const chartData = generateHistoricalData(itemsToDisplay);
+  
+  console.log('Final items to display:', itemsToDisplay?.length, itemsToDisplay);
 
   return (
     <Card>
