@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { stripe } from "../_shared/stripe.ts"
 import { supabase } from "../_shared/supabase.ts"
@@ -71,8 +70,8 @@ serve(async (req) => {
       console.log('New customer created:', customer.id);
     }
 
-    // Use preview URL for development
-    const baseUrl = req.headers.get('origin') || 'https://viralgenerator-pro.lovable.app'
+    // Use preview URL
+    const baseUrl = 'https://preview--viralgenerator-pro.lovable.app'
     console.log('Using base URL for redirects:', baseUrl)
 
     // Create Stripe checkout session
@@ -118,4 +117,3 @@ serve(async (req) => {
     )
   }
 })
-
