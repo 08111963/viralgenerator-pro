@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -64,11 +63,9 @@ const Dashboard = () => {
         </div>
         
         <div className="grid gap-6">
-          {/* Added key props and error boundaries for each section */}
           <TrendingSection key="trending" />
           <FeatureSection key="features" />
           <AnalyticsSection key="analytics" />
-          <ApiKeyDisplay key="api-key" />
           <PredictiveTrends key="predictive" />
           <ShareSection key="share" />
         </div>
