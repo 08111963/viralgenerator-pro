@@ -20,7 +20,7 @@ import { SortableWidget } from "@/components/dashboard/SortableWidget";
 
 const Dashboard = () => {
   const { toast } = useToast();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { session } = useAuth();
   const { widgetSettings, widgetOrder, reorderWidgets } = useDashboardSettings();
 
@@ -28,6 +28,32 @@ const Dashboard = () => {
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
   );
+
+  const handleNotificationToggle = async () => {
+    try {
+      const permission = await Notification.requestPermission();
+      
+      if (permission === "granted") {
+        toast({
+          title: t('dashboard.notifications.enabled'),
+          description: t('dashboard.notifications.description'),
+        });
+      } else {
+        toast({
+          title: t('Error'),
+          description: t('dashboard.notifications.denied'),
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error("Error enabling notifications:", error);
+      toast({
+        title: t('Error'),
+        description: t('dashboard.notifications.error'),
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -38,6 +64,15 @@ const Dashboard = () => {
       const newOrder = arrayMove(widgetOrder, oldIndex, newIndex);
       reorderWidgets(newOrder);
     }
+  };
+
+  const widgetComponents: Record<WidgetKey, React.ReactNode> = {
+    weeklyReports: <WeeklyReports />,
+    trending: <TrendingSection />,
+    features: <FeatureSection />,
+    analytics: <AnalyticsSection />,
+    predictive: <PredictiveTrends />,
+    share: <ShareSection />
   };
 
   return (
