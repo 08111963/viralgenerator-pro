@@ -23,13 +23,15 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
     queryFn: async () => {
       console.log(`Fetching all ${icon}s from ${tableName}...`);
       
-      const twelveHoursAgo = new Date();
-      twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
+      const twentyFourHoursAgo = new Date();
+      twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
       
       let { data, error } = await supabase
         .from(tableName)
         .select('*')
+        .gt('created_at', twentyFourHoursAgo.toISOString())
         .order('created_at', { ascending: false })
+        .order('volume', { ascending: false })
         .limit(10);
 
       if (error) {
@@ -51,7 +53,7 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
         name: item.name,
         volume: item.volume,
         change: item.change_percentage,
-        isTrending: new Date(item.created_at) <= twelveHoursAgo && item.volume > 0
+        isTrending: new Date(item.created_at) >= twentyFourHoursAgo && item.volume > 0
       }));
     },
     refetchInterval: 5000,
