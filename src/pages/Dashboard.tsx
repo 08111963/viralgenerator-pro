@@ -14,12 +14,20 @@ import { ShareSection } from "@/components/ShareSection";
 
 const Dashboard = () => {
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { session } = useAuth();
 
-  // Update document title and meta tags for SEO
+  // Update document title and meta tags for SEO based on current language
   React.useEffect(() => {
-    document.title = "Dashboard - ViralGenerator Pro | Analisi Trend Social";
+    const title = i18n.language === 'it' 
+      ? "Dashboard - ViralGenerator Pro | Analisi Trend Social"
+      : "Dashboard - ViralGenerator Pro | Social Trend Analysis";
+    
+    document.title = title;
+    
+    const description = i18n.language === 'it'
+      ? 'Accedi alla dashboard di ViralGenerator Pro per analizzare i trend social in tempo reale, generare contenuti virali e visualizzare previsioni AI personalizzate.'
+      : 'Access the ViralGenerator Pro dashboard to analyze social trends in real-time, generate viral content, and view personalized AI predictions.';
     
     // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]');
@@ -28,7 +36,7 @@ const Dashboard = () => {
       metaDescription.setAttribute('name', 'description');
       document.head.appendChild(metaDescription);
     }
-    metaDescription.setAttribute('content', 'Accedi alla dashboard di ViralGenerator Pro per analizzare i trend social in tempo reale, generare contenuti virali e visualizzare previsioni AI personalizzate.');
+    metaDescription.setAttribute('content', description);
     
     // Update meta keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
@@ -38,7 +46,7 @@ const Dashboard = () => {
       document.head.appendChild(metaKeywords);
     }
     metaKeywords.setAttribute('content', 'dashboard social media, analisi trend, contenuti virali, AI marketing, social media analytics, trend prediction');
-  }, []);
+  }, [i18n.language]);
 
   const handleNotificationToggle = () => {
     console.log("Notification toggle clicked");
