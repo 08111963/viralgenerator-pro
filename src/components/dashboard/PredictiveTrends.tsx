@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle, Loader2 } from "lucide-react";
@@ -97,9 +98,9 @@ export const PredictiveTrends = () => {
       <CardContent>
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
           <TabsList className="w-full mb-4">
-            <TabsTrigger value="followers">Follower</TabsTrigger>
-            <TabsTrigger value="engagement">Contenuti</TabsTrigger>
-            <TabsTrigger value="popularity">Hashtag</TabsTrigger>
+            <TabsTrigger value="followers">{t('dashboard.predictions.aggregated.followers.name')}</TabsTrigger>
+            <TabsTrigger value="engagement">{t('dashboard.predictions.aggregated.content.name')}</TabsTrigger>
+            <TabsTrigger value="popularity">{t('dashboard.predictions.aggregated.hashtags.name')}</TabsTrigger>
           </TabsList>
 
           <div className="space-y-4">
