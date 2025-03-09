@@ -7,7 +7,7 @@ const TermsOfService = () => {
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="min-h-screen bg-background">
       <Navigation />
       <div className="container mx-auto py-8 px-4">
         <Card>
@@ -49,7 +49,7 @@ const TermsOfService = () => {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 };
 

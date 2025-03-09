@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { Navigation } from "@/components/Navigation";
@@ -6,7 +7,7 @@ const PrivacyPolicy = () => {
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="min-h-screen bg-background">
       <Navigation />
       <div className="container mx-auto py-8 px-4">
         <Card>
@@ -48,7 +49,7 @@ const PrivacyPolicy = () => {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 };
 
