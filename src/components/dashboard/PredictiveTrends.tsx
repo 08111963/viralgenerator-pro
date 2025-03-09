@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle, Loader2 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid } from 'recharts';
 import { useTranslation } from "react-i18next";
 import { usePredictiveTrends, TrendDetail } from "@/hooks/usePredictiveTrends";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,6 +50,22 @@ const TrendDetails = ({ details }: { details: TrendDetail }) => (
     </div>
   </div>
 );
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-3 border rounded-lg shadow-lg">
+        <p className="font-medium">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} style={{ color: entry.color }}>
+            {entry.name}: {entry.value.toLocaleString()}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 export const PredictiveTrends = () => {
   const [activeMetric, setActiveMetric] = useState("followers");
@@ -100,6 +116,12 @@ export const PredictiveTrends = () => {
     );
   }
 
+  const metrics = {
+    followers: { color: "#22c55e", name: "Follower" },
+    engagement: { color: "#3b82f6", name: "Contenuti" },
+    popularity: { color: "#f97316", name: "Hashtag" }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -117,32 +139,43 @@ export const PredictiveTrends = () => {
             <TabsTrigger value="popularity">Hashtag</TabsTrigger>
           </TabsList>
 
-          {["followers", "engagement", "popularity"].map((metric) => (
-            <TabsContent key={metric} value={metric}>
-              <div className="space-y-4">
-                <div className="h-[200px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={trendsData}>
-                      <XAxis dataKey="time" />
-                      <YAxis domain={['auto', 'auto']} />
-                      <Tooltip />
-                      <Line 
-                        type="monotone" 
-                        dataKey={metric}
-                        stroke="#8884d8" 
-                        strokeWidth={2}
-                        dot={true}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                
-                {trendsData[0]?.trends && trendsData[0].trends[metric as keyof typeof trendsData[0]["trends"]] && (
-                  <TrendDetails details={trendsData[0].trends[metric as keyof typeof trendsData[0]["trends"]]} />
-                )}
-              </div>
-            </TabsContent>
-          ))}
+          <div className="space-y-4">
+            <div className="h-[300px]"> {/* Increased height for better visualization */}
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={trendsData}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis 
+                    dataKey="time"
+                    tick={{ fill: 'currentColor' }}
+                    tickLine={{ stroke: 'currentColor' }}
+                  />
+                  <YAxis 
+                    tick={{ fill: 'currentColor' }}
+                    tickLine={{ stroke: 'currentColor' }}
+                    tickFormatter={(value) => value.toLocaleString()}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend />
+                  {Object.entries(metrics).map(([key, { color, name }]) => (
+                    <Line
+                      key={key}
+                      type="monotone"
+                      dataKey={key}
+                      stroke={color}
+                      name={name}
+                      strokeWidth={2}
+                      dot={{ r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            
+            {trendsData?.[0]?.trends && trendsData[0].trends[activeMetric as keyof typeof trendsData[0]["trends"]] && (
+              <TrendDetails details={trendsData[0].trends[activeMetric as keyof typeof trendsData[0]["trends"]]} />
+            )}
+          </div>
         </Tabs>
       </CardContent>
     </Card>
