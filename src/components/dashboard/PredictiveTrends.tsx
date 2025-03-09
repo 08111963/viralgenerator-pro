@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, Ca
 import { useTranslation } from "react-i18next";
 import { usePredictiveTrends, TrendDetail } from "@/hooks/usePredictiveTrends";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PremiumFeatureOverlay } from "@/components/dashboard/PremiumFeatureOverlay";
 
 const TrendIndicator = ({ trend }: { trend: string }) => {
   if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-500" />;
@@ -136,7 +137,7 @@ export const PredictiveTrends = () => {
     }
   };
 
-  return (
+  const BaseContent = () => (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -213,5 +214,11 @@ export const PredictiveTrends = () => {
         </Tabs>
       </CardContent>
     </Card>
+  );
+
+  return (
+    <PremiumFeatureOverlay>
+      <BaseContent />
+    </PremiumFeatureOverlay>
   );
 };
