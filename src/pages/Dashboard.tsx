@@ -54,12 +54,36 @@ const Dashboard = () => {
     metaKeywords.setAttribute('content', 'dashboard social media, analisi trend, contenuti virali, AI marketing, social media analytics, trend prediction');
   }, [i18n.language]);
 
-  const handleNotificationToggle = () => {
-    console.log("Notification toggle clicked");
-    toast({
-      title: t('dashboard.notifications.enabled'),
-      description: t('dashboard.notifications.description'),
-    });
+  const handleNotificationToggle = async () => {
+    try {
+      const permission = await Notification.requestPermission();
+      
+      if (permission === "granted") {
+        toast({
+          title: t('dashboard.notifications.enabled'),
+          description: t('dashboard.notifications.description'),
+        });
+        
+        // Esempio di notifica
+        new Notification("ViralGenerator Pro", {
+          body: "Le notifiche sono state attivate con successo!",
+          icon: "/favicon.ico"
+        });
+      } else {
+        toast({
+          title: "Permesso negato",
+          description: "Per ricevere le notifiche, devi consentire l'accesso nelle impostazioni del browser.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error("Errore nell'attivazione delle notifiche:", error);
+      toast({
+        title: "Errore",
+        description: "Si è verificato un errore nell'attivazione delle notifiche.",
+        variant: "destructive"
+      });
+    }
   };
 
   const sensors = useSensors(
