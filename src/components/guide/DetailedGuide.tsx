@@ -8,6 +8,12 @@ import { Check, Info } from "lucide-react";
 export const DetailedGuide = () => {
   const { t } = useTranslation();
 
+  // Helper function to safely handle array translations
+  const getTranslatedArray = (key: string): string[] => {
+    const translation = t(key, { returnObjects: true });
+    return Array.isArray(translation) ? translation : [];
+  };
+
   return (
     <section className="space-y-6">
       <h2 className="text-2xl font-semibold mb-6">{t('guide.detailedGuide.title')}</h2>
@@ -33,7 +39,7 @@ export const DetailedGuide = () => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {t('guide.detailedGuide.dashboard.trendMonitoring.items', { returnObjects: true }).map((item: string, idx: number) => (
+                {getTranslatedArray('guide.detailedGuide.dashboard.trendMonitoring.items').map((item, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{item}</span>
@@ -49,7 +55,7 @@ export const DetailedGuide = () => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {t('guide.detailedGuide.dashboard.analytics.items', { returnObjects: true }).map((item: string, idx: number) => (
+                {getTranslatedArray('guide.detailedGuide.dashboard.analytics.items').map((item, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{item}</span>
@@ -71,7 +77,7 @@ export const DetailedGuide = () => {
           <Card>
             <CardContent className="pt-6">
               <ul className="space-y-2">
-                {t('guide.sections.trends.benefits', { returnObjects: true }).map((benefit: string, idx: number) => (
+                {getTranslatedArray('guide.sections.trends.benefits').map((benefit, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{benefit}</span>
@@ -93,7 +99,7 @@ export const DetailedGuide = () => {
           <Card>
             <CardContent className="pt-6">
               <ul className="space-y-2">
-                {t('guide.sections.content.benefits', { returnObjects: true }).map((benefit: string, idx: number) => (
+                {getTranslatedArray('guide.sections.content.benefits').map((benefit, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{benefit}</span>
