@@ -1,3 +1,4 @@
+
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid, ReferenceLine } from 'recharts';
 
 interface CustomTooltipProps {
@@ -39,11 +40,11 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="h-[700px] w-full max-w-[1400px] mx-auto"> {/* Increased max-width and centered */}
+      <div className="h-[800px] w-full max-w-[1800px] mx-auto"> {/* Increased height and max-width further */}
         <ResponsiveContainer width="100%" height="100%">
           <LineChart 
             data={data}
-            margin={{ top: 50, right: 80, left: 80, bottom: 50 }} // Increased margins significantly
+            margin={{ top: 60, right: 100, left: 100, bottom: 60 }} // Increased margins even more
           >
             <CartesianGrid 
               strokeDasharray="3 3" 
@@ -53,40 +54,40 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
             />
             <XAxis 
               dataKey="time"
-              tick={{ fill: '#1e293b', fontSize: 20 }} // Increased font size further
-              tickLine={{ stroke: '#64748b', strokeWidth: 2 }}
-              tickMargin={25} // Increased margin
+              tick={{ fill: '#1e293b', fontSize: 24 }} // Increased font size further
+              tickLine={{ stroke: '#64748b', strokeWidth: 3 }}
+              tickMargin={30} // Increased margin
               stroke="#64748b"
-              strokeWidth={2}
+              strokeWidth={3}
             />
             <YAxis 
-              tick={{ fill: '#1e293b', fontSize: 20 }} // Increased font size further
-              tickLine={{ stroke: '#64748b', strokeWidth: 2 }}
+              tick={{ fill: '#1e293b', fontSize: 24 }} // Increased font size further
+              tickLine={{ stroke: '#64748b', strokeWidth: 3 }}
               tickFormatter={(value) => value.toLocaleString()}
-              tickMargin={25} // Increased margin
+              tickMargin={30} // Increased margin
               stroke="#64748b"
-              strokeWidth={2}
+              strokeWidth={3}
             />
             <Tooltip 
               content={<CustomTooltip />}
-              wrapperStyle={{ fontSize: '18px' }} // Increased tooltip font size
+              wrapperStyle={{ fontSize: '22px' }} // Increased tooltip font size
             />
             <Legend 
               verticalAlign="top" 
-              height={80} // Increased height further
-              formatter={(value) => <span className="text-2xl font-medium">{value}</span>} // Increased legend text size
-              wrapperStyle={{ paddingBottom: '50px' }}
+              height={100} // Increased height further
+              formatter={(value) => <span className="text-3xl font-medium">{value}</span>} // Increased legend text size
+              wrapperStyle={{ paddingBottom: '60px' }}
             />
             <ReferenceLine 
               y={averageValue} 
               stroke="#94a3b8" 
-              strokeWidth={2}
+              strokeWidth={3}
               strokeDasharray="3 3"
               label={{ 
                 value: 'Media', 
                 position: 'right',
                 fill: '#1e293b',
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: 600
               }} 
             />
@@ -97,9 +98,9 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
                 dataKey="volume"
                 stroke={color}
                 name={name}
-                strokeWidth={5} // Increased line thickness
-                dot={{ r: 10, fill: color, strokeWidth: 2 }} // Increased dot size
-                activeDot={{ r: 12, fill: color }} // Increased active dot size
+                strokeWidth={6} // Increased line thickness
+                dot={{ r: 12, fill: color, strokeWidth: 3 }} // Increased dot size
+                activeDot={{ r: 14, fill: color }} // Increased active dot size
                 animationDuration={1500}
                 connectNulls
               />
