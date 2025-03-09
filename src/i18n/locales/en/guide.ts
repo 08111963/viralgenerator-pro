@@ -1,4 +1,3 @@
-
 export const guide = {
   title: 'TrendAI User Guide',
   downloadButton: 'Download Guide',
@@ -86,13 +85,13 @@ export const guide = {
           'Competitive Benchmark: Compare your performance with competitors'
         ]
       },
-      contentCreation: {
-        title: 'Content Creation',
+      settings: {
+        title: 'Dashboard Settings',
         items: [
-          'AI Generator: Create optimized variants of your content',
-          'Hashtag Suggestions: Get advice on the best hashtags to use',
-          'Editorial Calendar: Plan and organize your content',
-          'A/B Testing: Test different versions of your posts'
+          'Customize dashboard layout and widgets',
+          'Configure notification preferences',
+          'Manage API integrations',
+          'Set up data export options'
         ]
       }
     },
