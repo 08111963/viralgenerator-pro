@@ -70,7 +70,22 @@ export default {
         subtitle: 'Predicted trends in the next 72 hours',
         growth: 'Growing trend',
         volume: 'Volume',
-        sentiment: 'Sentiment'
+        sentiment: 'Sentiment',
+        aggregated: {
+          title: 'Aggregated predictions for connected socials:',
+          followers: {
+            name: 'Followers',
+            description: 'Follower growth prediction across all connected socials'
+          },
+          content: {
+            name: 'Content',
+            description: 'Interaction predictions for posts across all socials'
+          },
+          hashtags: {
+            name: 'Hashtags',
+            description: 'Popularity prediction for hashtags used on socials'
+          }
+        }
       },
       content: {
         title: 'Content Generator',

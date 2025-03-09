@@ -17,18 +17,18 @@ export const PredictiveTrends = () => {
   const metrics = {
     followers: { 
       color: "#8B5CF6", 
-      name: "Follower", 
-      description: "Previsione crescita follower su tutti i social collegati"
+      name: t('dashboard.predictions.aggregated.followers.name'), 
+      description: t('dashboard.predictions.aggregated.followers.description')
     },
     engagement: { 
       color: "#D946EF", 
-      name: "Contenuti", 
-      description: "Previsioni interazioni sui contenuti postati su tutti i social"
+      name: t('dashboard.predictions.aggregated.content.name'), 
+      description: t('dashboard.predictions.aggregated.content.description')
     },
     popularity: { 
       color: "#0EA5E9", 
-      name: "Hashtag", 
-      description: "Previsione popolarità degli hashtag usati sui social"
+      name: t('dashboard.predictions.aggregated.hashtags.name'), 
+      description: t('dashboard.predictions.aggregated.hashtags.description')
     }
   };
 
@@ -84,7 +84,7 @@ export const PredictiveTrends = () => {
         <CardDescription className="space-y-2">
           {t('dashboard.predictions.subtitle')}
           <div className="mt-2 space-y-1">
-            <p className="text-sm font-medium">Previsioni aggregate per i social collegati:</p>
+            <p className="text-sm font-medium">{t('dashboard.predictions.aggregated.title')}</p>
             {Object.values(metrics).map(({ name, description }) => (
               <div key={name} className="text-xs text-muted-foreground flex gap-2">
                 <span className="font-medium">{name}:</span>
