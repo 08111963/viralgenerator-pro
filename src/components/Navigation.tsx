@@ -33,6 +33,12 @@ export const Navigation = () => {
           <Link to="/admin" className="text-foreground/60 hover:text-foreground transition-colors">
             {t('navigation.admin')}
           </Link>
+          <Link to="/terms" className="text-foreground/60 hover:text-foreground transition-colors text-sm">
+            {t('legal.terms.title')}
+          </Link>
+          <Link to="/privacy" className="text-foreground/60 hover:text-foreground transition-colors text-sm">
+            {t('legal.privacy.title')}
+          </Link>
           <LanguageSwitcher />
           <Button variant="outline" asChild>
             <Link to="/login">{t('navigation.login')}</Link>
