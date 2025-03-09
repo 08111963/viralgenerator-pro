@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -23,9 +22,10 @@ export const TermsAcceptanceDialog = ({ isOpen, onClose }: TermsAcceptanceDialog
   const navigate = useNavigate();
 
   const handleAccept = () => {
-    // In una implementazione reale, qui salveresti l'accettazione nel database
     localStorage.setItem('termsAccepted', 'true');
     onClose();
+    // Forza un refresh della pagina per aggiornare lo stato
+    window.location.reload();
   };
 
   return (
