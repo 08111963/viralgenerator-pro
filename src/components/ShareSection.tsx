@@ -14,25 +14,33 @@ export const ShareSection = () => {
   const handleShare = (platform: string) => {
     console.log(`Sharing on ${platform}`);
     let shareUrl = '';
-    const shareText = encodeURIComponent("Check out ViralGenerator Pro - an amazing tool for social trend analysis! 📈");
+    
+    // Customize the message for each platform
+    const messages = {
+      twitter: "Discover TrendAI - The ultimate tool for social media trend analysis and content generation! 🚀 #SocialMedia #AI #DigitalMarketing",
+      facebook: "Transform your social media strategy with TrendAI - Your AI-powered solution for trend analysis and viral content generation! 🎯",
+      linkedin: "Excited to share TrendAI - An innovative AI platform that helps businesses master social media trends and create engaging content. Join the future of digital marketing! 🌟 #AI #SocialMediaMarketing #Innovation"
+    };
+    
+    const shareText = encodeURIComponent(messages[platform] || messages.twitter);
     
     switch (platform) {
       case 'twitter':
         shareUrl = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(appUrl)}`;
         break;
       case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(appUrl)}`;
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(appUrl)}&quote=${shareText}`;
         break;
       case 'linkedin':
-        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(appUrl)}`;
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(appUrl)}&summary=${shareText}`;
         break;
     }
 
     if (shareUrl) {
       window.open(shareUrl, '_blank', 'noopener,noreferrer');
       toast({
-        title: t('Condivisione avviata'),
-        description: t(`Condivisione su ${platform} in corso`),
+        title: t('Share started'),
+        description: t(`Sharing on ${platform}`),
       });
     }
   };
@@ -42,10 +50,10 @@ export const ShareSection = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Share2 className="h-5 w-5" />
-          {t('Condividi ViralGenerator Pro')}
+          Share TrendAI
         </CardTitle>
         <CardDescription>
-          {t('Aiutaci a far conoscere ViralGenerator Pro condividendolo con la tua rete')}
+          Help us spread the word about TrendAI with your network
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -79,4 +87,3 @@ export const ShareSection = () => {
     </Card>
   );
 };
-
