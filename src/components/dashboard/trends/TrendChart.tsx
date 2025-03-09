@@ -40,7 +40,7 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="h-[400px]"> {/* Increased height */}
+      <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart 
             data={data}
@@ -54,21 +54,23 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
             />
             <XAxis 
               dataKey="time"
-              tick={{ fill: '#64748b', fontSize: 12 }}
+              tick={{ fill: '#1e293b', fontSize: 14 }}
               tickLine={{ stroke: '#64748b' }}
               tickMargin={12}
+              stroke="#64748b"
             />
             <YAxis 
-              tick={{ fill: '#64748b', fontSize: 12 }}
+              tick={{ fill: '#1e293b', fontSize: 14 }}
               tickLine={{ stroke: '#64748b' }}
               tickFormatter={(value) => value.toLocaleString()}
               tickMargin={12}
+              stroke="#64748b"
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
               verticalAlign="top" 
               height={36}
-              formatter={(value) => <span className="text-sm font-medium">{value}</span>}
+              formatter={(value) => <span className="text-base font-medium">{value}</span>}
               wrapperStyle={{ paddingBottom: '20px' }}
             />
             <ReferenceLine 
@@ -78,8 +80,8 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
               label={{ 
                 value: 'Media', 
                 position: 'right',
-                fill: '#94a3b8',
-                fontSize: 12 
+                fill: '#1e293b',
+                fontSize: 14 
               }} 
             />
             {Object.entries(metrics).map(([key, { color, name }]) => (
@@ -102,4 +104,3 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
     </div>
   );
 };
-
