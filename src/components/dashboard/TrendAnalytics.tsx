@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, Instagram, Twitter, Video } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, CartesianGrid } from 'recharts';
+import { TrendingUp, Instagram, Twitter, Video, ArrowUp, ArrowDown } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 import { TrendDetailModal } from "./TrendDetailModal";
@@ -64,7 +64,9 @@ export const TrendAnalytics = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   useEffect(() => {
+    // Aggiorna i dati ogni 5 minuti
     const updateInterval = setInterval(() => {
+      // In un'implementazione reale, qui chiameremmo un'API per ottenere nuovi dati
       setLastUpdate(new Date());
       
       toast({
@@ -88,7 +90,7 @@ export const TrendAnalytics = () => {
 
   return (
     <>
-      <Card className="col-span-1">
+      <Card className="col-span-2">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
@@ -120,69 +122,26 @@ export const TrendAnalytics = () => {
 
             {Object.entries(platformData).map(([platform, data]) => (
               <TabsContent key={platform} value={platform}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div className="bg-card p-4 rounded-lg border shadow-sm h-[300px]">
-                    <p className="text-sm font-medium mb-4">{t('dashboard.analytics.metrics.engagement')}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="h-[200px]">
+                    <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.engagement')}</p>
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={engagementData[platform]} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                        <XAxis 
-                          dataKey="name"
-                          tick={{ fill: '#64748b', fontSize: 12 }}
-                          tickLine={{ stroke: '#64748b' }}
-                        />
-                        <YAxis 
-                          tick={{ fill: '#64748b', fontSize: 12 }}
-                          tickLine={{ stroke: '#64748b' }}
-                          tickFormatter={(value) => value.toLocaleString()}
-                        />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#fff',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '8px',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                          }}
-                        />
-                        <Line 
-                          type="monotone" 
-                          dataKey="value" 
-                          stroke="#8b5cf6"
-                          strokeWidth={3}
-                          dot={{ r: 6, fill: "#8b5cf6", strokeWidth: 2 }}
-                          activeDot={{ r: 8, fill: "#8b5cf6" }}
-                        />
+                      <LineChart data={engagementData[platform]}>
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="value" stroke="#8884d8" />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                  <div className="bg-card p-4 rounded-lg border shadow-sm h-[300px]">
-                    <p className="text-sm font-medium mb-4">{t('dashboard.analytics.metrics.volume')}</p>
+                  <div className="h-[200px]">
+                    <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.volume')}</p>
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                        <XAxis 
-                          dataKey="topic"
-                          tick={{ fill: '#64748b', fontSize: 12 }}
-                          tickLine={{ stroke: '#64748b' }}
-                        />
-                        <YAxis 
-                          tick={{ fill: '#64748b', fontSize: 12 }}
-                          tickLine={{ stroke: '#64748b' }}
-                          tickFormatter={(value) => value.toLocaleString()}
-                        />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#fff',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '8px',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                          }}
-                        />
-                        <Bar 
-                          dataKey="volume" 
-                          fill="#8b5cf6"
-                          radius={[4, 4, 0, 0]}
-                        />
+                      <BarChart data={data}>
+                        <XAxis dataKey="topic" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="volume" fill="#8884d8" />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
