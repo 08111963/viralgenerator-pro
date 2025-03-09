@@ -101,15 +101,15 @@ export const PredictiveTrends = () => {
   }
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="flex flex-col space-y-1.5 p-6">
-        <h3 className="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
           <Zap className="h-5 w-5" />
           {t('dashboard.predictions.title')}
-        </h3>
-        <p className="text-sm text-muted-foreground">{t('dashboard.predictions.subtitle')}</p>
-      </div>
-      <div className="p-6 pt-0">
+        </CardTitle>
+        <CardDescription>{t('dashboard.predictions.subtitle')}</CardDescription>
+      </CardHeader>
+      <CardContent>
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
           <TabsList className="w-full mb-4">
             <TabsTrigger value="followers">Follower</TabsTrigger>
@@ -137,14 +137,14 @@ export const PredictiveTrends = () => {
                   </ResponsiveContainer>
                 </div>
                 
-                {trendsData[0]?.trends && metric in trendsData[0].trends && (
-                  <TrendDetails details={trendsData[0].trends[metric as keyof typeof trendsData[0].trends]} />
+                {trendsData[0]?.trends && trendsData[0].trends[metric as keyof typeof trendsData[0]["trends"]] && (
+                  <TrendDetails details={trendsData[0].trends[metric as keyof typeof trendsData[0]["trends"]]} />
                 )}
               </div>
             </TabsContent>
           ))}
         </Tabs>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
