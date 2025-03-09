@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
@@ -29,7 +28,6 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
       let { data, error } = await supabase
         .from(tableName)
         .select('*')
-        .gt('created_at', twentyFourHoursAgo.toISOString())
         .order('created_at', { ascending: false })
         .order('volume', { ascending: false })
         .limit(10);
