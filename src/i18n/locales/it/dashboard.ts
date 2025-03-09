@@ -38,35 +38,34 @@ export const dashboard = {
     locked: "Funzionalità disponibile solo nel piano Pro",
     upgrade: "Passa a Pro"
   },
-  analytics: {
-    title: 'Analisi dei Trend',
-    subtitle: 'Monitoraggio in tempo reale dei trend social',
-    lastUpdate: 'Ultimo aggiornamento',
-    metrics: {
-      engagement: 'Engagement nel Tempo',
-      volume: 'Volume per Argomento'
-    }
-  },
   predictions: {
-    title: 'Previsioni AI',
-    subtitle: 'Analisi predittiva del tuo profilo social nelle prossime 72 ore',
+    title: 'Analisi Predittiva Social',
+    subtitle: 'Analisi del tuo profilo basata sui tuoi ultimi post e interazioni',
     growth: 'Trend in crescita',
     volume: 'Volume',
     sentiment: 'Sentiment',
     dataUpdated: 'Dati aggiornati alle',
+    noData: 'Nessun dato social disponibile da analizzare. Collega i tuoi account social per vedere le previsioni.',
+    analyzing: 'Analisi in corso dei tuoi ultimi:',
+    dataPoints: {
+      posts: 'Post pubblicati',
+      interactions: 'Interazioni ricevute',
+      hashtags: 'Hashtag utilizzati'
+    },
     metrics: {
-      followers: 'Crescita Follower',
-      engagement: 'Engagement dei Contenuti',
-      popularity: 'Popolarità Hashtag'
+      followers: 'Previsione Crescita Follower',
+      engagement: 'Previsione Engagement',
+      popularity: 'Trend Hashtag'
     },
     descriptions: {
-      followers: 'Previsione della crescita dei follower basata sulle tue attività recenti',
-      engagement: 'Stima delle interazioni future sui tuoi contenuti',
-      popularity: 'Analisi della potenziale visibilità dei tuoi hashtag'
+      followers: 'Analisi della crescita prevista dei follower nelle prossime 72 ore, basata sui tuoi ultimi post e pattern di crescita',
+      engagement: 'Previsione delle interazioni (like, commenti, condivisioni) sui tuoi prossimi post',
+      popularity: 'Analisi della potenziale visibilità dei tuoi hashtag più utilizzati'
     },
     error: {
       rateLimit: 'Troppe richieste, riprova tra qualche minuto',
-      generic: 'Errore nel recupero delle previsioni'
+      generic: 'Errore nel recupero delle previsioni',
+      noSocial: 'Collega almeno un account social per vedere le previsioni'
     }
   },
   content: {

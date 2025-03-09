@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle, Loader2 } from "lucide-react";
+import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle, Loader2, Link } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTranslation } from "react-i18next";
 import { usePredictiveTrends, TrendDetail } from "@/hooks/usePredictiveTrends";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
+import { useSocialAccounts } from "@/hooks/useSocialAccounts";
 
 const TrendIndicator = ({ trend }: { trend: string }) => {
   if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-500" />;
@@ -27,36 +28,31 @@ const ImpactBadge = ({ impact }: { impact: string }) => {
   );
 };
 
-const TrendDetails = ({ details }: { details: TrendDetail }) => (
-  <div className="space-y-2 mt-4 p-4 bg-muted rounded-lg">
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <TrendIndicator trend={details.trend} />
-        <span className={`font-medium ${details.percentageChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-          {details.percentageChange > 0 ? '+' : ''}{details.percentageChange}%
-        </span>
+const AnalysisOverview = () => {
+  return (
+    <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-muted rounded-lg">
+      <div className="text-center">
+        <div className="text-2xl font-bold">24</div>
+        <div className="text-sm text-muted-foreground">Post Analizzati</div>
       </div>
-      <ImpactBadge impact={details.impact} />
-    </div>
-    <div className="text-sm">
-      <p className="text-muted-foreground">Velocità: <span className="font-medium">{details.velocity}</span></p>
-      <div className="mt-2">
-        <p className="font-medium mb-1">Fattori chiave:</p>
-        <ul className="list-disc list-inside text-sm text-muted-foreground">
-          {details.factors.map((factor, idx) => (
-            <li key={idx}>{factor}</li>
-          ))}
-        </ul>
+      <div className="text-center">
+        <div className="text-2xl font-bold">1.2K</div>
+        <div className="text-sm text-muted-foreground">Interazioni</div>
+      </div>
+      <div className="text-center">
+        <div className="text-2xl font-bold">15</div>
+        <div className="text-sm text-muted-foreground">Hashtag</div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const PredictiveTrends = () => {
   const [activeMetric, setActiveMetric] = useState("followers");
   const [lastUpdateTime, setLastUpdateTime] = useState<Date>(new Date());
   const { t } = useTranslation();
   const { data: trendsData, isLoading, error } = usePredictiveTrends();
+  const { data: socialAccounts } = useSocialAccounts();
 
   useEffect(() => {
     if (trendsData) {
@@ -69,6 +65,22 @@ export const PredictiveTrends = () => {
   }, [trendsData, t]);
 
   console.log('PredictiveTrends render:', { trendsData, isLoading, error });
+
+  if (!socialAccounts || socialAccounts.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Link className="h-5 w-5" />
+            {t('dashboard.predictions.title')}
+          </CardTitle>
+          <CardDescription className="text-yellow-600">
+            {t('dashboard.predictions.error.noSocial')}
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   if (error) {
     const errorMessage = error.message?.includes('Too Many Requests') 
@@ -131,6 +143,8 @@ export const PredictiveTrends = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <AnalysisOverview />
+        
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
           <TabsList className="w-full mb-4">
             <TabsTrigger value="followers">{t('dashboard.predictions.metrics.followers')}</TabsTrigger>
