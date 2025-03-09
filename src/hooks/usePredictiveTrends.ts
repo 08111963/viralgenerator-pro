@@ -31,25 +31,29 @@ export const usePredictiveTrends = () => {
       try {
         const { data: aiPredictions, error: aiError } = await supabase.functions.invoke('generate-predictions');
         
-        if (aiPredictions?.predictions && !aiError) {
-          console.log('Got AI predictions:', aiPredictions);
+        if (aiPredictions?.predictions && Array.isArray(aiPredictions.predictions) && aiPredictions.predictions.length > 0) {
+          console.log('Got AI predictions:', aiPredictions.predictions);
           return aiPredictions.predictions as PredictiveTrendData[];
         } else {
-          console.warn('AI predictions failed:', aiError);
-          throw new Error('Failed to get AI predictions');
+          console.warn('AI predictions invalid or empty:', aiPredictions);
+          throw new Error('Invalid AI predictions format');
         }
       } catch (e) {
         console.error('Error getting AI predictions:', e);
         
-        // Fallback to database
         const { data, error } = await supabase
           .from('predictive_trends')
           .select('*')
           .order('time');
 
         if (error) {
-          console.error('Error fetching predictive trends:', error);
+          console.error('Error fetching predictive trends from DB:', error);
           throw error;
+        }
+
+        if (!data || data.length === 0) {
+          console.warn('No data found in database');
+          return [];
         }
 
         console.log('Found database trends:', data);

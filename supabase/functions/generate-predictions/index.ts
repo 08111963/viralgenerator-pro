@@ -33,53 +33,29 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o',
         messages: [
           {
             role: 'system',
-            content: `You are a social media trend analyst focused on generating predictive data in this exact JSON format:
+            content: `You are a social media trend analyst. Generate predictions for each date in a simple JSON format with this exact structure:
             {
               "predictions": [
                 {
                   "time": "YYYY-MM-DD",
                   "followers": number between 5000-50000,
                   "engagement": number between 1000-30000,
-                  "popularity": number between 500-10000,
-                  "trends": {
-                    "followers": {
-                      "percentageChange": number between -20 and 40,
-                      "trend": "up" | "down" | "stable",
-                      "impact": "alto" | "medio" | "basso",
-                      "velocity": "rapida" | "moderata" | "lenta",
-                      "factors": [string, string]
-                    },
-                    "engagement": {
-                      "percentageChange": number between -20 and 40,
-                      "trend": "up" | "down" | "stable",
-                      "impact": "alto" | "medio" | "basso",
-                      "velocity": "rapida" | "moderata" | "lenta",
-                      "factors": [string, string]
-                    },
-                    "popularity": {
-                      "percentageChange": number between -20 and 40,
-                      "trend": "up" | "down" | "stable",
-                      "impact": "alto" | "medio" | "basso",
-                      "velocity": "rapida" | "moderata" | "lenta",
-                      "factors": [string, string]
-                    }
-                  }
+                  "popularity": number between 500-10000
                 }
               ]
-            }
-            IMPORTANT: Follow the exact format and value ranges.`
+            }`
           },
           {
             role: 'user',
-            content: `Generate realistic predictions for these dates: ${dates.join(', ')}. Return data in the specified JSON format with realistic values within the defined ranges.`
+            content: `Generate predictions for these dates: ${dates.join(', ')}. Return data in the specified JSON format.`
           }
         ],
         temperature: 0.7,
-        max_tokens: 2000,
+        max_tokens: 1000,
       }),
     });
 
@@ -111,7 +87,7 @@ serve(async (req) => {
       };
     });
 
-    console.log('Processed predictions:', predictions);
+    console.log('Final processed predictions:', predictions);
 
     return new Response(JSON.stringify(predictions), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

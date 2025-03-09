@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle } from "lucide-react";
+import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle, Loader2 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTranslation } from "react-i18next";
 import { usePredictiveTrends, TrendDetail } from "@/hooks/usePredictiveTrends";
@@ -57,27 +56,7 @@ export const PredictiveTrends = () => {
   const { t } = useTranslation();
   const { data: trendsData, isLoading, error } = usePredictiveTrends();
 
-  const getMetricDetails = (metric: string) => {
-    if (!trendsData || trendsData.length === 0) {
-      return {
-        data: [],
-        dataKey: metric,
-        growth: "0%",
-        description: t('dashboard.trends.noData')
-      };
-    }
-
-    const lastDataPoint = trendsData[trendsData.length - 1];
-    const trendDetails = lastDataPoint.trends?.[metric as keyof typeof lastDataPoint.trends];
-
-    return {
-      data: trendsData,
-      dataKey: metric,
-      growth: trendDetails ? `${trendDetails.percentageChange > 0 ? '+' : ''}${trendDetails.percentageChange}%` : '0%',
-      description: t(`dashboard.predictions.${metric}`),
-      details: trendDetails
-    };
-  };
+  console.log('PredictiveTrends render:', { trendsData, isLoading, error });
 
   if (error) {
     return (
@@ -88,6 +67,34 @@ export const PredictiveTrends = () => {
             {t('dashboard.predictions.title')}
           </CardTitle>
           <CardDescription>{t('dashboard.trends.error')}</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            {t('dashboard.predictions.title')}
+          </CardTitle>
+          <CardDescription>{t('dashboard.predictions.loading')}</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  if (!trendsData || trendsData.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-yellow-500" />
+            {t('dashboard.predictions.title')}
+          </CardTitle>
+          <CardDescription>{t('dashboard.trends.noData')}</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -111,26 +118,27 @@ export const PredictiveTrends = () => {
           </TabsList>
 
           {["followers", "engagement", "popularity"].map((metric) => (
-            <TabsContent key={metric} value={metric} className={isLoading ? "animate-pulse" : ""}>
+            <TabsContent key={metric} value={metric}>
               <div className="space-y-4">
                 <div className="h-[200px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={getMetricDetails(metric).data}>
+                    <LineChart data={trendsData}>
                       <XAxis dataKey="time" />
-                      <YAxis />
+                      <YAxis domain={['auto', 'auto']} />
                       <Tooltip />
                       <Line 
                         type="monotone" 
                         dataKey={metric}
                         stroke="#8884d8" 
                         strokeWidth={2}
+                        dot={true}
                       />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
                 
-                {getMetricDetails(metric).details && (
-                  <TrendDetails details={getMetricDetails(metric).details} />
+                {trendsData[0]?.trends?.[metric as keyof typeof trendsData[0].trends] && (
+                  <TrendDetails details={trendsData[0].trends[metric as keyof typeof trendsData[0].trends]} />
                 )}
               </div>
             </TabsContent>
