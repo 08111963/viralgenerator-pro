@@ -1,116 +1,133 @@
 
 export const guide = {
-  title: 'Guida Utente',
+  title: 'Guida Completa TrendAI',
   downloadButton: 'Scarica Guida',
   appBenefits: {
     title: 'Vantaggi di TrendAI',
     anticipateTrends: {
       title: 'Anticipa i Trend',
-      description: 'Resta un passo avanti identificando i trend emergenti prima dei tuoi concorrenti'
+      description: 'Identifica i trend emergenti settimane prima della concorrenza grazie al nostro sistema di AI predittiva'
     },
     informedDecisions: {
-      title: 'Decisioni Informate',
-      description: 'Prendi decisioni strategiche basate su dati in tempo reale e analisi predittive'
+      title: 'Decisioni Strategiche',
+      description: 'Utilizza dati in tempo reale e analisi predittive per ottimizzare la tua strategia social'
     },
     timeSaving: {
       title: 'Risparmio di Tempo',
-      description: 'Ottimizza il tuo flusso di lavoro con la generazione automatica di contenuti basata su IA'
+      description: 'Automatizza la creazione di contenuti e il monitoraggio dei trend con strumenti basati su IA'
     },
     competitiveAdvantage: {
       title: 'Vantaggio Competitivo',
-      description: 'Mantieni un vantaggio competitivo nel tuo settore con insights avanzati e strumenti all\'avanguardia'
+      description: 'Mantieni la leadership nel tuo settore con insights esclusivi e strumenti avanzati'
     }
   },
   sections: {
-    title: 'Sezioni dell\'Applicazione',
-    home: {
-      title: 'Home',
-      description: 'Panoramica rapida delle funzionalità chiave dell\'app, per comprenderne rapidamente le capacità',
-      benefits: [
-        'Comprensione immediata delle funzionalità',
-        'Accesso rapido alle sezioni principali',
-        'Orientamento intuitivo nell\'applicazione'
-      ]
-    },
+    title: 'Guida alle Sezioni',
     dashboard: {
       title: 'Dashboard',
-      description: 'Il tuo centro di controllo per il monitoraggio dei trend, abilitando decisioni basate sui dati',
+      description: 'Centro di controllo completo per il monitoraggio dei trend e la gestione dei contenuti',
       benefits: [
-        'Monitoraggio dei trend in tempo reale',
-        'Analisi dettagliate e insights',
-        'Gestione centralizzata degli hashtag'
+        'Monitoraggio in tempo reale dei trend più rilevanti',
+        'Analisi dettagliata del sentiment e dell\'engagement',
+        'Gestione centralizzata degli account social',
+        'Report settimanali automatizzati'
       ]
     },
-    pricing: {
-      title: 'Prezzi',
-      description: 'Scegli il piano che meglio si adatta alle tue esigenze e al tuo budget, garantendo il massimo valore',
+    trends: {
+      title: 'Monitoraggio Trend',
+      description: 'Analisi approfondita dei trend social e del loro impatto',
       benefits: [
-        'Piani flessibili e scalabili',
-        'Funzionalità premium avanzate',
-        'Supporto dedicato per ogni livello'
+        'Identificazione rapida dei trending topics',
+        'Analisi del volume e della velocità di crescita',
+        'Metriche di engagement per hashtag',
+        'Previsioni sull\'evoluzione dei trend'
+      ]
+    },
+    content: {
+      title: 'Generazione Contenuti',
+      description: 'Strumenti avanzati per la creazione e ottimizzazione dei contenuti',
+      benefits: [
+        'Generazione automatica di varianti di contenuto',
+        'Suggerimenti per hashtag ottimali',
+        'Analisi del sentiment pre-pubblicazione',
+        'Ottimizzazione contenuti multilingua'
       ]
     }
   },
   detailedGuide: {
     title: 'Guida Dettagliata',
     mainNavigation: {
-      title: '1. Navigazione Principale',
-      description: 'Panoramica delle funzioni di navigazione principali',
+      title: 'Navigazione Principale',
       items: [
-        'Home: Pagina principale con panoramica delle funzionalità',
-        'Dashboard: Centro di controllo per il monitoraggio dei trend',
-        'Prezzi: Visualizza i piani disponibili'
+        'Dashboard: Centro di controllo principale con tutti gli strumenti essenziali',
+        'Report Settimanali: Analisi approfondite dei trend e delle performance',
+        'Generatore Contenuti: Strumento AI per la creazione di contenuti ottimizzati',
+        'Impostazioni: Configurazione account e preferenze personalizzate'
       ]
     },
     dashboard: {
-      title: '2. Dashboard',
-      description: 'La dashboard è divisa in tre sezioni principali:',
+      title: 'Utilizzo della Dashboard',
+      description: 'La dashboard offre una panoramica completa di tutte le funzionalità principali:',
       trendMonitoring: {
         title: 'Monitoraggio Trend',
         items: [
-          'Hashtag in Tendenza: Visualizza gli hashtag più popolari',
-          'Parole Chiave: Monitora le parole chiave più utilizzate',
-          'Argomenti in Tendenza: Analisi dei topic principali (Premium)'
+          'Hashtag in Tendenza: Visualizza e analizza gli hashtag più popolari con metriche di crescita',
+          'Parole Chiave: Monitora le keywords rilevanti per il tuo settore',
+          'Topics Emergenti: Scopri nuovi argomenti prima che diventino virali',
+          'Analisi Sentiment: Valuta la percezione dei contenuti sui social'
         ]
       },
-      premiumFeatures: {
-        title: 'Funzionalità Premium',
+      analytics: {
+        title: 'Analytics Avanzate',
         items: [
-          'Chiave API: Accesso programmatico ai dati',
-          'Generatore di Contenuti: Creazione contenuti ottimizzati',
-          'Analisi Predittiva: Previsioni sui trend futuri'
+          'Metriche Engagement: Misura l\'impatto dei tuoi contenuti',
+          'Analisi Audience: Comprendi il tuo pubblico target',
+          'Performance Report: Valuta l\'efficacia delle tue strategie',
+          'Benchmark Competitivo: Confronta le tue performance con i competitor'
+        ]
+      },
+      contentCreation: {
+        title: 'Creazione Contenuti',
+        items: [
+          'Generatore AI: Crea varianti ottimizzate dei tuoi contenuti',
+          'Suggerimenti Hashtag: Ricevi consigli sui migliori hashtag da utilizzare',
+          'Calendario Editoriale: Pianifica e organizza i tuoi contenuti',
+          'A/B Testing: Testa diverse versioni dei tuoi post'
         ]
       }
     },
-    pricing: {
-      title: '3. Prezzi e Piani',
+    premiumFeatures: {
+      title: 'Funzionalità Premium',
       basic: {
         title: 'Piano Base',
         items: [
-          'Analisi di base dei trend',
-          'Monitoraggio hashtag',
-          'Report settimanali',
-          '1 account social',
-          'Supporto email'
+          'Monitoraggio base dei trend',
+          'Report settimanali essenziali',
+          'Analisi hashtag limitata',
+          'Supporto email standard'
         ]
       },
       pro: {
         title: 'Piano Pro',
         items: [
-          'Tutte le funzionalità Base',
           'Analisi predittiva avanzata',
-          'Generazione contenuti AI',
-          '5 account social',
-          'Supporto prioritario',
-          'Accesso API'
+          'Generazione contenuti AI illimitata',
+          'API per integrazioni personalizzate',
+          'Report dettagliati e personalizzabili',
+          'Supporto prioritario 24/7',
+          'Dashboard multi-account'
         ]
       }
     },
     additionalFeatures: {
-      title: '4. Funzionalità Aggiuntive',
+      title: 'Funzionalità Aggiuntive',
       items: [
-        'Notifiche per nuovi trend',
-        'Supporto multilingua (Italiano/Inglese)'
+        'Sistema di notifiche personalizzabile per nuovi trend',
+        'Integrazione con principali piattaforme social',
+        'Export dati in vari formati (CSV, PDF, Excel)',
+        'Accesso API per sviluppatori',
+        'Dashboard personalizzabile',
+        'Supporto multilingua'
       ]
     }
   }
