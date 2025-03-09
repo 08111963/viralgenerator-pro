@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
               <h2>{t('legal.privacy.collection.title')}</h2>
               <p>{t('legal.privacy.collection.description')}</p>
             </section>
-
+            
             <section>
               <h2>{t('legal.privacy.use.title')}</h2>
               <p>{t('legal.privacy.use.description')}</p>
