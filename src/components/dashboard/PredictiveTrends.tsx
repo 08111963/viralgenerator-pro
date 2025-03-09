@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle, Loader2 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTranslation } from "react-i18next";
 import { usePredictiveTrends, TrendDetail } from "@/hooks/usePredictiveTrends";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const TrendIndicator = ({ trend }: { trend: string }) => {
   if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-500" />;
@@ -137,7 +137,7 @@ export const PredictiveTrends = () => {
                   </ResponsiveContainer>
                 </div>
                 
-                {trendsData[0]?.trends?.[metric as keyof typeof trendsData[0].trends] && (
+                {trendsData[0]?.trends && metric in trendsData[0].trends && (
                   <TrendDetails details={trendsData[0].trends[metric as keyof typeof trendsData[0].trends]} />
                 )}
               </div>
