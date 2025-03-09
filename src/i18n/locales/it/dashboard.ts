@@ -79,4 +79,15 @@ export const dashboard = {
     change: "Variazione",
     downloadReport: "Scarica Report"
   },
+  settings: {
+    title: 'Impostazioni Dashboard'
+  },
+  widgets: {
+    weeklyReports: 'Report Settimanali',
+    trending: 'Trend in Evidenza',
+    features: 'Funzionalità',
+    analytics: 'Analisi',
+    predictive: 'Previsioni Trend',
+    share: 'Condivisione'
+  }
 };

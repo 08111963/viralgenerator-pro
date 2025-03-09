@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -12,11 +11,14 @@ import { AnalyticsSection } from "@/components/dashboard/AnalyticsSection";
 import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ShareSection } from "@/components/ShareSection";
 import { WeeklyReports } from "@/components/dashboard/WeeklyReports";
+import { DashboardSettings } from "@/components/dashboard/DashboardSettings";
+import { useDashboardSettings } from "@/hooks/useDashboardSettings";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
   const { session } = useAuth();
+  const { widgetSettings } = useDashboardSettings();
 
   // Update document title and meta tags for SEO based on current language
   React.useEffect(() => {
@@ -71,13 +73,15 @@ const Dashboard = () => {
           )}
         </div>
         
+        <DashboardSettings />
+        
         <div className="grid gap-6">
-          <WeeklyReports />
-          <TrendingSection key="trending" />
-          <FeatureSection key="features" />
-          <AnalyticsSection key="analytics" />
-          <PredictiveTrends key="predictive" />
-          <ShareSection key="share" />
+          {widgetSettings.weeklyReports && <WeeklyReports />}
+          {widgetSettings.trending && <TrendingSection key="trending" />}
+          {widgetSettings.features && <FeatureSection key="features" />}
+          {widgetSettings.analytics && <AnalyticsSection key="analytics" />}
+          {widgetSettings.predictive && <PredictiveTrends key="predictive" />}
+          {widgetSettings.share && <ShareSection key="share" />}
         </div>
       </main>
     </div>
