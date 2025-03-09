@@ -27,7 +27,6 @@ const Terms = () => {
             {i18n.language === 'it' ? (
               <>
                 <h2 className="text-2xl font-semibold">Informativa sulla Privacy</h2>
-                <p>Ultimo aggiornamento: {new Date().toLocaleDateString('it-IT')}</p>
                 <div className="prose prose-slate dark:prose-invert max-w-none">
                   <h3>1. Raccolta dei Dati</h3>
                   <p>Raccogliamo i seguenti tipi di informazioni:</p>
@@ -52,7 +51,6 @@ const Terms = () => {
             ) : (
               <>
                 <h2 className="text-2xl font-semibold">Privacy Policy</h2>
-                <p>Last updated: {new Date().toLocaleDateString('en-US')}</p>
                 <div className="prose prose-slate dark:prose-invert max-w-none">
                   <h3>1. Data Collection</h3>
                   <p>We collect the following types of information:</p>
@@ -81,7 +79,6 @@ const Terms = () => {
             {i18n.language === 'it' ? (
               <>
                 <h2 className="text-2xl font-semibold">Termini di Utilizzo</h2>
-                <p>Ultimo aggiornamento: {new Date().toLocaleDateString('it-IT')}</p>
                 <div className="prose prose-slate dark:prose-invert max-w-none">
                   <h3>1. Accettazione dei Termini</h3>
                   <p>Utilizzando il nostro servizio, accetti questi termini di utilizzo.</p>
@@ -101,7 +98,6 @@ const Terms = () => {
             ) : (
               <>
                 <h2 className="text-2xl font-semibold">Terms of Use</h2>
-                <p>Last updated: {new Date().toLocaleDateString('en-US')}</p>
                 <div className="prose prose-slate dark:prose-invert max-w-none">
                   <h3>1. Acceptance of Terms</h3>
                   <p>By using our service, you agree to these terms of use.</p>
