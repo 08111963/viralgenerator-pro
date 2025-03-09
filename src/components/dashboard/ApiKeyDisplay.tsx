@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Key, Copy, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
+import { PremiumFeatureOverlay } from "@/components/dashboard/PremiumFeatureOverlay";
 
 const ApiKeyDisplay = () => {
   const { toast } = useToast();
@@ -61,7 +61,7 @@ const ApiKeyDisplay = () => {
       }
       return data;
     },
-    enabled: true // Rimuoviamo la condizione che bloccava la query
+    enabled: true
   });
 
   const copyApiKey = async () => {
@@ -105,25 +105,12 @@ const ApiKeyDisplay = () => {
     return <div className="p-4">Loading...</div>;
   }
 
-  // Allow access if user is admin or has active subscription
-  if ((!subscription?.api_key || subscription.status !== 'active') && !isAdmin) {
-    return (
-      <div className="relative">
-        <ApiKeyCard />
-        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
-          <div className="text-center p-4">
-            <Lock className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground mb-2">{t('dashboard.premium.locked')}</p>
-            <Button variant="outline" size="sm" asChild>
-              <Link to="/pricing">{t('dashboard.premium.upgrade')}</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return <ApiKeyCard />;
+  // Using PremiumFeatureOverlay to protect the API key display
+  return (
+    <PremiumFeatureOverlay>
+      <ApiKeyCard />
+    </PremiumFeatureOverlay>
+  );
 };
 
 export default ApiKeyDisplay;
