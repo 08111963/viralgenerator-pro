@@ -7,6 +7,8 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { LogIn } from "lucide-react";
 
 const Terms = () => {
   const { t, i18n } = useTranslation();
@@ -81,6 +83,22 @@ const Terms = () => {
       <Navigation />
       <main className="container py-6">
         <h1 className="text-3xl font-bold mb-8">{t('navigation.terms')}</h1>
+        
+        {!session && (
+          <Alert className="mb-8">
+            <AlertDescription className="flex items-center justify-between">
+              <span>
+                {i18n.language === 'it' 
+                  ? 'Per accettare i termini e la privacy policy, devi prima effettuare il login'
+                  : 'To accept the terms and privacy policy, you need to login first'}
+              </span>
+              <Button onClick={() => navigate('/login')} variant="outline" className="ml-4">
+                <LogIn className="mr-2 h-4 w-4" />
+                {i18n.language === 'it' ? 'Accedi' : 'Login'}
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
         
         <Tabs defaultValue="privacy" className="w-full">
           <TabsList className="mb-4">
