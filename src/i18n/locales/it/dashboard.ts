@@ -49,11 +49,25 @@ export const dashboard = {
   },
   predictions: {
     title: 'Previsioni AI',
-    subtitle: 'Trend previsti nelle prossime 72 ore',
+    subtitle: 'Analisi predittiva del tuo profilo social nelle prossime 72 ore',
     growth: 'Trend in crescita',
     volume: 'Volume',
     sentiment: 'Sentiment',
-    dataUpdated: 'Dati aggiornati alle'
+    dataUpdated: 'Dati aggiornati alle',
+    metrics: {
+      followers: 'Crescita Follower',
+      engagement: 'Engagement dei Contenuti',
+      popularity: 'Popolarità Hashtag'
+    },
+    descriptions: {
+      followers: 'Previsione della crescita dei follower basata sulle tue attività recenti',
+      engagement: 'Stima delle interazioni future sui tuoi contenuti',
+      popularity: 'Analisi della potenziale visibilità dei tuoi hashtag'
+    },
+    error: {
+      rateLimit: 'Troppe richieste, riprova tra qualche minuto',
+      generic: 'Errore nel recupero delle previsioni'
+    }
   },
   content: {
     title: 'Generatore di Contenuti',

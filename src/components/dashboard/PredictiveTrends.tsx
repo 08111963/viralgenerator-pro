@@ -58,7 +58,6 @@ export const PredictiveTrends = () => {
   const { t } = useTranslation();
   const { data: trendsData, isLoading, error } = usePredictiveTrends();
 
-  // Effect to handle real-time updates
   useEffect(() => {
     if (trendsData) {
       const now = new Date();
@@ -72,16 +71,20 @@ export const PredictiveTrends = () => {
   console.log('PredictiveTrends render:', { trendsData, isLoading, error });
 
   if (error) {
+    const errorMessage = error.message?.includes('Too Many Requests') 
+      ? t('dashboard.predictions.error.rateLimit')
+      : t('dashboard.predictions.error.generic');
+
     return (
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-        <div className="flex flex-col space-y-1.5 p-6">
-          <h3 className="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-red-500" />
             {t('dashboard.predictions.title')}
-          </h3>
-          <p className="text-sm text-muted-foreground">{t('dashboard.trends.error')}</p>
-        </div>
-      </div>
+          </CardTitle>
+          <CardDescription className="text-red-500">{errorMessage}</CardDescription>
+        </CardHeader>
+      </Card>
     );
   }
 
@@ -123,21 +126,25 @@ export const PredictiveTrends = () => {
         <CardDescription>
           {t('dashboard.predictions.subtitle')}
           <div className="text-xs text-muted-foreground mt-1">
-            Ultimo aggiornamento: {lastUpdateTime.toLocaleTimeString()}
+            {t('dashboard.predictions.dataUpdated')} {lastUpdateTime.toLocaleTimeString()}
           </div>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
           <TabsList className="w-full mb-4">
-            <TabsTrigger value="followers">Follower</TabsTrigger>
-            <TabsTrigger value="engagement">Contenuti</TabsTrigger>
-            <TabsTrigger value="popularity">Hashtag</TabsTrigger>
+            <TabsTrigger value="followers">{t('dashboard.predictions.metrics.followers')}</TabsTrigger>
+            <TabsTrigger value="engagement">{t('dashboard.predictions.metrics.engagement')}</TabsTrigger>
+            <TabsTrigger value="popularity">{t('dashboard.predictions.metrics.popularity')}</TabsTrigger>
           </TabsList>
 
           {["followers", "engagement", "popularity"].map((metric) => (
             <TabsContent key={metric} value={metric}>
               <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  {t(`dashboard.predictions.descriptions.${metric}`)}
+                </p>
+                
                 <div className="h-[200px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={trendsData}>
