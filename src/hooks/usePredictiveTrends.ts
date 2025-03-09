@@ -1,6 +1,6 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
 
 export interface TrendDetail {
   percentageChange: number;
@@ -23,7 +23,7 @@ export interface PredictiveTrendData {
 }
 
 export const usePredictiveTrends = () => {
-  return useQuery({
+  const { data: trendsData, isLoading, error, refetch } = useQuery({
     queryKey: ['predictive-trends'],
     queryFn: async () => {
       console.log('Fetching predictive trends data...');
@@ -60,6 +60,29 @@ export const usePredictiveTrends = () => {
         return data as PredictiveTrendData[];
       }
     },
-    refetchInterval: 300000, // Refresh every 5 minutes
   });
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('predictive_trends_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all changes (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: 'predictive_trends'
+        },
+        () => {
+          console.log('Received real-time update for predictive trends');
+          refetch(); // Refetch data when changes occur
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
+
+  return { data: trendsData, isLoading, error };
 };
