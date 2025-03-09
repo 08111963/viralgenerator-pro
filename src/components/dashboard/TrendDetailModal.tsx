@@ -46,7 +46,7 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          <div style={{ height: '400px' }}>
+          <div style={{ height: '300px' }}> {/* Reduced from 400px */}
             <TrendChart data={trendData} metrics={metrics} />
           </div>
         </div>

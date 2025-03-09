@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, Instagram, Twitter, Video, ArrowUp, ArrowDown } from "lucide-react";
+import { TrendingUp, Instagram, Twitter, Video } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
@@ -63,9 +63,7 @@ export const TrendAnalytics = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   useEffect(() => {
-    // Aggiorna i dati ogni 5 minuti
     const updateInterval = setInterval(() => {
-      // In un'implementazione reale, qui chiameremmo un'API per ottenere nuovi dati
       setLastUpdate(new Date());
       
       toast({
@@ -122,7 +120,7 @@ export const TrendAnalytics = () => {
             {Object.entries(platformData).map(([platform, data]) => (
               <TabsContent key={platform} value={platform}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="h-[350px]"> {/* Adjusted from 400px */}
+                  <div className="h-[300px]"> {/* Reduced from 350px */}
                     <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.engagement')}</p>
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={engagementData[platform]}>
@@ -133,7 +131,7 @@ export const TrendAnalytics = () => {
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                  <div className="h-[350px]"> {/* Adjusted from 400px */}
+                  <div className="h-[300px]"> {/* Reduced from 350px */}
                     <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.volume')}</p>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={data}>
