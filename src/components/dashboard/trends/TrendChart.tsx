@@ -39,11 +39,11 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="h-[500px]"> {/* Increased height significantly */}
+      <div className="h-[700px]"> {/* Increased height more */}
         <ResponsiveContainer width="100%" height="100%">
           <LineChart 
             data={data}
-            margin={{ top: 30, right: 40, left: 40, bottom: 20 }} // Increased margins
+            margin={{ top: 40, right: 50, left: 50, bottom: 40 }} // Increased margins further
           >
             <CartesianGrid 
               strokeDasharray="3 3" 
@@ -53,26 +53,29 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
             />
             <XAxis 
               dataKey="time"
-              tick={{ fill: '#1e293b', fontSize: 16 }} // Increased font size
+              tick={{ fill: '#1e293b', fontSize: 18 }} // Increased font size
               tickLine={{ stroke: '#64748b', strokeWidth: 2 }}
-              tickMargin={16} // Increased margin
+              tickMargin={20} // Increased margin
               stroke="#64748b"
               strokeWidth={2}
             />
             <YAxis 
-              tick={{ fill: '#1e293b', fontSize: 16 }} // Increased font size
+              tick={{ fill: '#1e293b', fontSize: 18 }} // Increased font size
               tickLine={{ stroke: '#64748b', strokeWidth: 2 }}
               tickFormatter={(value) => value.toLocaleString()}
-              tickMargin={16} // Increased margin
+              tickMargin={20} // Increased margin
               stroke="#64748b"
               strokeWidth={2}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip 
+              content={<CustomTooltip />}
+              wrapperStyle={{ fontSize: '16px' }} // Increased tooltip font size
+            />
             <Legend 
               verticalAlign="top" 
-              height={50} // Increased height
-              formatter={(value) => <span className="text-lg font-medium">{value}</span>}
-              wrapperStyle={{ paddingBottom: '30px' }}
+              height={60} // Increased height
+              formatter={(value) => <span className="text-xl font-medium">{value}</span>} // Increased legend text size
+              wrapperStyle={{ paddingBottom: '40px' }}
             />
             <ReferenceLine 
               y={averageValue} 
@@ -83,7 +86,7 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
                 value: 'Media', 
                 position: 'right',
                 fill: '#1e293b',
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: 600
               }} 
             />
@@ -94,9 +97,9 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
                 dataKey="volume"
                 stroke={color}
                 name={name}
-                strokeWidth={4} // Increased line thickness
-                dot={{ r: 8, fill: color, strokeWidth: 2 }} // Increased dot size
-                activeDot={{ r: 10, fill: color }} // Increased active dot size
+                strokeWidth={5} // Increased line thickness
+                dot={{ r: 10, fill: color, strokeWidth: 2 }} // Increased dot size
+                activeDot={{ r: 12, fill: color }} // Increased active dot size
                 animationDuration={1500}
                 connectNulls
               />
