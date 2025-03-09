@@ -10,6 +10,8 @@ export interface DashboardWidgetSettings {
   share: boolean;
 }
 
+export type WidgetKey = keyof DashboardWidgetSettings;
+
 const defaultSettings: DashboardWidgetSettings = {
   weeklyReports: true,
   trending: true,
@@ -19,15 +21,33 @@ const defaultSettings: DashboardWidgetSettings = {
   share: true,
 };
 
+const defaultOrder: WidgetKey[] = [
+  'weeklyReports',
+  'trending',
+  'features',
+  'analytics',
+  'predictive',
+  'share',
+];
+
 export function useDashboardSettings() {
   const [widgetSettings, setWidgetSettings] = useState<DashboardWidgetSettings>(() => {
     const saved = localStorage.getItem('dashboardWidgetSettings');
     return saved ? JSON.parse(saved) : defaultSettings;
   });
 
+  const [widgetOrder, setWidgetOrder] = useState<WidgetKey[]>(() => {
+    const saved = localStorage.getItem('dashboardWidgetOrder');
+    return saved ? JSON.parse(saved) : defaultOrder;
+  });
+
   useEffect(() => {
     localStorage.setItem('dashboardWidgetSettings', JSON.stringify(widgetSettings));
   }, [widgetSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('dashboardWidgetOrder', JSON.stringify(widgetOrder));
+  }, [widgetOrder]);
 
   const toggleWidget = (widgetName: keyof DashboardWidgetSettings) => {
     setWidgetSettings(prev => ({
@@ -36,8 +56,14 @@ export function useDashboardSettings() {
     }));
   };
 
+  const reorderWidgets = (newOrder: WidgetKey[]) => {
+    setWidgetOrder(newOrder);
+  };
+
   return {
     widgetSettings,
-    toggleWidget
+    widgetOrder,
+    toggleWidget,
+    reorderWidgets
   };
 }

@@ -12,13 +12,16 @@ import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ShareSection } from "@/components/ShareSection";
 import { WeeklyReports } from "@/components/dashboard/WeeklyReports";
 import { DashboardSettings } from "@/components/dashboard/DashboardSettings";
-import { useDashboardSettings } from "@/hooks/useDashboardSettings";
+import { useDashboardSettings, WidgetKey } from "@/hooks/useDashboardSettings";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, arrayMove, rectSortingStrategy } from '@dnd-kit/sortable';
+import { SortableWidget } from "@/components/dashboard/SortableWidget";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
   const { session } = useAuth();
-  const { widgetSettings } = useDashboardSettings();
+  const { widgetSettings, widgetOrder, reorderWidgets } = useDashboardSettings();
 
   // Update document title and meta tags for SEO based on current language
   React.useEffect(() => {
@@ -59,6 +62,31 @@ const Dashboard = () => {
     });
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = widgetOrder.indexOf(active.id as WidgetKey);
+      const newIndex = widgetOrder.indexOf(over.id as WidgetKey);
+      const newOrder = arrayMove(widgetOrder, oldIndex, newIndex);
+      reorderWidgets(newOrder);
+    }
+  };
+
+  const widgetComponents: Record<WidgetKey, React.ReactNode> = {
+    weeklyReports: <WeeklyReports />,
+    trending: <TrendingSection key="trending" />,
+    features: <FeatureSection key="features" />,
+    analytics: <AnalyticsSection key="analytics" />,
+    predictive: <PredictiveTrends key="predictive" />,
+    share: <ShareSection key="share" />
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -75,14 +103,23 @@ const Dashboard = () => {
         
         <DashboardSettings />
         
-        <div className="grid gap-6">
-          {widgetSettings.weeklyReports && <WeeklyReports />}
-          {widgetSettings.trending && <TrendingSection key="trending" />}
-          {widgetSettings.features && <FeatureSection key="features" />}
-          {widgetSettings.analytics && <AnalyticsSection key="analytics" />}
-          {widgetSettings.predictive && <PredictiveTrends key="predictive" />}
-          {widgetSettings.share && <ShareSection key="share" />}
-        </div>
+        <DndContext 
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={widgetOrder} strategy={rectSortingStrategy}>
+            <div className="grid gap-6">
+              {widgetOrder.map((widgetKey) => (
+                widgetSettings[widgetKey] && (
+                  <SortableWidget key={widgetKey} id={widgetKey}>
+                    {widgetComponents[widgetKey]}
+                  </SortableWidget>
+                )
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       </main>
     </div>
   );
