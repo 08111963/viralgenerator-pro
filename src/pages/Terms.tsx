@@ -1,8 +1,8 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TermsAcceptance } from "@/components/TermsAcceptance";
 
 const Terms = () => {
   const { t, i18n } = useTranslation();
@@ -31,9 +31,10 @@ const Terms = () => {
                   <h3>1. Raccolta dei Dati</h3>
                   <p>Raccogliamo i seguenti tipi di informazioni:</p>
                   <ul>
-                    <li>Informazioni di registrazione dell'account</li>
-                    <li>Dati di utilizzo del servizio</li>
+                    <li>Informazioni di registrazione dell'account (email, nome utente)</li>
+                    <li>Dati di utilizzo del servizio e preferenze</li>
                     <li>Informazioni tecniche del dispositivo</li>
+                    <li>Cookie e identificatori del dispositivo</li>
                   </ul>
 
                   <h3>2. Utilizzo dei Dati</h3>
@@ -42,10 +43,26 @@ const Terms = () => {
                     <li>Fornire e migliorare i nostri servizi</li>
                     <li>Personalizzare l'esperienza utente</li>
                     <li>Analizzare l'utilizzo della piattaforma</li>
+                    <li>Inviare comunicazioni di servizio</li>
+                    <li>Prevenire frodi e abusi</li>
                   </ul>
 
                   <h3>3. Protezione dei Dati</h3>
-                  <p>Adottiamo misure di sicurezza appropriate per proteggere i tuoi dati personali.</p>
+                  <p>Adottiamo misure di sicurezza tecniche e organizzative per proteggere i tuoi dati personali, inclusi:</p>
+                  <ul>
+                    <li>Crittografia dei dati in transito e a riposo</li>
+                    <li>Controlli degli accessi rigorosi</li>
+                    <li>Monitoraggio regolare della sicurezza</li>
+                  </ul>
+
+                  <h3>4. I Tuoi Diritti</h3>
+                  <p>Hai diritto a:</p>
+                  <ul>
+                    <li>Accedere ai tuoi dati personali</li>
+                    <li>Richiedere la rettifica dei dati inesatti</li>
+                    <li>Richiedere la cancellazione dei dati</li>
+                    <li>Opporti al trattamento dei dati</li>
+                  </ul>
                 </div>
               </>
             ) : (
@@ -55,9 +72,10 @@ const Terms = () => {
                   <h3>1. Data Collection</h3>
                   <p>We collect the following types of information:</p>
                   <ul>
-                    <li>Account registration information</li>
-                    <li>Service usage data</li>
+                    <li>Account registration information (email, username)</li>
+                    <li>Service usage data and preferences</li>
                     <li>Device technical information</li>
+                    <li>Cookies and device identifiers</li>
                   </ul>
 
                   <h3>2. Data Usage</h3>
@@ -66,10 +84,26 @@ const Terms = () => {
                     <li>Provide and improve our services</li>
                     <li>Personalize user experience</li>
                     <li>Analyze platform usage</li>
+                    <li>Send service communications</li>
+                    <li>Prevent fraud and abuse</li>
                   </ul>
 
                   <h3>3. Data Protection</h3>
-                  <p>We implement appropriate security measures to protect your personal data.</p>
+                  <p>We implement appropriate security measures to protect your personal data, including:</p>
+                  <ul>
+                    <li>Encryption of data in transit and at rest</li>
+                    <li>Strict access controls</li>
+                    <li>Regular security monitoring</li>
+                  </ul>
+
+                  <h3>4. Your Rights</h3>
+                  <p>You have the right to:</p>
+                  <ul>
+                    <li>Access your personal data</li>
+                    <li>Request correction of inaccurate data</li>
+                    <li>Request deletion of your data</li>
+                    <li>Object to data processing</li>
+                  </ul>
                 </div>
               </>
             )}
@@ -86,13 +120,25 @@ const Terms = () => {
                   <h3>2. Utilizzo del Servizio</h3>
                   <p>Ti impegni a:</p>
                   <ul>
-                    <li>Fornire informazioni accurate</li>
-                    <li>Mantenere la sicurezza del tuo account</li>
-                    <li>Rispettare le leggi applicabili</li>
+                    <li>Fornire informazioni accurate durante la registrazione</li>
+                    <li>Mantenere la sicurezza delle tue credenziali di accesso</li>
+                    <li>Utilizzare il servizio in conformità con le leggi applicabili</li>
+                    <li>Non interferire con il funzionamento del servizio</li>
                   </ul>
 
-                  <h3>3. Limitazioni di Responsabilità</h3>
-                  <p>Il servizio è fornito "così com'è" senza garanzie di alcun tipo.</p>
+                  <h3>3. Contenuti degli Utenti</h3>
+                  <p>Quando pubblichi contenuti:</p>
+                  <ul>
+                    <li>Mantieni i diritti sui tuoi contenuti</li>
+                    <li>Ci concedi una licenza per utilizzarli nel servizio</li>
+                    <li>Sei responsabile dei contenuti che pubblichi</li>
+                  </ul>
+
+                  <h3>4. Limitazioni di Responsabilità</h3>
+                  <p>Il servizio è fornito "così com'è" e non offriamo garanzie specifiche.</p>
+
+                  <h3>5. Modifiche ai Termini</h3>
+                  <p>Ci riserviamo il diritto di modificare questi termini con un preavviso adeguato.</p>
                 </div>
               </>
             ) : (
@@ -105,13 +151,25 @@ const Terms = () => {
                   <h3>2. Service Usage</h3>
                   <p>You agree to:</p>
                   <ul>
-                    <li>Provide accurate information</li>
-                    <li>Maintain account security</li>
-                    <li>Comply with applicable laws</li>
+                    <li>Provide accurate information during registration</li>
+                    <li>Maintain the security of your login credentials</li>
+                    <li>Use the service in compliance with applicable laws</li>
+                    <li>Not interfere with the service operation</li>
                   </ul>
 
-                  <h3>3. Liability Limitations</h3>
-                  <p>The service is provided "as is" without warranties of any kind.</p>
+                  <h3>3. User Content</h3>
+                  <p>When posting content:</p>
+                  <ul>
+                    <li>You retain rights to your content</li>
+                    <li>You grant us a license to use it in the service</li>
+                    <li>You are responsible for the content you post</li>
+                  </ul>
+
+                  <h3>4. Liability Limitations</h3>
+                  <p>The service is provided "as is" and we make no specific warranties.</p>
+
+                  <h3>5. Terms Modifications</h3>
+                  <p>We reserve the right to modify these terms with appropriate notice.</p>
                 </div>
               </>
             )}
