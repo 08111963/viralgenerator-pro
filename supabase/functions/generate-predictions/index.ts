@@ -17,6 +17,13 @@ serve(async (req) => {
   try {
     console.log('Generating AI predictions...');
     
+    // Get next 3 days for predictions
+    const dates = Array.from({length: 3}, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() + i + 1);
+      return date.toISOString().split('T')[0];
+    });
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -24,43 +31,62 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         messages: [
           {
             role: 'system',
-            content: `Sei un esperto analista di trend social media. Genera previsioni dettagliate includendo:
-            - Variazione percentuale rispetto al giorno precedente
-            - Tendenza (crescita/decrescita)
-            - Impatto previsto
-            - Velocità di cambiamento
-            - Fattori chiave che influenzano il trend`
+            content: `You are an expert social media trend analyst focused on generating detailed predictions with:
+            - Precise percentage changes
+            - Clear trend directions (up/down/stable)
+            - Impact levels (alto/medio/basso)
+            - Change velocity (rapida/moderata/lenta)
+            - Key influencing factors`
           },
           {
             role: 'user',
-            content: `Genera previsioni dettagliate per i prossimi 3 giorni in formato JSON con questa struttura:
+            content: `Generate detailed predictions for these dates: ${dates.join(', ')}. For each date, predict:
+            1. Follower count trends
+            2. Engagement metrics
+            3. Overall popularity score
+            
+            Return data in this exact JSON format:
             {
               "predictions": [
                 {
-                  "time": "2024-03-XX",
-                  "followers": number,
-                  "engagement": number,
-                  "popularity": number,
+                  "time": "YYYY-MM-DD",
+                  "followers": number between 5000-50000,
+                  "engagement": number between 1000-30000,
+                  "popularity": number between 500-10000,
                   "trends": {
                     "followers": {
-                      "percentageChange": number,
+                      "percentageChange": number between -20 and 40,
                       "trend": "up" | "down" | "stable",
                       "impact": "alto" | "medio" | "basso",
                       "velocity": "rapida" | "moderata" | "lenta",
-                      "factors": string[]
+                      "factors": [string, string, string]
                     },
-                    "engagement": { ... stessa struttura ... },
-                    "popularity": { ... stessa struttura ... }
+                    "engagement": {
+                      "percentageChange": number between -20 and 40,
+                      "trend": "up" | "down" | "stable", 
+                      "impact": "alto" | "medio" | "basso",
+                      "velocity": "rapida" | "moderata" | "lenta",
+                      "factors": [string, string, string]
+                    },
+                    "popularity": {
+                      "percentageChange": number between -20 and 40,
+                      "trend": "up" | "down" | "stable",
+                      "impact": "alto" | "medio" | "basso",
+                      "velocity": "rapida" | "moderata" | "lenta", 
+                      "factors": [string, string, string]
+                    }
                   }
                 }
               ]
             }`
           }
         ],
+        temperature: 0.7,
+        max_tokens: 2000,
       }),
     });
 
@@ -69,13 +95,22 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('Received AI predictions:', data);
+    console.log('Received AI response:', data);
 
-    const aiPredictions = {
-      predictions: JSON.parse(data.choices[0].message.content)
-    };
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response from OpenAI');
+    }
 
-    return new Response(JSON.stringify(aiPredictions), {
+    const predictions = JSON.parse(data.choices[0].message.content);
+    
+    // Validate predictions format
+    if (!predictions.predictions || !Array.isArray(predictions.predictions)) {
+      throw new Error('Invalid predictions format');
+    }
+
+    console.log('Processed predictions:', predictions);
+
+    return new Response(JSON.stringify(predictions), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
