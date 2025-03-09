@@ -40,11 +40,11 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="h-[300px]">
+      <div className="h-[400px]"> {/* Increased height */}
         <ResponsiveContainer width="100%" height="100%">
           <LineChart 
             data={data}
-            margin={{ top: 10, right: 30, left: 10, bottom: 10 }}
+            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
           >
             <CartesianGrid 
               strokeDasharray="3 3" 
@@ -54,15 +54,15 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
             />
             <XAxis 
               dataKey="time"
-              tick={{ fill: 'currentColor', fontSize: 12 }}
-              tickLine={{ stroke: 'currentColor' }}
-              tickMargin={8}
+              tick={{ fill: '#64748b', fontSize: 12 }}
+              tickLine={{ stroke: '#64748b' }}
+              tickMargin={12}
             />
             <YAxis 
-              tick={{ fill: 'currentColor', fontSize: 12 }}
-              tickLine={{ stroke: 'currentColor' }}
+              tick={{ fill: '#64748b', fontSize: 12 }}
+              tickLine={{ stroke: '#64748b' }}
               tickFormatter={(value) => value.toLocaleString()}
-              tickMargin={8}
+              tickMargin={12}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
@@ -89,9 +89,9 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
                 dataKey="volume"
                 stroke={color}
                 name={name}
-                strokeWidth={2.5}
-                dot={{ r: 5, fill: color, strokeWidth: 2 }}
-                activeDot={{ r: 7, fill: color }}
+                strokeWidth={3}
+                dot={{ r: 6, fill: color, strokeWidth: 2 }}
+                activeDot={{ r: 8, fill: color }}
                 animationDuration={1500}
                 connectNulls
               />
@@ -102,3 +102,4 @@ export const TrendChart = ({ data, metrics }: TrendChartProps) => {
     </div>
   );
 };
+

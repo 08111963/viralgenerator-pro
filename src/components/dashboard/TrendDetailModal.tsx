@@ -22,12 +22,12 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
   if (!item) return null;
 
   const trendData = [
-    { time: '24h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 100))) },
-    { time: '18h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 150))) },
-    { time: '12h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 200))) },
-    { time: '9h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 250))) },
-    { time: '6h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 300))) },
-    { time: '3h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 350))) },
+    { time: '24h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 100)))) },
+    { time: '20h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 120)))) },
+    { time: '16h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 140)))) },
+    { time: '12h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 160)))) },
+    { time: '8h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 180)))) },
+    { time: '4h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 200)))) },
     { time: 'Ora', volume: item.volume },
   ];
 
@@ -40,24 +40,24 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[700px]">
+      <DialogContent className="sm:max-w-[800px]"> {/* Increased width */}
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+          <DialogTitle className="text-2xl font-bold flex items-center gap-2 mb-2">
             {item.name}
           </DialogTitle>
         </DialogHeader>
-        <div className="mt-4">
+        <div className="mt-6">
           <TrendChart data={trendData} metrics={metrics} />
         </div>
-        <div className="mt-6 space-y-2">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg bg-muted">
-              <p className="text-sm text-muted-foreground mb-1">{t('dashboard.trends.mentions')}</p>
-              <p className="text-lg font-semibold">{item.volume.toLocaleString()}</p>
+        <div className="mt-8 space-y-4">
+          <div className="grid grid-cols-2 gap-6">
+            <div className="p-6 rounded-xl bg-muted/50 border border-muted-foreground/10">
+              <p className="text-sm text-muted-foreground mb-2">{t('dashboard.trends.mentions')}</p>
+              <p className="text-2xl font-bold">{item.volume.toLocaleString()}</p>
             </div>
-            <div className="p-4 rounded-lg bg-muted">
-              <p className="text-sm text-muted-foreground mb-1">{t('dashboard.trends.change')}</p>
-              <p className={`text-lg font-semibold ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+            <div className="p-6 rounded-xl bg-muted/50 border border-muted-foreground/10">
+              <p className="text-sm text-muted-foreground mb-2">{t('dashboard.trends.change')}</p>
+              <p className={`text-2xl font-bold ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                 {item.change >= 0 ? '+' : ''}{item.change}%
               </p>
             </div>
@@ -67,3 +67,4 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
     </Dialog>
   );
 };
+
