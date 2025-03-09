@@ -1,11 +1,80 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const Terms = () => {
   const { t, i18n } = useTranslation();
+  const { session } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [accepted, setAccepted] = useState(false);
+
+  // Check if user has already accepted terms
+  useEffect(() => {
+    const checkTermsAcceptance = async () => {
+      if (!session?.user.id) return;
+      
+      const { data, error } = await supabase
+        .from('terms_acceptance')
+        .select('accepted_at')
+        .eq('user_id', session.user.id)
+        .single();
+      
+      if (data) {
+        setAccepted(true);
+      }
+    };
+
+    checkTermsAcceptance();
+  }, [session?.user.id]);
+
+  const handleAcceptTerms = async () => {
+    if (!session?.user.id) {
+      toast({
+        title: i18n.language === 'it' ? 'Errore' : 'Error',
+        description: i18n.language === 'it' 
+          ? 'Devi effettuare il login per accettare i termini'
+          : 'You must be logged in to accept the terms',
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('terms_acceptance')
+        .insert({
+          user_id: session.user.id,
+          version: '1.0'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: i18n.language === 'it' ? 'Successo' : 'Success',
+        description: i18n.language === 'it'
+          ? 'Hai accettato i termini e la privacy policy'
+          : 'You have accepted the terms and privacy policy'
+      });
+
+      setAccepted(true);
+      navigate('/dashboard');
+    } catch (error) {
+      toast({
+        title: i18n.language === 'it' ? 'Errore' : 'Error',
+        description: i18n.language === 'it'
+          ? "Si è verificato un errore durante l'accettazione dei termini"
+          : 'An error occurred while accepting the terms',
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -175,6 +244,20 @@ const Terms = () => {
             )}
           </TabsContent>
         </Tabs>
+
+        {!accepted && session && (
+          <div className="mt-8 flex justify-center">
+            <Button 
+              onClick={handleAcceptTerms}
+              size="lg"
+              className="px-8"
+            >
+              {i18n.language === 'it' 
+                ? 'Accetto i Termini e la Privacy Policy'
+                : 'I Accept the Terms and Privacy Policy'}
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );
