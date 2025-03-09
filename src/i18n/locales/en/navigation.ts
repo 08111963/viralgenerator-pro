@@ -7,5 +7,7 @@ export const navigation = {
   guide: 'Guide',
   login: 'Login',
   register: 'Register',
-  admin: 'Admin'
+  admin: 'Admin',
+  terms: 'Terms & Privacy'
 };
+

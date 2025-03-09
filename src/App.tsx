@@ -13,6 +13,7 @@ import Features from "./pages/Features";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import Admin from "./pages/Admin";
+import Terms from "./pages/Terms";
 import "./i18n/config";
 import Guide from "./pages/Guide";
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/guide" element={<Guide />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/about" element={<NotFound />} />
             <Route path="/demo" element={<NotFound />} />
             <Route 
@@ -52,3 +54,4 @@ const App = () => (
 );
 
 export default App;
+

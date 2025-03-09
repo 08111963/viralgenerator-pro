@@ -28,10 +28,13 @@ export const Navigation = () => {
             {t('navigation.pricing')}
           </Link>
           <Link to="/guide" className="text-foreground/60 hover:text-foreground transition-colors">
-            Guida
+            {t('navigation.guide')}
           </Link>
           <Link to="/admin" className="text-foreground/60 hover:text-foreground transition-colors">
             {t('navigation.admin')}
+          </Link>
+          <Link to="/terms" className="text-foreground/60 hover:text-foreground transition-colors">
+            {t('navigation.terms')}
           </Link>
           <LanguageSwitcher />
           <Button variant="outline" asChild>
@@ -45,3 +48,4 @@ export const Navigation = () => {
     </nav>
   );
 };
+
