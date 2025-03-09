@@ -1,9 +1,11 @@
 
 import { useEffect, useState } from 'react';
 import { TermsAcceptanceDialog } from '@/components/TermsAcceptanceDialog';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [showTerms, setShowTerms] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const termsAccepted = localStorage.getItem('termsAccepted');
@@ -13,7 +15,10 @@ const Dashboard = () => {
   }, []);
 
   const handleCloseTerms = () => {
-    window.location.href = '/dashboard';
+    setShowTerms(false);
+    if (localStorage.getItem('termsAccepted')) {
+      navigate(0); // This will refresh the current page
+    }
   };
 
   return (
