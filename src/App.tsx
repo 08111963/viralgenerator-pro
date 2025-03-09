@@ -1,3 +1,4 @@
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,10 +13,8 @@ import Features from "./pages/Features";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import Admin from "./pages/Admin";
-import "./i18n/config";
 import Guide from "./pages/Guide";
-import TermsOfService from "./pages/TermsOfService";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import "./i18n/config";
 
 const queryClient = new QueryClient();
 
@@ -44,8 +43,6 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
