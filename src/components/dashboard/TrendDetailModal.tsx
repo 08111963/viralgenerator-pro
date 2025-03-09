@@ -21,9 +21,12 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
 
   if (!item) return null;
 
-  // Create sample data points for the last 24 hours
+  // Create sample data points for a more detailed 24-hour view
   const trendData = [
     { time: '24h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 100))) },
+    { time: '18h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 150))) },
+    { time: '12h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 200))) },
+    { time: '6h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 300))) },
     { time: 'Now', volume: item.volume },
   ];
 
@@ -44,6 +47,16 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
         </DialogHeader>
         <div className="mt-4">
           <TrendChart data={trendData} metrics={metrics} />
+        </div>
+        <div className="mt-4 text-sm text-muted-foreground">
+          <p className="mb-2">
+            Volume attuale: {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
+          </p>
+          <p>
+            Variazione: <span className={item.change >= 0 ? 'text-green-500' : 'text-red-500'}>
+              {item.change >= 0 ? '+' : ''}{item.change}%
+            </span>
+          </p>
         </div>
       </DialogContent>
     </Dialog>
