@@ -33,27 +33,28 @@ export const usePredictiveTrends = () => {
         
         if (aiPredictions?.predictions && !aiError) {
           console.log('Got AI predictions:', aiPredictions);
-          return aiPredictions.predictions;
+          return aiPredictions.predictions as PredictiveTrendData[];
         } else {
-          console.warn('AI predictions failed, falling back to database:', aiError);
+          console.warn('AI predictions failed:', aiError);
+          throw new Error('Failed to get AI predictions');
         }
       } catch (e) {
         console.error('Error getting AI predictions:', e);
+        
+        // Fallback to database
+        const { data, error } = await supabase
+          .from('predictive_trends')
+          .select('*')
+          .order('time');
+
+        if (error) {
+          console.error('Error fetching predictive trends:', error);
+          throw error;
+        }
+
+        console.log('Found database trends:', data);
+        return data as PredictiveTrendData[];
       }
-
-      // Fallback to database if AI fails
-      const { data, error } = await supabase
-        .from('predictive_trends')
-        .select('*')
-        .order('time');
-
-      if (error) {
-        console.error('Error fetching predictive trends:', error);
-        throw error;
-      }
-
-      console.log('Found database trends:', data);
-      return data as PredictiveTrendData[];
     },
     refetchInterval: 300000, // Refresh every 5 minutes
   });

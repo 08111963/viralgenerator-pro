@@ -24,6 +24,8 @@ serve(async (req) => {
       return date.toISOString().split('T')[0];
     });
 
+    console.log('Requesting predictions for dates:', dates);
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -35,21 +37,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are an expert social media trend analyst focused on generating detailed predictions with:
-            - Precise percentage changes
-            - Clear trend directions (up/down/stable)
-            - Impact levels (alto/medio/basso)
-            - Change velocity (rapida/moderata/lenta)
-            - Key influencing factors`
-          },
-          {
-            role: 'user',
-            content: `Generate detailed predictions for these dates: ${dates.join(', ')}. For each date, predict:
-            1. Follower count trends
-            2. Engagement metrics
-            3. Overall popularity score
-            
-            Return data in this exact JSON format:
+            content: `You are a social media trend analyst focused on generating predictive data in this exact JSON format:
             {
               "predictions": [
                 {
@@ -63,26 +51,31 @@ serve(async (req) => {
                       "trend": "up" | "down" | "stable",
                       "impact": "alto" | "medio" | "basso",
                       "velocity": "rapida" | "moderata" | "lenta",
-                      "factors": [string, string, string]
+                      "factors": [string, string]
                     },
                     "engagement": {
                       "percentageChange": number between -20 and 40,
-                      "trend": "up" | "down" | "stable", 
+                      "trend": "up" | "down" | "stable",
                       "impact": "alto" | "medio" | "basso",
                       "velocity": "rapida" | "moderata" | "lenta",
-                      "factors": [string, string, string]
+                      "factors": [string, string]
                     },
                     "popularity": {
                       "percentageChange": number between -20 and 40,
                       "trend": "up" | "down" | "stable",
                       "impact": "alto" | "medio" | "basso",
-                      "velocity": "rapida" | "moderata" | "lenta", 
-                      "factors": [string, string, string]
+                      "velocity": "rapida" | "moderata" | "lenta",
+                      "factors": [string, string]
                     }
                   }
                 }
               ]
-            }`
+            }
+            IMPORTANT: Follow the exact format and value ranges.`
+          },
+          {
+            role: 'user',
+            content: `Generate realistic predictions for these dates: ${dates.join(', ')}. Return data in the specified JSON format with realistic values within the defined ranges.`
           }
         ],
         temperature: 0.7,
@@ -107,6 +100,16 @@ serve(async (req) => {
     if (!predictions.predictions || !Array.isArray(predictions.predictions)) {
       throw new Error('Invalid predictions format');
     }
+
+    // Validate each prediction's data ranges
+    predictions.predictions = predictions.predictions.map(prediction => {
+      return {
+        ...prediction,
+        followers: Math.max(5000, Math.min(50000, prediction.followers)),
+        engagement: Math.max(1000, Math.min(30000, prediction.engagement)),
+        popularity: Math.max(500, Math.min(10000, prediction.popularity))
+      };
+    });
 
     console.log('Processed predictions:', predictions);
 
