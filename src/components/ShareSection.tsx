@@ -19,7 +19,8 @@ export const ShareSection = () => {
     const messages = {
       twitter: "Discover TrendAI - The ultimate tool for social media trend analysis and content generation! 🚀 #SocialMedia #AI #DigitalMarketing",
       facebook: "Transform your social media strategy with TrendAI - Your AI-powered solution for trend analysis and viral content generation! 🎯",
-      linkedin: "Excited to share TrendAI - An innovative AI platform that helps businesses master social media trends and create engaging content. Join the future of digital marketing! 🌟 #AI #SocialMediaMarketing #Innovation"
+      linkedin: "Excited to share TrendAI - An innovative AI platform that helps businesses master social media trends and create engaging content. Join the future of digital marketing! 🌟 #AI #SocialMediaMarketing #Innovation",
+      tiktok: "Check out TrendAI! 🎯 Your AI assistant for viral content and trend analysis! #TrendAI #SocialMedia #AIMarketing #ViralContent"
     };
     
     const shareText = encodeURIComponent(messages[platform] || messages.twitter);
@@ -33,6 +34,9 @@ export const ShareSection = () => {
         break;
       case 'linkedin':
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(appUrl)}&summary=${shareText}`;
+        break;
+      case 'tiktok':
+        shareUrl = `https://www.tiktok.com/share?url=${encodeURIComponent(appUrl)}&text=${shareText}`;
         break;
     }
 
@@ -81,6 +85,13 @@ export const ShareSection = () => {
           >
             <Linkedin className="h-4 w-4" />
             LinkedIn
+          </Button>
+          <Button
+            variant="outline"
+            className="flex items-center gap-2 font-bold"
+            onClick={() => handleShare('tiktok')}
+          >
+            TikTok
           </Button>
         </div>
       </CardContent>
