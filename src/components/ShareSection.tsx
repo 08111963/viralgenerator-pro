@@ -36,8 +36,13 @@ export const ShareSection = () => {
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(appUrl)}&summary=${shareText}`;
         break;
       case 'tiktok':
-        shareUrl = `https://www.tiktok.com/share?url=${encodeURIComponent(appUrl)}&text=${shareText}`;
-        break;
+        // Copy to clipboard since TikTok doesn't support direct sharing via URL
+        navigator.clipboard.writeText(`${messages.tiktok} ${appUrl}`);
+        toast({
+          title: t('Share on TikTok'),
+          description: t('Text copied to clipboard. Open TikTok app to share'),
+        });
+        return;
     }
 
     if (shareUrl) {
