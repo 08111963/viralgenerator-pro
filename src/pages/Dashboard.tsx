@@ -13,8 +13,7 @@ const Dashboard = () => {
   }, []);
 
   const handleCloseTerms = () => {
-    setShowTerms(false);
-    window.location.reload();
+    window.location.href = '/dashboard';
   };
 
   return (
