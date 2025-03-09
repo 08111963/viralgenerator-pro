@@ -23,7 +23,7 @@ export const DetailedGuide = () => {
           <TabsTrigger value="dashboard">{t('guide.sections.dashboard.title')}</TabsTrigger>
           <TabsTrigger value="trends">{t('guide.sections.trends.title')}</TabsTrigger>
           <TabsTrigger value="content">{t('guide.sections.content.title')}</TabsTrigger>
-          <TabsTrigger value="features">Funzionalità Premium</TabsTrigger>
+          <TabsTrigger value="features">{t('guide.detailedGuide.premiumFeatures.title')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-4">
@@ -77,26 +77,17 @@ export const DetailedGuide = () => {
               <AccordionTrigger>
                 <div className="flex items-center gap-2">
                   <Settings className="h-4 w-4" />
-                  <span>Impostazioni Dashboard</span>
+                  <span>{t('guide.detailedGuide.dashboard.settings.title')}</span>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-muted-foreground mb-2">
-                  Personalizza la tua dashboard in base alle tue esigenze:
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <Check className="h-4 w-4 mt-1 text-green-500" />
-                    <span>Configura gli alert per i trend rilevanti</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-4 w-4 mt-1 text-green-500" />
-                    <span>Personalizza i widget visualizzati</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-4 w-4 mt-1 text-green-500" />
-                    <span>Imposta le metriche prioritarie</span>
-                  </li>
+                <ul className="space-y-2 pt-2">
+                  {getTranslatedArray('guide.detailedGuide.dashboard.settings.items').map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <Check className="h-4 w-4 mt-1 text-green-500" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -113,9 +104,9 @@ export const DetailedGuide = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Come Utilizzare il Monitoraggio Trend</CardTitle>
+              <CardTitle>{t('guide.sections.trends.title')}</CardTitle>
               <CardDescription>
-                Scopri come sfruttare al meglio l'analisi dei trend
+                {t('guide.sections.trends.subtitle')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -141,9 +132,9 @@ export const DetailedGuide = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Generazione Contenuti Ottimizzati</CardTitle>
+              <CardTitle>{t('guide.sections.content.title')}</CardTitle>
               <CardDescription>
-                Utilizza l'AI per creare contenuti efficaci
+                {t('guide.sections.content.subtitle')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -163,7 +154,7 @@ export const DetailedGuide = () => {
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              Scopri le funzionalità premium di TrendAI
+              {t('guide.detailedGuide.premiumFeatures.description')}
             </AlertDescription>
           </Alert>
 
@@ -171,13 +162,13 @@ export const DetailedGuide = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CircleDollarSign className="h-5 w-5" />
-                Piano Premium
+                {t('guide.detailedGuide.premiumFeatures.title')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium mb-2">Piano Base</h4>
+                  <h4 className="font-medium mb-2">{t('guide.detailedGuide.premiumFeatures.basic.title')}</h4>
                   <ul className="space-y-2">
                     {getTranslatedArray('guide.detailedGuide.premiumFeatures.basic.items').map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2">
@@ -188,7 +179,7 @@ export const DetailedGuide = () => {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">Piano Pro</h4>
+                  <h4 className="font-medium mb-2">{t('guide.detailedGuide.premiumFeatures.pro.title')}</h4>
                   <ul className="space-y-2">
                     {getTranslatedArray('guide.detailedGuide.premiumFeatures.pro.items').map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2">
