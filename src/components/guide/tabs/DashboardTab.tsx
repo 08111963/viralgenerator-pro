@@ -1,8 +1,8 @@
-
 import { useTranslation } from "react-i18next";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Info, Check, BarChart, Layers, Settings } from "lucide-react";
+import { Info, Check, BarChart, Layers, Settings, Bell } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const DashboardTab = () => {
   const { t } = useTranslation();
@@ -38,6 +38,45 @@ export const DashboardTab = () => {
                 </li>
               ))}
             </ul>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="notifications">
+          <AccordionTrigger>
+            <div className="flex items-center gap-2">
+              <Bell className="h-4 w-4" />
+              <span>Notifiche</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <Card>
+              <CardContent className="pt-6">
+                <h4 className="font-medium mb-2">Come attivare le notifiche:</h4>
+                <ol className="space-y-4">
+                  <li className="flex items-start gap-2">
+                    <span className="font-semibold mr-2">1.</span>
+                    <span>Clicca sull'icona del lucchetto (o del punto esclamativo) nella barra degli indirizzi del browser</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-semibold mr-2">2.</span>
+                    <span>Cerca l'impostazione "Notifiche"</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-semibold mr-2">3.</span>
+                    <span>Cambia l'impostazione da "Blocca" a "Consenti"</span>
+                  </li>
+                </ol>
+
+                <div className="mt-4 space-y-2">
+                  <p className="font-medium">Per browser specifici:</p>
+                  <div className="space-y-2 text-sm">
+                    <p><strong>Chrome:</strong> Icona lucchetto → Impostazioni sito → Notifiche → Consenti</p>
+                    <p><strong>Firefox:</strong> Icona scudo/punto esclamativo → Impostazioni notifiche → Consenti</p>
+                    <p><strong>Safari:</strong> Preferenze → Siti web → Notifiche → Modifica permessi</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </AccordionContent>
         </AccordionItem>
 
