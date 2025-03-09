@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -17,6 +16,7 @@ import { useDashboardSettings, WidgetKey } from "@/hooks/useDashboardSettings";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, arrayMove, rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableWidget } from "@/components/dashboard/SortableWidget";
+import { ContentOptimizer } from "@/components/dashboard/ContentOptimizer";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -72,7 +72,8 @@ const Dashboard = () => {
     features: <FeatureSection />,
     analytics: <AnalyticsSection />,
     predictive: <PredictiveTrends />,
-    share: <ShareSection />
+    share: <ShareSection />,
+    contentOptimizer: <ContentOptimizer />  // Aggiunto nuovo widget
   };
 
   return (

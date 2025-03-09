@@ -27,6 +27,36 @@ export type Database = {
         }
         Relationships: []
       }
+      content_templates: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          name: string
+          template: string
+          user_id: string
+          variables: Json
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          template: string
+          user_id: string
+          variables?: Json
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          template?: string
+          user_id?: string
+          variables?: Json
+        }
+        Relationships: []
+      }
       predictive_trends: {
         Row: {
           created_at: string
@@ -122,6 +152,53 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      scheduled_posts: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          platform: string
+          posted_at: string | null
+          scheduled_time: string
+          status: string
+          template_id: string | null
+          trend_data: Json | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          platform: string
+          posted_at?: string | null
+          scheduled_time: string
+          status?: string
+          template_id?: string | null
+          trend_data?: Json | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          platform?: string
+          posted_at?: string | null
+          scheduled_time?: string
+          status?: string
+          template_id?: string | null
+          trend_data?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_posts_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "content_templates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       social_accounts: {
         Row: {
