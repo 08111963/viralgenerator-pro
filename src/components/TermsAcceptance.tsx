@@ -14,7 +14,10 @@ export const TermsAcceptance = () => {
   const navigate = useNavigate();
 
   const handleAcceptTerms = async () => {
+    console.log('Button clicked, session:', session); // Debug log
+
     if (!session?.user.id) {
+      console.log('No session or user ID found'); // Debug log
       toast({
         variant: "destructive",
         title: i18n.language === 'it' ? 'Errore' : 'Error',
@@ -26,12 +29,19 @@ export const TermsAcceptance = () => {
     }
 
     try {
-      const { error } = await supabase.from('terms_acceptance').insert([{
+      console.log('Attempting to insert terms acceptance for user:', session.user.id); // Debug log
+      
+      const { data, error } = await supabase.from('terms_acceptance').insert([{
         user_id: session.user.id,
         version: '1.0'
       }]);
 
-      if (error) throw error;
+      console.log('Supabase response:', { data, error }); // Debug log
+
+      if (error) {
+        console.error('Supabase error details:', error); // Detailed error log
+        throw error;
+      }
 
       toast({
         title: i18n.language === 'it' ? 'Termini accettati' : 'Terms accepted',
