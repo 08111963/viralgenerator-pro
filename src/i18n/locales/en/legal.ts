@@ -1,4 +1,3 @@
-
 export const legal = {
   terms: {
     title: "Terms of Service",
@@ -53,5 +52,9 @@ export const legal = {
       title: "Contact",
       description: "For any questions about this Privacy Policy, please contact us."
     }
+  },
+  common: {
+    accept: "Accept",
+    cancel: "Cancel"
   }
 };

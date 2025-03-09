@@ -1,4 +1,3 @@
-
 export const legal = {
   terms: {
     title: "Termini di Servizio",
@@ -53,5 +52,9 @@ export const legal = {
       title: "Contatto",
       description: "Per qualsiasi domanda su questa Informativa sulla Privacy, contattaci."
     }
+  },
+  common: {
+    accept: "Accetta",
+    cancel: "Annulla"
   }
 };
