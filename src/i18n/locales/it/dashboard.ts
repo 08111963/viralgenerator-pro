@@ -68,5 +68,15 @@ export const dashboard = {
   premium: {
     locked: "Funzionalità disponibile solo nel piano Pro",
     upgrade: "Passa a Pro"
-  }
+  },
+  reports: {
+    title: "Report Settimanali",
+    description: "Analisi settimanale dei trend e delle performance",
+    noData: "Nessun report disponibile",
+    topHashtags: "Top Hashtag",
+    name: "Nome",
+    volume: "Volume",
+    change: "Variazione",
+    downloadReport: "Scarica Report"
+  },
 };

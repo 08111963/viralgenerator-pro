@@ -11,6 +11,7 @@ import { FeatureSection } from "@/components/dashboard/FeatureSection";
 import { AnalyticsSection } from "@/components/dashboard/AnalyticsSection";
 import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ShareSection } from "@/components/ShareSection";
+import { WeeklyReports } from "@/components/dashboard/WeeklyReports";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -71,6 +72,7 @@ const Dashboard = () => {
         </div>
         
         <div className="grid gap-6">
+          <WeeklyReports />
           <TrendingSection key="trending" />
           <FeatureSection key="features" />
           <AnalyticsSection key="analytics" />
