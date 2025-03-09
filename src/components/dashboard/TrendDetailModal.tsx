@@ -40,22 +40,24 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[800px]"> {/* Increased width */}
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2 mb-2">
             {item.name}
           </DialogTitle>
         </DialogHeader>
-        <div className="mt-6">
-          <TrendChart data={trendData} metrics={metrics} />
+        <div className="mt-4">
+          <div className="h-[300px]">
+            <TrendChart data={trendData} metrics={metrics} />
+          </div>
         </div>
-        <div className="mt-8 space-y-4">
-          <div className="grid grid-cols-2 gap-6">
-            <div className="p-6 rounded-xl bg-muted/50 border border-muted-foreground/10">
+        <div className="mt-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-muted/50 border border-muted-foreground/10">
               <p className="text-sm text-muted-foreground mb-2">{t('dashboard.trends.mentions')}</p>
               <p className="text-2xl font-bold">{item.volume.toLocaleString()}</p>
             </div>
-            <div className="p-6 rounded-xl bg-muted/50 border border-muted-foreground/10">
+            <div className="p-4 rounded-xl bg-muted/50 border border-muted-foreground/10">
               <p className="text-sm text-muted-foreground mb-2">{t('dashboard.trends.change')}</p>
               <p className={`text-2xl font-bold ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                 {item.change >= 0 ? '+' : ''}{item.change}%
@@ -67,4 +69,3 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
     </Dialog>
   );
 };
-
