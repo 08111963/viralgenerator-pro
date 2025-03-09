@@ -1,3 +1,4 @@
+
 import { useTranslation } from "react-i18next";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Info, Check, BarChart, Layers, Settings, Bell } from "lucide-react";
@@ -21,6 +22,14 @@ export const DashboardTab = () => {
         </AlertDescription>
       </Alert>
 
+      <div className="w-full rounded-lg overflow-hidden mb-6">
+        <img 
+          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
+          alt="Dashboard example" 
+          className="w-full h-48 object-cover"
+        />
+      </div>
+
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="monitoring">
           <AccordionTrigger>
@@ -30,14 +39,23 @@ export const DashboardTab = () => {
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <ul className="space-y-2 pt-2">
-              {getTranslatedArray('guide.detailedGuide.dashboard.trendMonitoring.items').map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2">
-                  <Check className="h-4 w-4 mt-1 text-green-500" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-4">
+              <div className="rounded-lg overflow-hidden mb-4">
+                <img 
+                  src="https://images.unsplash.com/photo-1518770660439-4636190af475" 
+                  alt="Analytics visualization" 
+                  className="w-full h-32 object-cover"
+                />
+              </div>
+              <ul className="space-y-2">
+                {getTranslatedArray('guide.detailedGuide.dashboard.trendMonitoring.items').map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <Check className="h-4 w-4 mt-1 text-green-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -51,6 +69,13 @@ export const DashboardTab = () => {
           <AccordionContent>
             <Card>
               <CardContent className="pt-6">
+                <div className="rounded-lg overflow-hidden mb-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
+                    alt="Browser settings" 
+                    className="w-full h-32 object-cover"
+                  />
+                </div>
                 <h4 className="font-medium mb-2">Come attivare le notifiche:</h4>
                 <ol className="space-y-4">
                   <li className="flex items-start gap-2">
