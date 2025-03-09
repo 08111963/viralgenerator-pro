@@ -5,12 +5,13 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
+import { useNavigate } from 'react-router-dom';
 
 export const TermsAcceptance = () => {
   const { t, i18n } = useTranslation();
   const { toast } = useToast();
   const { session } = useAuth();
+  const navigate = useNavigate();
 
   const handleAcceptTerms = async () => {
     if (!session?.user.id) return;
@@ -30,7 +31,11 @@ export const TermsAcceptance = () => {
           ? 'Grazie per aver accettato i nostri termini e la privacy policy'
           : 'Thank you for accepting our terms and privacy policy',
       });
+
+      // Redirect to dashboard after successful acceptance
+      navigate('/dashboard');
     } catch (error) {
+      console.error('Error accepting terms:', error);
       toast({
         variant: "destructive",
         title: i18n.language === 'it' ? 'Errore' : 'Error',
