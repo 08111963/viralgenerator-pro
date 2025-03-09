@@ -6,7 +6,6 @@ import { auth } from './it/auth';
 import { dashboard } from './it/dashboard';
 import { pricing } from './it/pricing';
 import { guide } from './it/guide';
-import { legal } from './it/legal';
 
 export default {
   translation: {
@@ -17,6 +16,5 @@ export default {
     dashboard,
     pricing,
     guide,
-    legal
   }
 };

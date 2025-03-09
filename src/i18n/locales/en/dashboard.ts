@@ -1,3 +1,4 @@
+
 export const dashboard = {
   title: 'Dashboard',
   notifications: {
@@ -89,61 +90,6 @@ export const dashboard = {
     analytics: 'Analytics',
     predictive: 'Predictive Trends',
     share: 'Share Section'
-  },
-  legal: {
-    terms: {
-      title: 'Terms of Service',
-      agreement: {
-        title: 'Agreement',
-        description: 'By accessing and using this application, you agree to be bound by these Terms of Service.',
-      },
-      usage: {
-        title: 'Acceptable Use',
-        description: 'You agree to use the application only for lawful purposes and in accordance with these Terms of Service.',
-      },
-      intellectual: {
-        title: 'Intellectual Property',
-        description: 'All content, features, and functionality of this application are owned by us and are protected by international copyright, trademark, and other intellectual property laws.',
-      },
-      termination: {
-        title: 'Account Termination',
-        description: 'We reserve the right to terminate or suspend your account and access to the service at our sole discretion, without notice, for any reason.',
-      },
-      liability: {
-        title: 'Limitation of Liability',
-        description: 'We shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.',
-      },
-      contact: {
-        title: 'Contact Information',
-        description: 'For any questions about these Terms of Service, please contact us.',
-      },
-    },
-    privacy: {
-      title: 'Privacy Policy',
-      collection: {
-        title: 'Information Collection',
-        description: 'We collect information that you provide directly to us when using our service.',
-      },
-      use: {
-        title: 'Information Use',
-        description: 'We use the information we collect to operate, maintain, and improve our services.',
-      },
-      cookies: {
-        title: 'Cookies',
-        description: 'We use cookies and similar tracking technologies to track activity on our service and hold certain information.',
-      },
-      security: {
-        title: 'Data Security',
-        description: 'We take reasonable measures to help protect your personal information from loss, theft, misuse, and unauthorized access.',
-      },
-      rights: {
-        title: 'Your Rights',
-        description: 'You have the right to access, update, or delete your personal information at any time.',
-      },
-      contact: {
-        title: 'Contact Us',
-        description: 'If you have any questions about this Privacy Policy, please contact us.',
-      },
-    },
-  },
+  }
 };
+
