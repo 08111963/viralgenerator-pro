@@ -119,9 +119,21 @@ export const PredictiveTrends = () => {
   }
 
   const metrics = {
-    followers: { color: "#8B5CF6", name: "Follower" },     // Viola vivace
-    engagement: { color: "#D946EF", name: "Contenuti" },   // Rosa magenta
-    popularity: { color: "#0EA5E9", name: "Hashtag" }      // Blu oceano
+    followers: { 
+      color: "#8B5CF6", 
+      name: "Follower", 
+      description: "Previsione crescita follower su tutti i social collegati"
+    },
+    engagement: { 
+      color: "#D946EF", 
+      name: "Contenuti", 
+      description: "Previsioni interazioni sui contenuti postati su tutti i social"
+    },
+    popularity: { 
+      color: "#0EA5E9", 
+      name: "Hashtag", 
+      description: "Previsione popolarità degli hashtag usati sui social"
+    }
   };
 
   return (
@@ -131,7 +143,18 @@ export const PredictiveTrends = () => {
           <Zap className="h-5 w-5" />
           {t('dashboard.predictions.title')}
         </CardTitle>
-        <CardDescription>{t('dashboard.predictions.subtitle')}</CardDescription>
+        <CardDescription className="space-y-2">
+          {t('dashboard.predictions.subtitle')}
+          <div className="mt-2 space-y-1">
+            <p className="text-sm font-medium">Previsioni aggregate per i social collegati:</p>
+            {Object.values(metrics).map(({ name, description }) => (
+              <div key={name} className="text-xs text-muted-foreground flex gap-2">
+                <span className="font-medium">{name}:</span>
+                <span>{description}</span>
+              </div>
+            ))}
+          </div>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
