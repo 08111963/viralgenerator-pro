@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -5,6 +6,7 @@ import { TrendingUp, Instagram, Twitter, Video, ArrowUp, ArrowDown } from "lucid
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { TrendDetailModal } from "./TrendDetailModal";
 
 const platformData = {
   twitter: [
@@ -58,6 +60,8 @@ export const TrendAnalytics = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [selectedTrend, setSelectedTrend] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   useEffect(() => {
     // Aggiorna i dati ogni 5 minuti
@@ -74,93 +78,115 @@ export const TrendAnalytics = () => {
     return () => clearInterval(updateInterval);
   }, []);
 
+  const handleTrendClick = (trend: any) => {
+    const trendData = {
+      name: trend.topic,
+      volume: parseInt(trend.volume.replace('K', '000')),
+      change: parseInt(trend.growth.replace('%', '')),
+    };
+    setSelectedTrend(trendData);
+    setIsModalOpen(true);
+  };
+
   return (
-    <Card className="col-span-2">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5" />
-          {t('dashboard.analytics.title')}
-        </CardTitle>
-        <CardDescription>
-          {t('dashboard.analytics.subtitle')}
-          <div className="text-xs text-muted-foreground mt-1">
-            {t('dashboard.analytics.lastUpdate')}: {lastUpdate.toLocaleTimeString()}
-          </div>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="twitter">
-          <TabsList className="mb-4">
-            <TabsTrigger value="twitter" className="flex items-center gap-2">
-              <Twitter className="h-4 w-4" />
-              Twitter
-            </TabsTrigger>
-            <TabsTrigger value="instagram" className="flex items-center gap-2">
-              <Instagram className="h-4 w-4" />
-              Instagram
-            </TabsTrigger>
-            <TabsTrigger value="tiktok" className="flex items-center gap-2">
-              <Video className="h-4 w-4" />
-              TikTok
-            </TabsTrigger>
-          </TabsList>
+    <>
+      <Card className="col-span-2">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            {t('dashboard.analytics.title')}
+          </CardTitle>
+          <CardDescription>
+            {t('dashboard.analytics.subtitle')}
+            <div className="text-xs text-muted-foreground mt-1">
+              {t('dashboard.analytics.lastUpdate')}: {lastUpdate.toLocaleTimeString()}
+            </div>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="twitter">
+            <TabsList className="mb-4">
+              <TabsTrigger value="twitter" className="flex items-center gap-2">
+                <Twitter className="h-4 w-4" />
+                Twitter
+              </TabsTrigger>
+              <TabsTrigger value="instagram" className="flex items-center gap-2">
+                <Instagram className="h-4 w-4" />
+                Instagram
+              </TabsTrigger>
+              <TabsTrigger value="tiktok" className="flex items-center gap-2">
+                <Video className="h-4 w-4" />
+                TikTok
+              </TabsTrigger>
+            </TabsList>
 
-          {Object.entries(platformData).map(([platform, data]) => (
-            <TabsContent key={platform} value={platform}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="h-[200px]">
-                  <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.engagement')}</p>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={engagementData[platform]}>
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="value" stroke="#8884d8" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="h-[200px]">
-                  <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.volume')}</p>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data}>
-                      <XAxis dataKey="topic" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="volume" fill="#8884d8" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                {data.map((item, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-medium">{item.topic}</h4>
-                      <span className={`text-sm px-2 py-1 rounded ${
-                        item.growth.startsWith('+') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                        {item.growth}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {item.hashtags.map((hashtag, idx) => (
-                        <span key={idx} className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                          {hashtag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex justify-between items-center text-sm text-muted-foreground">
-                      <span>Volume: {item.volume}</span>
-                      <span>Sentiment: {(item.sentiment * 100).toFixed(0)}%</span>
-                    </div>
+            {Object.entries(platformData).map(([platform, data]) => (
+              <TabsContent key={platform} value={platform}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="h-[200px]">
+                    <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.engagement')}</p>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={engagementData[platform]}>
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
-                ))}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-      </CardContent>
-    </Card>
+                  <div className="h-[200px]">
+                    <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.volume')}</p>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={data}>
+                        <XAxis dataKey="topic" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="volume" fill="#8884d8" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {data.map((item, index) => (
+                    <div 
+                      key={index} 
+                      className="p-4 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                      onClick={() => handleTrendClick(item)}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-medium">{item.topic}</h4>
+                        <span className={`text-sm px-2 py-1 rounded ${
+                          item.growth.startsWith('+') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {item.growth}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {item.hashtags.map((hashtag, idx) => (
+                          <span key={idx} className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                            {hashtag}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex justify-between items-center text-sm text-muted-foreground">
+                        <span>Volume: {item.volume}</span>
+                        <span>Sentiment: {(item.sentiment * 100).toFixed(0)}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      <TrendDetailModal
+        item={selectedTrend}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 };
