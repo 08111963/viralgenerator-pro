@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Hash, MessageCircle, Radio, AlertTriangle } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -6,7 +6,8 @@ import { useTrendingItems } from "@/hooks/useTrendingItems";
 import { TrendingChart } from "./TrendingChart";
 import { TrendingList } from "./TrendingList";
 import { Progress } from "@/components/ui/progress";
-import { Tooltip } from "@/components/ui/tooltip";
+import { TrendValidationTooltip } from "./TrendValidationTooltip";
+import { TrendDetailModal } from "./TrendDetailModal";
 
 interface TrendingCardProps {
   title: string;
@@ -29,6 +30,8 @@ const getIcon = (icon: "hashtag" | "keyword" | "topic") => {
 export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   const { t } = useTranslation();
   const { data: items = [], isLoading, isError } = useTrendingItems(icon);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -87,6 +90,11 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
     );
   }
 
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -119,24 +127,27 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
 
           <div className="space-y-2">
             {items.map((item) => (
-              <div key={item.id} className="p-3 border rounded-lg hover:bg-muted/50">
+              <div 
+                key={item.id} 
+                className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
+                onClick={() => handleItemClick(item)}
+              >
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-medium">{item.name}</span>
-                  <Tooltip content={item.validationIssues.join(', ')}>
+                  <TrendValidationTooltip issues={item.validationIssues}>
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-muted-foreground">
                         Affidabilità:
                       </span>
                       <Progress 
                         value={item.confidence} 
-                        className="w-20"
-                        indicatorClassName={
+                        className={`w-20 ${
                           item.confidence > 70 ? "bg-green-500" :
                           item.confidence > 40 ? "bg-yellow-500" : "bg-red-500"
-                        }
+                        }`}
                       />
                     </div>
-                  </Tooltip>
+                  </TrendValidationTooltip>
                 </div>
                 
                 <div className="flex justify-between items-center text-sm">
@@ -150,6 +161,15 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
           </div>
         </div>
       </CardContent>
+
+      <TrendDetailModal
+        item={selectedItem}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedItem(null);
+        }}
+      />
     </Card>
   );
 };
