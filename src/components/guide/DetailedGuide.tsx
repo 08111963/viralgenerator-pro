@@ -13,11 +13,10 @@ export const DetailedGuide = () => {
       <h2 className="text-2xl font-semibold mb-6">{t('guide.detailedGuide.title')}</h2>
       
       <Tabs defaultValue="dashboard" className="space-y-4">
-        <TabsList className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <TabsList className="grid grid-cols-3 gap-4">
           <TabsTrigger value="dashboard">{t('guide.sections.dashboard.title')}</TabsTrigger>
           <TabsTrigger value="trends">{t('guide.sections.trends.title')}</TabsTrigger>
           <TabsTrigger value="content">{t('guide.sections.content.title')}</TabsTrigger>
-          <TabsTrigger value="premium">{t('guide.detailedGuide.premiumFeatures.title')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-4">
@@ -34,7 +33,7 @@ export const DetailedGuide = () => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {(t('guide.detailedGuide.dashboard.trendMonitoring.items', { returnObjects: true }) as string[]).map((item, idx) => (
+                {t('guide.detailedGuide.dashboard.trendMonitoring.items', { returnObjects: true }).map((item: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{item}</span>
@@ -50,7 +49,7 @@ export const DetailedGuide = () => {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {(t('guide.detailedGuide.dashboard.analytics.items', { returnObjects: true }) as string[]).map((item, idx) => (
+                {t('guide.detailedGuide.dashboard.analytics.items', { returnObjects: true }).map((item: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{item}</span>
@@ -72,7 +71,7 @@ export const DetailedGuide = () => {
           <Card>
             <CardContent className="pt-6">
               <ul className="space-y-2">
-                {(t('guide.sections.trends.benefits', { returnObjects: true }) as string[]).map((benefit, idx) => (
+                {t('guide.sections.trends.benefits', { returnObjects: true }).map((benefit: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{benefit}</span>
@@ -94,7 +93,7 @@ export const DetailedGuide = () => {
           <Card>
             <CardContent className="pt-6">
               <ul className="space-y-2">
-                {(t('guide.sections.content.benefits', { returnObjects: true }) as string[]).map((benefit, idx) => (
+                {t('guide.sections.content.benefits', { returnObjects: true }).map((benefit: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
                     <Check className="h-4 w-4 mt-1 text-green-500" />
                     <span>{benefit}</span>
@@ -103,42 +102,6 @@ export const DetailedGuide = () => {
               </ul>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="premium" className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t('guide.detailedGuide.premiumFeatures.basic.title')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {(t('guide.detailedGuide.premiumFeatures.basic.items', { returnObjects: true }) as string[]).map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <Check className="h-4 w-4 mt-1 text-green-500" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>{t('guide.detailedGuide.premiumFeatures.pro.title')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {(t('guide.detailedGuide.premiumFeatures.pro.items', { returnObjects: true }) as string[]).map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <Check className="h-4 w-4 mt-1 text-green-500" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
         </TabsContent>
       </Tabs>
     </section>
