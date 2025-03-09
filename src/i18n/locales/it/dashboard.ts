@@ -41,6 +41,13 @@ export const dashboard = {
       }
     }
   },
+  apiKey: {
+    title: "Chiave API",
+    description: "Usa questa chiave per accedere alla nostra API in modo programmatico",
+    copied: "Chiave API Copiata",
+    copiedDesc: "La chiave API è stata copiata negli appunti",
+    createdAt: "Creata il"
+  },
   analytics: {
     title: "Analisi Trend",
     subtitle: "Monitoraggio in tempo reale dei trend social",
