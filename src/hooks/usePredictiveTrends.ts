@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
@@ -15,6 +16,7 @@ export interface PredictiveTrendData {
   followers: number;
   engagement: number;
   popularity: number;
+  created_at?: string;
   trends?: {
     followers: TrendDetail;
     engagement: TrendDetail;
@@ -29,52 +31,46 @@ export const usePredictiveTrends = () => {
       console.log('Fetching predictive trends data...');
       
       try {
+        // Prima prova a generare nuove previsioni
         const { data: aiPredictions, error: aiError } = await supabase.functions.invoke('generate-predictions');
         
-        if (aiPredictions?.predictions && Array.isArray(aiPredictions.predictions) && aiPredictions.predictions.length > 0) {
-          console.log('Got AI predictions:', aiPredictions.predictions);
+        if (aiPredictions?.predictions && Array.isArray(aiPredictions.predictions)) {
+          console.log('Got new AI predictions:', aiPredictions.predictions);
           return aiPredictions.predictions as PredictiveTrendData[];
-        } else {
-          console.warn('AI predictions invalid or empty:', aiPredictions);
-          throw new Error('Invalid AI predictions format');
         }
-      } catch (e) {
-        console.error('Error getting AI predictions:', e);
         
+        console.warn('Falling back to stored predictions');
+        // Se fallisce, usa le previsioni salvate
         const { data, error } = await supabase
           .from('predictive_trends')
           .select('*')
-          .order('time');
+          .order('created_at', { ascending: false })
+          .limit(3);
 
-        if (error) {
-          console.error('Error fetching predictive trends from DB:', error);
-          throw error;
-        }
-
-        if (!data || data.length === 0) {
-          console.warn('No data found in database');
-          return [];
-        }
-
-        console.log('Found database trends:', data);
+        if (error) throw error;
         return data as PredictiveTrendData[];
+      } catch (e) {
+        console.error('Error in predictions:', e);
+        throw e;
       }
     },
+    refetchInterval: 30000, // Aggiorna ogni 30 secondi
   });
 
+  // Ascolta gli aggiornamenti in tempo reale
   useEffect(() => {
     const channel = supabase
       .channel('predictive_trends_changes')
       .on(
         'postgres_changes',
         {
-          event: '*', // Listen to all changes (INSERT, UPDATE, DELETE)
+          event: '*',
           schema: 'public',
           table: 'predictive_trends'
         },
         () => {
           console.log('Received real-time update for predictive trends');
-          refetch(); // Refetch data when changes occur
+          refetch();
         }
       )
       .subscribe();

@@ -1,8 +1,13 @@
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.39.7";
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,7 +22,7 @@ serve(async (req) => {
   try {
     console.log('Generating AI predictions...');
     
-    // Get next 3 days for predictions
+    // Get the next 3 days for predictions
     const dates = Array.from({length: 3}, (_, i) => {
       const date = new Date();
       date.setDate(date.getDate() + i + 1);
@@ -33,29 +38,23 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
-            content: `You are a social media trend analyst. Generate predictions for each date in a simple JSON format with this exact structure:
-            {
-              "predictions": [
-                {
-                  "time": "YYYY-MM-DD",
-                  "followers": number between 5000-50000,
-                  "engagement": number between 1000-30000,
-                  "popularity": number between 500-10000
-                }
-              ]
-            }`
+            content: `Sei un analista di trend social media esperto. Genera previsioni per ogni data nel formato JSON richiesto con metriche realistiche per:
+            - followers: crescita dei follower (5000-50000)
+            - engagement: interazioni con i contenuti (1000-30000)
+            - popularity: viralità degli hashtag (500-10000)
+            
+            Spiega anche i fattori che influenzano ogni metrica.`
           },
           {
             role: 'user',
-            content: `Generate predictions for these dates: ${dates.join(', ')}. Return data in the specified JSON format.`
+            content: `Genera previsioni per queste date: ${dates.join(', ')}. Includi i fattori di influenza.`
           }
         ],
         temperature: 0.7,
-        max_tokens: 1000,
       }),
     });
 
@@ -71,23 +70,18 @@ serve(async (req) => {
     }
 
     const predictions = JSON.parse(data.choices[0].message.content);
-    
-    // Validate predictions format
-    if (!predictions.predictions || !Array.isArray(predictions.predictions)) {
-      throw new Error('Invalid predictions format');
+
+    // Store predictions in Supabase with timestamp
+    const { error: insertError } = await supabase
+      .from('predictive_trends')
+      .insert(predictions.predictions.map((p: any) => ({
+        ...p,
+        created_at: new Date().toISOString()
+      })));
+
+    if (insertError) {
+      console.error('Error storing predictions:', insertError);
     }
-
-    // Validate each prediction's data ranges
-    predictions.predictions = predictions.predictions.map(prediction => {
-      return {
-        ...prediction,
-        followers: Math.max(5000, Math.min(50000, prediction.followers)),
-        engagement: Math.max(1000, Math.min(30000, prediction.engagement)),
-        popularity: Math.max(500, Math.min(10000, prediction.popularity))
-      };
-    });
-
-    console.log('Final processed predictions:', predictions);
 
     return new Response(JSON.stringify(predictions), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
