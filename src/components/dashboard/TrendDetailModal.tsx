@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Dialog,
@@ -41,23 +42,23 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-[850px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+          <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
             {item.name}
           </DialogTitle>
         </DialogHeader>
-        <div className="mt-4">
-          <div style={{ height: '300px' }}> {/* Reduced from 400px */}
+        <div className="mt-6 bg-card p-6 rounded-lg border shadow-sm">
+          <div className="h-[300px]">
             <TrendChart data={trendData} metrics={metrics} />
           </div>
         </div>
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <div className="p-4 rounded-lg bg-muted/50 border border-muted-foreground/10">
-            <p className="text-sm text-muted-foreground">{t('dashboard.trends.mentions')}</p>
-            <p className="text-lg font-semibold">{item.volume.toLocaleString()}</p>
+        <div className="mt-6 grid grid-cols-2 gap-6">
+          <div className="p-6 rounded-lg bg-card border shadow-sm">
+            <p className="text-sm font-medium text-muted-foreground mb-2">{t('dashboard.trends.mentions')}</p>
+            <p className="text-2xl font-semibold">{item.volume.toLocaleString()}</p>
           </div>
-          <div className="p-4 rounded-lg bg-muted/50 border border-muted-foreground/10">
-            <p className="text-sm text-muted-foreground">{t('dashboard.trends.change')}</p>
-            <p className={`text-lg font-semibold ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+          <div className="p-6 rounded-lg bg-card border shadow-sm">
+            <p className="text-sm font-medium text-muted-foreground mb-2">{t('dashboard.trends.change')}</p>
+            <p className={`text-2xl font-semibold ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
               {item.change >= 0 ? '+' : ''}{item.change}%
             </p>
           </div>
