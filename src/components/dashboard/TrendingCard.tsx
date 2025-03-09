@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Hash, MessageCircle } from "lucide-react";
+import { TrendingUp, Hash, MessageCircle, Radio } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useTrendingItems } from "@/hooks/useTrendingItems";
 import { TrendingChart } from "./TrendingChart";
@@ -90,11 +91,19 @@ export const TrendingCard = ({ title, icon }: TrendingCardProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          {getIcon(icon)}
-          {title}
-        </CardTitle>
-        <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              {getIcon(icon)}
+              {title}
+            </CardTitle>
+            <CardDescription>{t('dashboard.trends.lastDay')}</CardDescription>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-primary">
+            <Radio className="h-3 w-3 animate-pulse" />
+            {t('dashboard.trends.realtime')}
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

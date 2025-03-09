@@ -1,4 +1,3 @@
-
 export const dashboard = {
   title: "Dashboard",
   notifications: {
@@ -13,7 +12,8 @@ export const dashboard = {
     mentions: "menzioni",
     lastDay: "Ultime 24 ore",
     error: "Errore nel caricamento dei trend",
-    noData: "Nessun trend disponibile"
+    noData: "Nessun trend disponibile",
+    realtime: "Aggiornamento in tempo reale"
   },
   predictions: {
     title: "Previsioni AI",
@@ -62,4 +62,3 @@ export const dashboard = {
     upgrade: "Passa a Pro"
   }
 };
-
