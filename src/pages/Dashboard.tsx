@@ -16,12 +16,43 @@ import { useDashboardSettings, WidgetKey } from "@/hooks/useDashboardSettings";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, arrayMove, rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableWidget } from "@/components/dashboard/SortableWidget";
+import { useNavigate } from 'react-router-dom';
+import { useTermsAcceptance } from "@/hooks/useTermsAcceptance";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
   const { session } = useAuth();
+  const navigate = useNavigate();
+  const { hasAcceptedTerms, isLoading } = useTermsAcceptance();
   const { widgetSettings, widgetOrder, reorderWidgets } = useDashboardSettings();
+
+  React.useEffect(() => {
+    if (!isLoading && !hasAcceptedTerms) {
+      toast({
+        title: i18n.language === 'it' 
+          ? 'Accettazione Termini Richiesta'
+          : 'Terms Acceptance Required',
+        description: i18n.language === 'it'
+          ? 'Per favore accetta i termini e la privacy policy per continuare'
+          : 'Please accept the terms and privacy policy to continue',
+        variant: "destructive"
+      });
+      navigate('/terms');
+    }
+  }, [hasAcceptedTerms, isLoading, navigate, toast, i18n.language]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!hasAcceptedTerms) {
+    return null;
+  }
 
   // Update document title and meta tags for SEO based on current language
   React.useEffect(() => {
