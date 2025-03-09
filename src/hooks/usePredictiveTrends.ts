@@ -15,6 +15,19 @@ export const usePredictiveTrends = () => {
     queryFn: async () => {
       console.log('Fetching predictive trends data...');
       
+      // Prima proviamo a ottenere previsioni AI
+      try {
+        const { data: aiPredictions, error: aiError } = await supabase.functions.invoke('generate-predictions');
+        
+        if (aiPredictions && !aiError) {
+          console.log('Got AI predictions:', aiPredictions);
+          return aiPredictions.predictions;
+        }
+      } catch (e) {
+        console.error('Error getting AI predictions:', e);
+      }
+
+      // Fallback ai dati del database se l'AI fallisce
       const { data, error } = await supabase
         .from('predictive_trends')
         .select('*')
@@ -26,9 +39,8 @@ export const usePredictiveTrends = () => {
       }
 
       console.log('Found predictive trends:', data);
-      
       return data as PredictiveTrendData[];
     },
-    refetchInterval: 300000, // Refresh every 5 minutes
+    refetchInterval: 300000, // Refresh ogni 5 minuti
   });
 };
