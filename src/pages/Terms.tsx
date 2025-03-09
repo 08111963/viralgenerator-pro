@@ -3,6 +3,7 @@ import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TermsAcceptance } from "@/components/TermsAcceptance";
 
 const Terms = () => {
   const { t, i18n } = useTranslation();
@@ -121,10 +122,11 @@ const Terms = () => {
             )}
           </TabsContent>
         </Tabs>
+
+        <TermsAcceptance />
       </main>
     </div>
   );
 };
 
 export default Terms;
-
