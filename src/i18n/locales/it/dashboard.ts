@@ -13,7 +13,8 @@ export const dashboard = {
     lastDay: "Ultime 24 ore",
     error: "Errore nel caricamento dei trend",
     noData: "Nessun trend disponibile",
-    realtime: "Aggiornamento in tempo reale"
+    realtime: "Aggiornamento in tempo reale",
+    trendDetail: "Dettaglio trend"
   },
   predictions: {
     title: "Previsioni AI",
