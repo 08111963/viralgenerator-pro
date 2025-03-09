@@ -1,7 +1,8 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Hash, FileText, UserRound, CheckCircle2, PlusCircle } from "lucide-react";
+import { TrendingUp, Hash, FileText, UserRound, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
@@ -39,14 +40,14 @@ const getFeatureIcon = (feature: string) => {
 
 const PricingTier = ({
   name,
-  price,
+  prices,
   description,
   features,
   priceId,
   highlighted = false,
 }: {
   name: string;
-  price: string;
+  prices: { eur: string; usd: string };
   description: string;
   features: string[];
   priceId?: string;
@@ -97,9 +98,15 @@ const PricingTier = ({
   return (
     <div className={`p-6 rounded-lg ${highlighted ? 'border-2 border-primary ring-2 ring-primary/10' : 'border'} bg-background`}>
       <h3 className="text-2xl font-bold">{name}</h3>
-      <div className="mt-4 flex items-baseline">
-        <span className="text-4xl font-bold">{price}</span>
-        {price !== 'Custom' && <span className="ml-1 text-muted-foreground">/month</span>}
+      <div className="mt-4 flex items-baseline gap-4">
+        <div>
+          <span className="text-4xl font-bold">{prices.eur}</span>
+          <span className="ml-1 text-muted-foreground">/month</span>
+        </div>
+        <div className="text-muted-foreground">
+          <span className="text-2xl">{prices.usd}</span>
+          <span className="ml-1">/month</span>
+        </div>
       </div>
       <p className="mt-4 text-muted-foreground">{description}</p>
       <ul className="mt-6 space-y-4">
@@ -131,17 +138,23 @@ const Pricing = () => {
   const tiers = [
     {
       name: t('pricing.tiers.base.name'),
-      price: "€12",
+      prices: {
+        eur: t('pricing.tiers.base.price.eur'),
+        usd: t('pricing.tiers.base.price.usd')
+      },
       description: t('pricing.tiers.base.description'),
       features: t('pricing.features.base', { returnObjects: true }) as string[],
       priceId: "price_1R0AW8CyM0TeKm79DfnZE2ib"
     },
     {
       name: t('pricing.tiers.pro.name'),
-      price: "€26,99",
+      prices: {
+        eur: t('pricing.tiers.pro.price.eur'),
+        usd: t('pricing.tiers.pro.price.usd')
+      },
       description: t('pricing.tiers.pro.description'),
       features: t('pricing.features.pro', { returnObjects: true }) as string[],
-      priceId: "price_1R0AYtCyM0TeKm797UxFHTHh",
+      priceId: "price_1R0AYtCyM0TeKm797UxFHTHb",
       highlighted: true
     }
   ];

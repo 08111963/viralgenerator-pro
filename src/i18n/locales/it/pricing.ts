@@ -6,10 +6,18 @@ export const pricing = {
     base: {
       name: 'Base',
       description: 'Inizia con 7 giorni di prova gratuita',
+      price: {
+        eur: '€12',
+        usd: '$13'
+      }
     },
     pro: {
       name: 'Pro',
       description: 'Ideale per professionisti e team in crescita',
+      price: {
+        eur: '€26.99',
+        usd: '$29'
+      }
     },
   },
   features: {
