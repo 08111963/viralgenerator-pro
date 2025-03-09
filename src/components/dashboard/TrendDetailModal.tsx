@@ -40,14 +40,14 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[850px]">
+      <DialogContent className="sm:max-w-[1800px] w-[95vw]"> {/* Increased max width */}
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
             {item.name}
           </DialogTitle>
         </DialogHeader>
         <div className="mt-6 bg-card p-6 rounded-lg border shadow-sm">
-          <div className="h-[300px]">
+          <div className="h-[800px]"> {/* Increased height */}
             <TrendChart data={trendData} metrics={metrics} />
           </div>
         </div>
