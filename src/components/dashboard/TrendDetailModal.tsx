@@ -21,25 +21,26 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
 
   if (!item) return null;
 
-  // Create sample data points for a more detailed 24-hour view
   const trendData = [
-    { time: '24h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 100))) },
-    { time: '18h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 150))) },
-    { time: '12h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 200))) },
-    { time: '6h ago', volume: Math.max(0, item.volume - (item.volume * (item.change / 300))) },
-    { time: 'Now', volume: item.volume },
+    { time: '24h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 100))) },
+    { time: '18h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 150))) },
+    { time: '12h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 200))) },
+    { time: '9h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 250))) },
+    { time: '6h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 300))) },
+    { time: '3h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 350))) },
+    { time: 'Ora', volume: item.volume },
   ];
 
   const metrics = {
     volume: {
-      color: '#9b87f5',
+      color: '#8b5cf6',
       name: t('dashboard.trends.mentions')
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             {item.name}
@@ -48,15 +49,19 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
         <div className="mt-4">
           <TrendChart data={trendData} metrics={metrics} />
         </div>
-        <div className="mt-4 text-sm text-muted-foreground">
-          <p className="mb-2">
-            Volume attuale: {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
-          </p>
-          <p>
-            Variazione: <span className={item.change >= 0 ? 'text-green-500' : 'text-red-500'}>
-              {item.change >= 0 ? '+' : ''}{item.change}%
-            </span>
-          </p>
+        <div className="mt-6 space-y-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 rounded-lg bg-muted">
+              <p className="text-sm text-muted-foreground mb-1">{t('dashboard.trends.mentions')}</p>
+              <p className="text-lg font-semibold">{item.volume.toLocaleString()}</p>
+            </div>
+            <div className="p-4 rounded-lg bg-muted">
+              <p className="text-sm text-muted-foreground mb-1">{t('dashboard.trends.change')}</p>
+              <p className={`text-lg font-semibold ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                {item.change >= 0 ? '+' : ''}{item.change}%
+              </p>
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
