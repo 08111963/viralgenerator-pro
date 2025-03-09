@@ -1,4 +1,3 @@
-
 export const dashboard = {
   title: 'Dashboard',
   notifications: {
@@ -53,7 +52,8 @@ export const dashboard = {
     subtitle: 'Trend previsti nelle prossime 72 ore',
     growth: 'Trend in crescita',
     volume: 'Volume',
-    sentiment: 'Sentiment'
+    sentiment: 'Sentiment',
+    dataUpdated: 'Dati aggiornati alle'
   },
   content: {
     title: 'Generatore di Contenuti',

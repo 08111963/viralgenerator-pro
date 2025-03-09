@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Zap, TrendingUp, TrendingDown, Minus, AlertTriangle, Loader2 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTranslation } from "react-i18next";
 import { usePredictiveTrends, TrendDetail } from "@/hooks/usePredictiveTrends";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "@/components/ui/use-toast";
 
 const TrendIndicator = ({ trend }: { trend: string }) => {
   if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-500" />;
@@ -53,8 +54,20 @@ const TrendDetails = ({ details }: { details: TrendDetail }) => (
 
 export const PredictiveTrends = () => {
   const [activeMetric, setActiveMetric] = useState("followers");
+  const [lastUpdateTime, setLastUpdateTime] = useState<Date>(new Date());
   const { t } = useTranslation();
   const { data: trendsData, isLoading, error } = usePredictiveTrends();
+
+  // Effect to handle real-time updates
+  useEffect(() => {
+    if (trendsData) {
+      const now = new Date();
+      setLastUpdateTime(now);
+      toast({
+        description: `${t('dashboard.predictions.dataUpdated')} ${now.toLocaleTimeString()}`,
+      });
+    }
+  }, [trendsData, t]);
 
   console.log('PredictiveTrends render:', { trendsData, isLoading, error });
 
@@ -107,7 +120,12 @@ export const PredictiveTrends = () => {
           <Zap className="h-5 w-5" />
           {t('dashboard.predictions.title')}
         </CardTitle>
-        <CardDescription>{t('dashboard.predictions.subtitle')}</CardDescription>
+        <CardDescription>
+          {t('dashboard.predictions.subtitle')}
+          <div className="text-xs text-muted-foreground mt-1">
+            Ultimo aggiornamento: {lastUpdateTime.toLocaleTimeString()}
+          </div>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
