@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -10,7 +9,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
-import { useNavigate } from 'react-router-dom';
 
 interface TermsAcceptanceDialogProps {
   isOpen: boolean;
@@ -19,13 +17,10 @@ interface TermsAcceptanceDialogProps {
 
 export const TermsAcceptanceDialog = ({ isOpen, onClose }: TermsAcceptanceDialogProps) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const handleAccept = () => {
     localStorage.setItem('termsAccepted', 'true');
     onClose();
-    // Forza un refresh della pagina per aggiornare lo stato
-    window.location.reload();
   };
 
   return (

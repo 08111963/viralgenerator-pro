@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { TermsAcceptanceDialog } from '@/components/TermsAcceptanceDialog';
 
@@ -11,13 +12,18 @@ const Dashboard = () => {
     }
   }, []);
 
+  const handleCloseTerms = () => {
+    setShowTerms(false);
+    window.location.reload();
+  };
+
   return (
     <>
       <h1>Dashboard</h1>
       <p>Welcome to your dashboard!</p>
       <TermsAcceptanceDialog 
         isOpen={showTerms} 
-        onClose={() => setShowTerms(false)} 
+        onClose={handleCloseTerms} 
       />
     </>
   );
