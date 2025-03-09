@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
 export const TermsAcceptance = () => {
   const { t, i18n } = useTranslation();
@@ -12,12 +13,13 @@ export const TermsAcceptance = () => {
   const { session } = useAuth();
 
   const handleAcceptTerms = async () => {
+    if (!session?.user.id) return;
+
     try {
-      // Update terms acceptance in Supabase
-      const { error } = await supabase.from('terms_acceptance').upsert({
-        user_id: session?.user.id,
+      const { error } = await supabase.from('terms_acceptance').insert({
+        user_id: session.user.id,
         accepted_at: new Date().toISOString(),
-        version: '1.0' // You can update this version when terms change
+        version: '1.0'
       });
 
       if (error) throw error;
