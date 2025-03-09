@@ -1,5 +1,13 @@
+import { useState } from 'react';
 
-import { useState, useEffect } from 'react';
+export type WidgetKey = 
+  | 'weeklyReports'
+  | 'trending'
+  | 'features'
+  | 'analytics'
+  | 'predictive'
+  | 'share'
+  | 'contentOptimizer';
 
 export interface DashboardWidgetSettings {
   weeklyReports: boolean;
@@ -8,51 +16,65 @@ export interface DashboardWidgetSettings {
   analytics: boolean;
   predictive: boolean;
   share: boolean;
+  contentOptimizer: boolean;
 }
 
-export type WidgetKey = keyof DashboardWidgetSettings;
+const useLocalStorage = <T>(key: string, initialValue: T) => {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(error);
+      return initialValue;
+    }
+  });
 
-const defaultSettings: DashboardWidgetSettings = {
-  weeklyReports: true,
-  trending: true,
-  features: true,
-  analytics: true,
-  predictive: true,
-  share: true,
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return [storedValue, setValue] as const;
 };
 
-const defaultOrder: WidgetKey[] = [
-  'weeklyReports',
-  'trending',
-  'features',
-  'analytics',
-  'predictive',
-  'share',
-];
+export const useDashboardSettings = () => {
+  const [widgetSettings, setWidgetSettings] = useLocalStorage<DashboardWidgetSettings>(
+    'dashboardWidgetSettings',
+    {
+      weeklyReports: true,
+      trending: true,
+      features: true,
+      analytics: true,
+      predictive: true,
+      share: true,
+      contentOptimizer: true,
+    }
+  );
 
-export function useDashboardSettings() {
-  const [widgetSettings, setWidgetSettings] = useState<DashboardWidgetSettings>(() => {
-    const saved = localStorage.getItem('dashboardWidgetSettings');
-    return saved ? JSON.parse(saved) : defaultSettings;
-  });
+  const [widgetOrder, setWidgetOrder] = useLocalStorage<WidgetKey[]>(
+    'dashboardWidgetOrder',
+    [
+      'weeklyReports',
+      'trending',
+      'features',
+      'analytics',
+      'predictive',
+      'share',
+      'contentOptimizer',
+    ]
+  );
 
-  const [widgetOrder, setWidgetOrder] = useState<WidgetKey[]>(() => {
-    const saved = localStorage.getItem('dashboardWidgetOrder');
-    return saved ? JSON.parse(saved) : defaultOrder;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('dashboardWidgetSettings', JSON.stringify(widgetSettings));
-  }, [widgetSettings]);
-
-  useEffect(() => {
-    localStorage.setItem('dashboardWidgetOrder', JSON.stringify(widgetOrder));
-  }, [widgetOrder]);
-
-  const toggleWidget = (widgetName: keyof DashboardWidgetSettings) => {
-    setWidgetSettings(prev => ({
-      ...prev,
-      [widgetName]: !prev[widgetName]
+  const toggleWidget = (widgetKey: WidgetKey) => {
+    setWidgetSettings((prevSettings) => ({
+      ...prevSettings,
+      [widgetKey]: !prevSettings[widgetKey],
     }));
   };
 
@@ -62,8 +84,8 @@ export function useDashboardSettings() {
 
   return {
     widgetSettings,
-    widgetOrder,
     toggleWidget,
-    reorderWidgets
+    widgetOrder,
+    reorderWidgets,
   };
-}
+};
