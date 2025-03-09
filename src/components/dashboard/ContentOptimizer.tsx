@@ -4,21 +4,32 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Sparkles, Calendar } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Sparkles, Calendar, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 import { useTrendingItems } from "@/hooks/useTrendingItems";
 import { supabase } from "@/integrations/supabase/client";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { useQueryClient } from "@tanstack/react-query";
+
+interface TemplateData {
+  id: string;
+  name: string;
+  template: string;
+  variables: Record<string, string>;
+}
 
 export const ContentOptimizer = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [content, setContent] = useState('');
   const [platform, setPlatform] = useState('twitter');
   const [optimizedContent, setOptimizedContent] = useState('');
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [scheduledTime, setScheduledTime] = useState<Date | undefined>(undefined);
+  const [templateName, setTemplateName] = useState('');
   const { data: trends = [] } = useTrendingItems('hashtag');
 
   const handleOptimize = async () => {
@@ -33,12 +44,11 @@ export const ContentOptimizer = () => {
 
     setIsOptimizing(true);
     try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) throw new Error("Devi essere autenticato");
+
       const { data, error } = await supabase.functions.invoke('generate-optimized-content', {
-        body: {
-          content,
-          trends,
-          platform,
-        },
+        body: { content, trends, platform },
       });
 
       if (error) throw error;
@@ -71,16 +81,18 @@ export const ContentOptimizer = () => {
     }
 
     try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) throw new Error("Devi essere autenticato");
+
       const { error } = await supabase
         .from('scheduled_posts')
-        .insert([
-          {
-            content: optimizedContent,
-            platform,
-            scheduled_time: scheduledTime.toISOString(),
-            trend_data: trends
-          }
-        ]);
+        .insert({
+          content: optimizedContent,
+          platform,
+          scheduled_time: scheduledTime.toISOString(),
+          trend_data: trends,
+          user_id: session.session.user.id
+        });
 
       if (error) throw error;
 
@@ -93,6 +105,45 @@ export const ContentOptimizer = () => {
       toast({
         title: "Errore",
         description: "Errore durante la programmazione del post",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const saveTemplate = async () => {
+    if (!templateName || !content) {
+      toast({
+        title: "Errore",
+        description: "Inserisci nome del template e contenuto",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) throw new Error("Devi essere autenticato");
+
+      const { error } = await supabase
+        .from('content_templates')
+        .insert({
+          name: templateName,
+          template: content,
+          user_id: session.session.user.id
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Template salvato",
+        description: "Il template è stato salvato con successo",
+      });
+      setTemplateName('');
+    } catch (error) {
+      console.error('Errore:', error);
+      toast({
+        title: "Errore",
+        description: "Errore durante il salvataggio del template",
         variant: "destructive",
       });
     }
@@ -111,20 +162,30 @@ export const ContentOptimizer = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div>
+          <div className="flex items-center gap-4">
             <Select value={platform} onValueChange={setPlatform}>
               <SelectTrigger>
                 <SelectValue placeholder="Seleziona piattaforma" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="twitter">Twitter</SelectItem>
-                <SelectItem value="instagram">Instagram</SelectItem>
                 <SelectItem value="linkedin">LinkedIn</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
+            <div className="flex items-center gap-4 mb-2">
+              <Input
+                placeholder="Nome del template"
+                value={templateName}
+                onChange={(e) => setTemplateName(e.target.value)}
+              />
+              <Button onClick={saveTemplate} variant="outline">
+                <Save className="h-4 w-4 mr-2" />
+                Salva Template
+              </Button>
+            </div>
             <label className="text-sm font-medium">Contenuto originale</label>
             <Textarea
               value={content}
