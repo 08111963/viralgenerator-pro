@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -40,7 +39,7 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[750px]">
+      <DialogContent className="sm:max-w-[850px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             {item.name}
@@ -67,4 +66,3 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
     </Dialog>
   );
 };
-
