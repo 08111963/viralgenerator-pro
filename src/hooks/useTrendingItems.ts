@@ -1,8 +1,10 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import { validateTrendData } from "@/utils/dataValidation";
 
 export interface TrendingItem {
   id: string;
@@ -10,6 +12,9 @@ export interface TrendingItem {
   volume: number;
   change: number;
   isTrending?: boolean;
+  confidence: number;
+  validationIssues: string[];
+  historicalData?: { volume: number; timestamp: string }[];
 }
 
 export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
@@ -22,10 +27,11 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
     queryFn: async () => {
       console.log(`Fetching all ${icon}s from ${tableName}...`);
       
-      const twentyFourHoursAgo = new Date();
-      twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
-      let { data, error } = await supabase
+      // Fetch current data
+      let { data: currentData, error } = await supabase
         .from(tableName)
         .select('*')
         .order('created_at', { ascending: false })
@@ -42,17 +48,46 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
         return [];
       }
 
-      console.log(`Found ${data?.length || 0} ${icon}s:`, data);
+      // Fetch historical data for validation
+      const { data: historicalData, error: historicalError } = await supabase
+        .from(tableName)
+        .select('volume, created_at')
+        .gte('created_at', thirtyDaysAgo.toISOString())
+        .order('created_at', { ascending: true });
 
-      if (!data) return [];
+      if (historicalError) {
+        console.error('Error fetching historical data:', historicalError);
+      }
 
-      return data.map(item => ({
-        id: item.id,
-        name: item.name,
-        volume: item.volume,
-        change: item.change_percentage,
-        isTrending: new Date(item.created_at) >= twentyFourHoursAgo && item.volume > 0
-      }));
+      console.log(`Found ${currentData?.length || 0} ${icon}s:`, currentData);
+
+      if (!currentData) return [];
+
+      return currentData.map(item => {
+        const itemHistoricalData = historicalData
+          ?.filter(h => h.created_at < item.created_at)
+          .map(h => ({
+            volume: h.volume,
+            timestamp: h.created_at
+          })) || [];
+
+        const validation = validateTrendData(
+          item.volume,
+          item.change_percentage,
+          itemHistoricalData
+        );
+
+        return {
+          id: item.id,
+          name: item.name,
+          volume: item.volume,
+          change: item.change_percentage,
+          isTrending: new Date(item.created_at) >= thirtyDaysAgo && item.volume > 0,
+          confidence: validation.confidence,
+          validationIssues: validation.issues,
+          historicalData: itemHistoricalData
+        };
+      });
     },
     refetchInterval: 5000,
     staleTime: 3000
