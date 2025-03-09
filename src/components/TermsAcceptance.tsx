@@ -14,14 +14,22 @@ export const TermsAcceptance = () => {
   const navigate = useNavigate();
 
   const handleAcceptTerms = async () => {
-    if (!session?.user.id) return;
+    if (!session?.user.id) {
+      toast({
+        variant: "destructive",
+        title: i18n.language === 'it' ? 'Errore' : 'Error',
+        description: i18n.language === 'it'
+          ? 'Devi essere autenticato per accettare i termini'
+          : 'You must be logged in to accept terms',
+      });
+      return;
+    }
 
     try {
-      const { error } = await supabase.from('terms_acceptance').insert({
+      const { error } = await supabase.from('terms_acceptance').insert([{
         user_id: session.user.id,
-        accepted_at: new Date().toISOString(),
         version: '1.0'
-      });
+      }]);
 
       if (error) throw error;
 
@@ -32,7 +40,6 @@ export const TermsAcceptance = () => {
           : 'Thank you for accepting our terms and privacy policy',
       });
 
-      // Redirect to dashboard after successful acceptance
       navigate('/dashboard');
     } catch (error) {
       console.error('Error accepting terms:', error);
