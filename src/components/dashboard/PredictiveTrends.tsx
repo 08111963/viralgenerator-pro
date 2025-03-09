@@ -60,56 +60,56 @@ export const PredictiveTrends = () => {
 
   if (error) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
             <AlertTriangle className="h-5 w-5 text-red-500" />
             {t('dashboard.predictions.title')}
-          </CardTitle>
-          <CardDescription>{t('dashboard.trends.error')}</CardDescription>
-        </CardHeader>
-      </Card>
+          </h3>
+          <p className="text-sm text-muted-foreground">{t('dashboard.trends.error')}</p>
+        </div>
+      </div>
     );
   }
 
   if (isLoading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
             <Loader2 className="h-5 w-5 animate-spin" />
             {t('dashboard.predictions.title')}
-          </CardTitle>
-          <CardDescription>{t('dashboard.predictions.loading')}</CardDescription>
-        </CardHeader>
-      </Card>
+          </h3>
+          <p className="text-sm text-muted-foreground">{t('dashboard.predictions.loading')}</p>
+        </div>
+      </div>
     );
   }
 
   if (!trendsData || trendsData.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
             <AlertTriangle className="h-5 w-5 text-yellow-500" />
             {t('dashboard.predictions.title')}
-          </CardTitle>
-          <CardDescription>{t('dashboard.trends.noData')}</CardDescription>
-        </CardHeader>
-      </Card>
+          </h3>
+          <p className="text-sm text-muted-foreground">{t('dashboard.trends.noData')}</p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="flex flex-col space-y-1.5 p-6">
+        <h3 className="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
           <Zap className="h-5 w-5" />
           {t('dashboard.predictions.title')}
-        </CardTitle>
-        <CardDescription>{t('dashboard.predictions.subtitle')}</CardDescription>
-      </CardHeader>
-      <CardContent>
+        </h3>
+        <p className="text-sm text-muted-foreground">{t('dashboard.predictions.subtitle')}</p>
+      </div>
+      <div className="p-6 pt-0">
         <Tabs defaultValue="followers" onValueChange={setActiveMetric}>
           <TabsList className="w-full mb-4">
             <TabsTrigger value="followers">Follower</TabsTrigger>
@@ -144,7 +144,7 @@ export const PredictiveTrends = () => {
             </TabsContent>
           ))}
         </Tabs>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
