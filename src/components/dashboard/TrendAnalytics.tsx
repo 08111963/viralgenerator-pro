@@ -122,7 +122,7 @@ export const TrendAnalytics = () => {
             {Object.entries(platformData).map(([platform, data]) => (
               <TabsContent key={platform} value={platform}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="h-[200px]">
+                  <div className="h-[300px]"> {/* Increased from 200px */}
                     <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.engagement')}</p>
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={engagementData[platform]}>
@@ -133,7 +133,7 @@ export const TrendAnalytics = () => {
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                  <div className="h-[200px]">
+                  <div className="h-[300px]"> {/* Increased from 200px */}
                     <p className="text-sm font-medium mb-2">{t('dashboard.analytics.metrics.volume')}</p>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={data}>
