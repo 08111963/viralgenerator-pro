@@ -10,7 +10,6 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -29,11 +28,37 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'Sei un esperto analista di trend social media. Genera previsioni per i prossimi 3 giorni basandoti sui dati storici dei social media.'
+            content: `Sei un esperto analista di trend social media. Genera previsioni dettagliate includendo:
+            - Variazione percentuale rispetto al giorno precedente
+            - Tendenza (crescita/decrescita)
+            - Impatto previsto
+            - Velocità di cambiamento
+            - Fattori chiave che influenzano il trend`
           },
           {
             role: 'user',
-            content: 'Genera previsioni per followers, engagement e popolarità degli hashtag per i prossimi 3 giorni in formato JSON.'
+            content: `Genera previsioni dettagliate per i prossimi 3 giorni in formato JSON con questa struttura:
+            {
+              "predictions": [
+                {
+                  "time": "2024-03-XX",
+                  "followers": number,
+                  "engagement": number,
+                  "popularity": number,
+                  "trends": {
+                    "followers": {
+                      "percentageChange": number,
+                      "trend": "up" | "down" | "stable",
+                      "impact": "alto" | "medio" | "basso",
+                      "velocity": "rapida" | "moderata" | "lenta",
+                      "factors": string[]
+                    },
+                    "engagement": { ... stessa struttura ... },
+                    "popularity": { ... stessa struttura ... }
+                  }
+                }
+              ]
+            }`
           }
         ],
       }),

@@ -2,11 +2,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 
+export interface TrendDetail {
+  percentageChange: number;
+  trend: 'up' | 'down' | 'stable';
+  impact: 'alto' | 'medio' | 'basso';
+  velocity: 'rapida' | 'moderata' | 'lenta';
+  factors: string[];
+}
+
 export interface PredictiveTrendData {
   time: string;
   followers: number;
   engagement: number;
   popularity: number;
+  trends?: {
+    followers: TrendDetail;
+    engagement: TrendDetail;
+    popularity: TrendDetail;
+  };
 }
 
 export const usePredictiveTrends = () => {
@@ -15,7 +28,6 @@ export const usePredictiveTrends = () => {
     queryFn: async () => {
       console.log('Fetching predictive trends data...');
       
-      // Prima proviamo a ottenere previsioni AI
       try {
         const { data: aiPredictions, error: aiError } = await supabase.functions.invoke('generate-predictions');
         
@@ -27,7 +39,6 @@ export const usePredictiveTrends = () => {
         console.error('Error getting AI predictions:', e);
       }
 
-      // Fallback ai dati del database se l'AI fallisce
       const { data, error } = await supabase
         .from('predictive_trends')
         .select('*')
@@ -41,6 +52,6 @@ export const usePredictiveTrends = () => {
       console.log('Found predictive trends:', data);
       return data as PredictiveTrendData[];
     },
-    refetchInterval: 300000, // Refresh ogni 5 minuti
+    refetchInterval: 300000,
   });
 };
