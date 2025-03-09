@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { useTranslation } from "react-i18next";
@@ -122,8 +121,6 @@ const Terms = () => {
             )}
           </TabsContent>
         </Tabs>
-
-        <TermsAcceptance />
       </main>
     </div>
   );
