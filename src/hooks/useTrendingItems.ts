@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export interface TrendingItem {
   id: string;
@@ -17,7 +18,7 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
   const { toast } = useToast();
   const tableName = `trending_${icon}s`;
 
-  return useQuery({
+  const { data = [], refetch, ...rest } = useQuery({
     queryKey: [`trending-${icon}s`],
     queryFn: async () => {
       console.log(`Fetching all ${icon}s from ${tableName}...`);
@@ -56,4 +57,30 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
     refetchInterval: 5000,
     staleTime: 3000
   });
+
+  useEffect(() => {
+    // Subscribe to real-time changes
+    const channel = supabase
+      .channel('trending-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: tableName
+        },
+        () => {
+          // Refetch data when changes occur
+          refetch();
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [tableName, refetch]);
+
+  return { data, ...rest };
 };
