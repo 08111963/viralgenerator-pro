@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Bell } from "lucide-react";
@@ -93,15 +94,16 @@ const Dashboard = () => {
       <main className="container py-6">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">{t('dashboard.title')}</h1>
-          {session && (
-            <Button onClick={handleNotificationToggle} variant="outline">
-              <Bell className="h-4 w-4 mr-2" />
-              {t('dashboard.notifications.enable')}
-            </Button>
-          )}
+          <div className="flex items-center gap-4">
+            {session && (
+              <Button onClick={handleNotificationToggle} variant="outline">
+                <Bell className="h-4 w-4 mr-2" />
+                {t('dashboard.notifications.enable')}
+              </Button>
+            )}
+            <DashboardSettings />
+          </div>
         </div>
-        
-        <DashboardSettings />
         
         <DndContext 
           sensors={sensors}
