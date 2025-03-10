@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth";
 import { useAdminStatus } from "@/hooks/useAdminStatus";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 
 interface PremiumFeatureOverlayProps {
   children: React.ReactNode;
@@ -14,6 +16,29 @@ export const PremiumFeatureOverlay = ({ children }: PremiumFeatureOverlayProps) 
   const { t } = useTranslation();
   const { session } = useAuth();
   const isAdmin = useAdminStatus();
+
+  const { data: subscription } = useQuery({
+    queryKey: ["subscription"],
+    queryFn: async () => {
+      if (!session) return null;
+      
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select('status')
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching subscription:", error);
+        return null;
+      }
+
+      return data;
+    },
+    enabled: !!session
+  });
+
+  const hasPremiumAccess = isAdmin || subscription?.status === 'active';
 
   if (!session) {
     return (
@@ -32,7 +57,7 @@ export const PremiumFeatureOverlay = ({ children }: PremiumFeatureOverlayProps) 
     );
   }
 
-  if (isAdmin) {
+  if (hasPremiumAccess) {
     return <>{children}</>;
   }
 
