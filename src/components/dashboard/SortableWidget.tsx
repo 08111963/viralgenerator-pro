@@ -2,7 +2,7 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { MoreVertical } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
 import { WidgetKey } from '@/hooks/useDashboardSettings';
 
 interface SortableWidgetProps {
@@ -30,17 +30,17 @@ export function SortableWidget({ id, children }: SortableWidgetProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative group bg-white rounded-lg shadow-sm"
+      className="relative group bg-white rounded-lg shadow-sm hover:shadow-md transition-all"
     >
       <div
         {...attributes}
         {...listeners}
-        className="absolute left-0 top-0 bottom-0 flex items-center px-3 cursor-move opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute left-0 top-0 bottom-0 flex items-center px-2 cursor-move border-r border-gray-100"
         aria-label="Riordina widget"
       >
-        <MoreVertical className="h-5 w-5 text-gray-400" />
+        <GripVertical className="h-5 w-5 text-gray-400" />
       </div>
-      <div className="pl-12 w-full">
+      <div className="pl-10 w-full">
         {children}
       </div>
     </div>
