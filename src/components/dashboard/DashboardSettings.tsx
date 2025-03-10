@@ -78,7 +78,7 @@ export function DashboardSettings() {
                 <WidgetToggle
                   key={widgetKey}
                   widgetKey={widgetKey}
-                  label={t(`dashboard.widgets.${widgetKey}`)}
+                  label={widgetKey === 'zapierIntegration' ? 'Zapier Integration' : t(`dashboard.widgets.${widgetKey}`)}
                   checked={widgetSettings[widgetKey]}
                   onToggle={() => toggleWidget(widgetKey)}
                 />
