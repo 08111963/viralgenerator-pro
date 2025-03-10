@@ -21,7 +21,7 @@ export const ContentOptimizer = () => {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [scheduledTime, setScheduledTime] = useState<Date | undefined>(undefined);
   const [templateName, setTemplateName] = useState('');
-  const { data: trends = [] } = useTrendingItems('hashtag');
+  const { data: trends = [] } = useTrendingItems('hashtags');
 
   const handleOptimize = async () => {
     if (!content.trim()) {

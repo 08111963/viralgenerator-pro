@@ -11,16 +11,16 @@ import { TrendDetailModal } from "./TrendDetailModal";
 
 interface TrendingCardProps {
   title: string;
-  icon: "hashtag" | "keyword" | "topic";
+  icon: "hashtags" | "keywords" | "topics";
 }
 
-const getIcon = (icon: "hashtag" | "keyword" | "topic") => {
+const getIcon = (icon: "hashtags" | "keywords" | "topics") => {
   switch (icon) {
-    case "hashtag":
+    case "hashtags":
       return <Hash className="h-4 w-4" />;
-    case "keyword":
+    case "keywords":
       return <MessageCircle className="h-4 w-4" />;
-    case "topic":
+    case "topics":
       return <TrendingUp className="h-4 w-4" />;
     default:
       return null;

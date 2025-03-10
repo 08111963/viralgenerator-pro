@@ -32,7 +32,7 @@ export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
       
       // Fetch current data
       let { data: currentData, error } = await supabase
-        .from(tableName as "trending_hashtags" | "trending_keywords" | "trending_topics")
+        .from(tableName)
         .select('*')
         .order('created_at', { ascending: false })
         .order('volume', { ascending: false })
@@ -50,7 +50,7 @@ export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
 
       // Fetch historical data for validation
       const { data: historicalData, error: historicalError } = await supabase
-        .from(tableName as "trending_hashtags" | "trending_keywords" | "trending_topics")
+        .from(tableName)
         .select('volume, created_at')
         .gte('created_at', thirtyDaysAgo.toISOString())
         .order('created_at', { ascending: true });
