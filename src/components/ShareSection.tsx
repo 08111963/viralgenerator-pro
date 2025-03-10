@@ -17,9 +17,10 @@ export const ShareSection = () => {
     
     // Customize the message for each platform
     const messages = {
-      twitter: "Scopri TrendAI - Lo strumento definitivo per l'analisi dei trend social e la generazione di contenuti! 🚀 #SocialMedia #AI #DigitalMarketing",
-      facebook: "Trasforma la tua strategia social con TrendAI - La tua soluzione AI per l'analisi dei trend e la generazione di contenuti virali! 🎯",
-      linkedin: "Sono entusiasta di condividere TrendAI - Una piattaforma innovativa che aiuta le aziende a padroneggiare i trend social e creare contenuti coinvolgenti. Unisciti al futuro del digital marketing! 🌟 #AI #SocialMediaMarketing #Innovation"
+      twitter: "Discover TrendAI - The ultimate tool for social media trend analysis and content generation! 🚀 #SocialMedia #AI #DigitalMarketing",
+      facebook: "Transform your social media strategy with TrendAI - Your AI-powered solution for trend analysis and viral content generation! 🎯",
+      linkedin: "Excited to share TrendAI - An innovative AI platform that helps businesses master social media trends and create engaging content. Join the future of digital marketing! 🌟 #AI #SocialMediaMarketing #Innovation",
+      tiktok: "Check out TrendAI! 🎯 Your AI assistant for viral content and trend analysis! #TrendAI #SocialMedia #AIMarketing #ViralContent"
     };
     
     const shareText = encodeURIComponent(messages[platform] || messages.twitter);
@@ -34,13 +35,21 @@ export const ShareSection = () => {
       case 'linkedin':
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(appUrl)}&summary=${shareText}`;
         break;
+      case 'tiktok':
+        // Copy to clipboard since TikTok doesn't support direct sharing via URL
+        navigator.clipboard.writeText(`${messages.tiktok} ${appUrl}`);
+        toast({
+          title: t('Share on TikTok'),
+          description: t('Text copied to clipboard. Open TikTok app to share'),
+        });
+        return;
     }
 
     if (shareUrl) {
       window.open(shareUrl, '_blank', 'noopener,noreferrer');
       toast({
-        title: t('Condivisione avviata'),
-        description: t(`Condivisione su ${platform}`),
+        title: t('Share started'),
+        description: t(`Sharing on ${platform}`),
       });
     }
   };
@@ -50,10 +59,10 @@ export const ShareSection = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Share2 className="h-5 w-5" />
-          Condividi TrendAI
+          Share TrendAI
         </CardTitle>
         <CardDescription>
-          Aiutaci a far conoscere TrendAI al tuo network
+          Help us spread the word about TrendAI with your network
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -81,6 +90,13 @@ export const ShareSection = () => {
           >
             <Linkedin className="h-4 w-4" />
             LinkedIn
+          </Button>
+          <Button
+            variant="outline"
+            className="flex items-center gap-2 font-bold"
+            onClick={() => handleShare('tiktok')}
+          >
+            TikTok
           </Button>
         </div>
       </CardContent>

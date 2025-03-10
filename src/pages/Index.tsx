@@ -3,10 +3,9 @@ import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, BarChart2, Zap, Users } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 import { useTranslation } from "react-i18next";
-import { useAuth } from "@/lib/auth";
 
 const trendData = [
   { name: 'Gen', value: 400 },
@@ -39,14 +38,6 @@ const reportData = [
 
 const Index = () => {
   const { t } = useTranslation();
-  const { session } = useAuth();
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (session) {
-      navigate('/dashboard');
-    }
-  }, [session, navigate]);
 
   // Update document title for SEO
   React.useEffect(() => {
