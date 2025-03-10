@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 
 export type WidgetKey = 
@@ -7,7 +8,8 @@ export type WidgetKey =
   | 'analytics'
   | 'predictive'
   | 'share'
-  | 'contentOptimizer';
+  | 'contentOptimizer'
+  | 'zapierIntegration';
 
 export interface DashboardWidgetSettings {
   weeklyReports: boolean;
@@ -17,9 +19,10 @@ export interface DashboardWidgetSettings {
   predictive: boolean;
   share: boolean;
   contentOptimizer: boolean;
+  zapierIntegration: boolean;
 }
 
-const useLocalStorage = <T>(key: string, initialValue: T) => {
+const useLocalStorage = <T,>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
@@ -55,6 +58,7 @@ export const useDashboardSettings = () => {
       predictive: true,
       share: true,
       contentOptimizer: true,
+      zapierIntegration: true,
     }
   );
 
@@ -68,6 +72,7 @@ export const useDashboardSettings = () => {
       'predictive',
       'share',
       'contentOptimizer',
+      'zapierIntegration',
     ]
   );
 
@@ -89,3 +94,4 @@ export const useDashboardSettings = () => {
     reorderWidgets,
   };
 };
+
