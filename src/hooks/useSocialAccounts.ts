@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -54,12 +55,15 @@ export const useSocialAccounts = () => {
         return [];
       }
 
-      return data;
+      return data as SocialAccount[];
     }
   });
 
   const addAccount = useMutation({
-    mutationFn: async ({ platform, accountName, accessToken }: { platform: string, accountName: string, accessToken?: string }) => {
+    mutationFn: async ({ platform, accountName }: { platform: string, accountName: string }) => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
+
       // Check account limit based on subscription status
       if (accounts.length >= (subscription?.status === 'active' ? 5 : 1)) {
         throw new Error(t('dashboard.social.limitReached'));
@@ -70,7 +74,7 @@ export const useSocialAccounts = () => {
         .insert([{ 
           platform, 
           account_name: accountName,
-          access_token: accessToken 
+          user_id: session.user.id
         }]);
 
       if (error) throw error;

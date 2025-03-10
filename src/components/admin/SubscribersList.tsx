@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from '@/integrations/supabase/client';
 import { Users } from "lucide-react";
@@ -12,9 +13,9 @@ import {
 
 interface Subscriber {
   id: string;
-  email: string;
-  full_name: string;
+  username: string;
   created_at: string;
+  avatar_url: string | null;
 }
 
 const SubscribersList = () => {
@@ -22,8 +23,8 @@ const SubscribersList = () => {
     queryKey: ["subscribers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("users")
-        .select("id, email, full_name, created_at");
+        .from("profiles")
+        .select("id, username, created_at, avatar_url");
 
       if (error) throw error;
       return data as Subscriber[];
@@ -45,15 +46,13 @@ const SubscribersList = () => {
         <TableHeader>
           <TableRow>
             <TableHead>Nome</TableHead>
-            <TableHead>Email</TableHead>
             <TableHead>Data Iscrizione</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {subscribers?.map((subscriber) => (
             <TableRow key={subscriber.id}>
-              <TableCell>{subscriber.full_name}</TableCell>
-              <TableCell>{subscriber.email}</TableCell>
+              <TableCell>{subscriber.username || 'Utente anonimo'}</TableCell>
               <TableCell>
                 {new Date(subscriber.created_at).toLocaleDateString('it-IT')}
               </TableCell>

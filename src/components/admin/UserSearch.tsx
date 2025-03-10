@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from '@/integrations/supabase/client';
@@ -14,9 +15,9 @@ import {
 
 interface User {
   id: string;
-  email: string;
+  username: string;
   created_at: string;
-  full_name: string;
+  avatar_url: string | null;
 }
 
 export const UserSearch = () => {
@@ -27,10 +28,10 @@ export const UserSearch = () => {
     queryFn: async () => {
       let query = supabase
         .from('profiles')
-        .select('id, email, created_at, full_name');
+        .select('id, username, created_at, avatar_url');
 
       if (searchTerm) {
-        query = query.or(`email.ilike.%${searchTerm}%,full_name.ilike.%${searchTerm}%`);
+        query = query.ilike('username', `%${searchTerm}%`);
       }
 
       const { data, error } = await query;
@@ -44,7 +45,7 @@ export const UserSearch = () => {
       <div className="relative">
         <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Cerca utenti per email o nome..."
+          placeholder="Cerca utenti..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10"
@@ -58,15 +59,13 @@ export const UserSearch = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Nome</TableHead>
-              <TableHead>Email</TableHead>
               <TableHead>Data Registrazione</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users?.map((user) => (
               <TableRow key={user.id}>
-                <TableCell>{user.full_name || 'N/A'}</TableCell>
-                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.username || 'Utente anonimo'}</TableCell>
                 <TableCell>
                   {new Date(user.created_at).toLocaleDateString('it-IT')}
                 </TableCell>

@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -16,32 +17,32 @@ export interface TrendingItem {
   historicalData?: { volume: number; timestamp: string }[];
 }
 
-export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
+export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const tableName = `trending_${icon}s`;
+  const tableName = `trending_${type}`;
 
   const { data = [], refetch, ...rest } = useQuery({
-    queryKey: [`trending-${icon}s`],
+    queryKey: [`trending-${type}`],
     queryFn: async () => {
-      console.log(`Fetching all ${icon}s from ${tableName}...`);
+      console.log(`Fetching all ${type} from ${tableName}...`);
       
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
       // Fetch current data
       let { data: currentData, error } = await supabase
-        .from(tableName)
+        .from(tableName as "trending_hashtags" | "trending_keywords" | "trending_topics")
         .select('*')
         .order('created_at', { ascending: false })
         .order('volume', { ascending: false })
         .limit(10);
 
       if (error) {
-        console.error(`Error fetching ${icon}s:`, error);
+        console.error(`Error fetching ${type}:`, error);
         toast({
           title: t('Error'),
-          description: `Failed to fetch ${icon}s`,
+          description: `Failed to fetch ${type}`,
           variant: "destructive",
         });
         return [];
@@ -49,7 +50,7 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
 
       // Fetch historical data for validation
       const { data: historicalData, error: historicalError } = await supabase
-        .from(tableName)
+        .from(tableName as "trending_hashtags" | "trending_keywords" | "trending_topics")
         .select('volume, created_at')
         .gte('created_at', thirtyDaysAgo.toISOString())
         .order('created_at', { ascending: true });
@@ -58,7 +59,7 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
         console.error('Error fetching historical data:', historicalError);
       }
 
-      console.log(`Found ${currentData?.length || 0} ${icon}s:`, currentData);
+      console.log(`Found ${currentData?.length || 0} ${type}:`, currentData);
 
       if (!currentData) return [];
 
@@ -99,18 +100,16 @@ export const useTrendingItems = (icon: "hashtag" | "keyword" | "topic") => {
       .on(
         'postgres_changes',
         {
-          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          event: '*',
           schema: 'public',
           table: tableName
         },
         () => {
-          // Refetch data when changes occur
           refetch();
         }
       )
       .subscribe();
 
-    // Cleanup subscription
     return () => {
       supabase.removeChannel(channel);
     };

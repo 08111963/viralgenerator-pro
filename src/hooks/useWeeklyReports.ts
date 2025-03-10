@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -42,7 +43,14 @@ export const useWeeklyReports = () => {
         .order("week_start", { ascending: false });
 
       if (error) throw error;
-      return data as WeeklyReport[];
+      
+      // Cast the JSON fields to their proper types
+      return data.map(report => ({
+        ...report,
+        trending_hashtags_summary: report.trending_hashtags_summary as WeeklyReport['trending_hashtags_summary'],
+        trending_keywords_summary: report.trending_keywords_summary as WeeklyReport['trending_keywords_summary'],
+        trending_topics_summary: report.trending_topics_summary as WeeklyReport['trending_topics_summary'],
+      })) as WeeklyReport[];
     }
   });
 };
