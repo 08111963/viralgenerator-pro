@@ -10,28 +10,52 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
-import { useDashboardSettings, DashboardWidgetSettings } from "@/hooks/useDashboardSettings";
+import { useDashboardSettings, DashboardWidgetSettings, WidgetKey } from "@/hooks/useDashboardSettings";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableWidget } from "./SortableWidget";
 
 interface WidgetToggleProps {
+  widgetKey: WidgetKey;
   label: string;
   checked: boolean;
   onToggle: () => void;
 }
 
-const WidgetToggle = ({ label, checked, onToggle }: WidgetToggleProps) => (
-  <div className="flex items-center justify-between py-2 px-2">
-    <span className="text-sm">{label}</span>
-    <Switch
-      checked={checked}
-      onCheckedChange={onToggle}
-      aria-label={`Toggle ${label}`}
-    />
-  </div>
-);
+const WidgetToggle = ({ widgetKey, label, checked, onToggle }: WidgetToggleProps) => {
+  return (
+    <SortableWidget id={widgetKey}>
+      <div className="flex items-center justify-between py-2 px-2">
+        <span className="text-sm">{label}</span>
+        <Switch
+          checked={checked}
+          onCheckedChange={onToggle}
+          aria-label={`Toggle ${label}`}
+        />
+      </div>
+    </SortableWidget>
+  );
+};
 
 export function DashboardSettings() {
   const { t } = useTranslation();
-  const { widgetSettings, toggleWidget } = useDashboardSettings();
+  const { widgetSettings, toggleWidget, widgetOrder, reorderWidgets } = useDashboardSettings();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = widgetOrder.indexOf(active.id as WidgetKey);
+      const newIndex = widgetOrder.indexOf(over.id as WidgetKey);
+      const newOrder = arrayMove(widgetOrder, oldIndex, newIndex);
+      reorderWidgets(newOrder);
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -44,46 +68,23 @@ export function DashboardSettings() {
         <DropdownMenuLabel>{t('dashboard.settings.title')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <div className="px-2">
-          <WidgetToggle
-            label={t('dashboard.widgets.weeklyReports')}
-            checked={widgetSettings.weeklyReports}
-            onToggle={() => toggleWidget('weeklyReports')}
-          />
-          <WidgetToggle
-            label={t('dashboard.widgets.trending')}
-            checked={widgetSettings.trending}
-            onToggle={() => toggleWidget('trending')}
-          />
-          <WidgetToggle
-            label={t('dashboard.widgets.features')}
-            checked={widgetSettings.features}
-            onToggle={() => toggleWidget('features')}
-          />
-          <WidgetToggle
-            label={t('dashboard.widgets.analytics')}
-            checked={widgetSettings.analytics}
-            onToggle={() => toggleWidget('analytics')}
-          />
-          <WidgetToggle
-            label={t('dashboard.widgets.predictive')}
-            checked={widgetSettings.predictive}
-            onToggle={() => toggleWidget('predictive')}
-          />
-          <WidgetToggle
-            label={t('dashboard.widgets.share')}
-            checked={widgetSettings.share}
-            onToggle={() => toggleWidget('share')}
-          />
-          <WidgetToggle
-            label={t('dashboard.widgets.contentOptimizer')}
-            checked={widgetSettings.contentOptimizer}
-            onToggle={() => toggleWidget('contentOptimizer')}
-          />
-          <WidgetToggle
-            label="Zapier Integration"
-            checked={widgetSettings.zapierIntegration}
-            onToggle={() => toggleWidget('zapierIntegration')}
-          />
+          <DndContext 
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext items={widgetOrder} strategy={verticalListSortingStrategy}>
+              {widgetOrder.map((widgetKey) => (
+                <WidgetToggle
+                  key={widgetKey}
+                  widgetKey={widgetKey}
+                  label={t(`dashboard.widgets.${widgetKey}`)}
+                  checked={widgetSettings[widgetKey]}
+                  onToggle={() => toggleWidget(widgetKey)}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
