@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase";  // Updated import path
 import { PlatformSelector } from './content-optimizer/PlatformSelector';
 import { TemplateForm } from './content-optimizer/TemplateForm';
 import { OptimizedContent } from './content-optimizer/OptimizedContent';

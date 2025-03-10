@@ -4,10 +4,16 @@ import { Navigation } from "@/components/Navigation";
 import ApiKeyDisplay from "@/components/dashboard/ApiKeyDisplay";
 import { ContentGenerator } from "@/components/dashboard/ContentGenerator";
 import { ContentOptimizer } from "@/components/dashboard/ContentOptimizer";
-import { PremiumFeatureOverlay } from "@/components/dashboard/PremiumFeatureOverlay";
 import { ShareSection } from "@/components/ShareSection";
+import { useAuth } from "@/lib/auth";
 
 const Dashboard = () => {
+  const { session } = useAuth();
+
+  if (!session) {
+    return null; // The ProtectedRoute will handle the redirect
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -17,15 +23,11 @@ const Dashboard = () => {
         </div>
 
         <div className="mb-6">
-          <PremiumFeatureOverlay>
-            <ContentGenerator />
-          </PremiumFeatureOverlay>
+          <ContentGenerator />
         </div>
 
         <div className="mb-6">
-          <PremiumFeatureOverlay>
-            <ContentOptimizer />
-          </PremiumFeatureOverlay>
+          <ContentOptimizer />
         </div>
         
         <div className="mb-6">
