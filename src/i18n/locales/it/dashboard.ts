@@ -1,3 +1,4 @@
+
 export const dashboard = {
   title: "Dashboard",
   notifications: {
@@ -88,6 +89,8 @@ export const dashboard = {
     features: 'Funzionalità',
     analytics: 'Analisi',
     predictive: 'Previsioni Trend',
-    share: 'Condivisione'
+    share: 'Condivisione',
+    contentOptimizer: 'Ottimizzatore Contenuti',
+    zapierIntegration: 'Integrazione Zapier'
   }
 };

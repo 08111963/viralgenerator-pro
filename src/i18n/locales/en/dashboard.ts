@@ -89,7 +89,8 @@ export const dashboard = {
     features: 'Features',
     analytics: 'Analytics',
     predictive: 'Predictive Trends',
-    share: 'Share Section'
+    share: 'Share Section',
+    contentOptimizer: 'Content Optimizer',
+    zapierIntegration: 'Zapier Integration'
   }
 };
-
