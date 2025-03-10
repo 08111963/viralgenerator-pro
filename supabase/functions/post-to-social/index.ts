@@ -32,43 +32,6 @@ async function postToFacebook(content: string, accessToken: string) {
   return response.json();
 }
 
-async function postToLinkedIn(content: string, accessToken: string) {
-  const url = 'https://api.linkedin.com/v2/ugcPosts';
-  
-  const postData = {
-    author: `urn:li:person:${accessToken}`, // The LinkedIn Member ID will be obtained from the token
-    lifecycleState: 'PUBLISHED',
-    specificContent: {
-      'com.linkedin.ugc.ShareContent': {
-        shareCommentary: {
-          text: content
-        },
-        shareMediaCategory: 'NONE'
-      }
-    },
-    visibility: {
-      'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC'
-    }
-  };
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(postData)
-  });
-
-  if (!response.ok) {
-    const errorData = await response.text();
-    console.error('LinkedIn API error:', errorData);
-    throw new Error(`LinkedIn API error: ${errorData}`);
-  }
-
-  return response.json();
-}
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -89,17 +52,6 @@ serve(async (req) => {
       });
     }
 
-    if (platform === 'linkedin') {
-      if (!accessToken) {
-        throw new Error('LinkedIn access token is required');
-      }
-
-      const result = await postToLinkedIn(content, accessToken);
-      return new Response(JSON.stringify(result), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
     throw new Error(`Platform ${platform} not supported`);
   } catch (error) {
     console.error('Error posting to social:', error);
@@ -109,3 +61,4 @@ serve(async (req) => {
     });
   }
 });
+
