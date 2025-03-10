@@ -32,14 +32,14 @@ export function SortableWidget({ id, children }: SortableWidgetProps) {
       style={style}
       className="relative group bg-white rounded-lg shadow-sm"
     >
-      <button
+      <div
         {...attributes}
         {...listeners}
-        className="absolute left-0 top-0 bottom-0 px-3 opacity-0 group-hover:opacity-100 cursor-move transition-all duration-200 hover:bg-gray-50 rounded-l-lg flex items-center"
+        className="absolute left-0 top-0 bottom-0 flex items-center px-3 cursor-move hover:bg-gray-100 rounded-l-lg transition-colors"
         aria-label="Riordina widget"
       >
-        <GripVertical className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-      </button>
+        <GripVertical className="h-5 w-5 text-gray-400" />
+      </div>
       <div className="pl-12 w-full">
         {children}
       </div>
