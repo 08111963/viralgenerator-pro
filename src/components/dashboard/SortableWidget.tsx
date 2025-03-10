@@ -30,16 +30,19 @@ export function SortableWidget({ id, children }: SortableWidgetProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative group"
+      className="relative flex group"
     >
-      <div
+      <button
         {...attributes}
         {...listeners}
-        className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2 p-2 opacity-0 group-hover:opacity-100 cursor-move transition-opacity"
+        className="absolute left-2 top-1/2 -translate-y-1/2 p-2 opacity-0 group-hover:opacity-100 cursor-move transition-opacity"
+        aria-label="Riordina widget"
       >
-        <GripVertical className="h-5 w-5 text-gray-400" />
+        <GripVertical className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+      </button>
+      <div className="flex-1 pl-12">
+        {children}
       </div>
-      {children}
     </div>
   );
 }
