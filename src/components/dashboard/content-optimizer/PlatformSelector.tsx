@@ -19,9 +19,9 @@ export const PlatformSelector = ({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="facebook">Facebook</SelectItem>
+          <SelectItem value="linkedin">LinkedIn</SelectItem>
         </SelectContent>
       </Select>
     </div>
   );
 };
-
