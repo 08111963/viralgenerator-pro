@@ -25,10 +25,6 @@ const Dashboard = () => {
   const { session } = useAuth();
   const { widgetSettings, widgetOrder, reorderWidgets } = useDashboardSettings();
 
-  console.log("Dashboard rendering with session:", session?.user?.id);
-  console.log("Widget settings:", widgetSettings);
-  console.log("Widget order:", widgetOrder);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
@@ -81,11 +77,6 @@ const Dashboard = () => {
     contentOptimizer: <ContentOptimizer />,
     zapierIntegration: <ZapierIntegration />,
   };
-
-  if (!session) {
-    console.log("No active session found in Dashboard");
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-background">
