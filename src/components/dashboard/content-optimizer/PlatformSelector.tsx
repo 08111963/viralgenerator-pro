@@ -18,7 +18,7 @@ export const PlatformSelector = ({
           <SelectValue placeholder="Seleziona piattaforma" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="twitter">Twitter</SelectItem>
+          <SelectItem value="facebook">Facebook</SelectItem>
           <SelectItem value="linkedin">LinkedIn</SelectItem>
         </SelectContent>
       </Select>

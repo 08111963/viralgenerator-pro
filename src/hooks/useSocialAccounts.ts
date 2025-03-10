@@ -59,7 +59,7 @@ export const useSocialAccounts = () => {
   });
 
   const addAccount = useMutation({
-    mutationFn: async ({ platform, accountName }: { platform: string, accountName: string }) => {
+    mutationFn: async ({ platform, accountName, accessToken }: { platform: string, accountName: string, accessToken?: string }) => {
       // Check account limit based on subscription status
       if (accounts.length >= (subscription?.status === 'active' ? 5 : 1)) {
         throw new Error(t('dashboard.social.limitReached'));
@@ -67,7 +67,11 @@ export const useSocialAccounts = () => {
 
       const { error } = await supabase
         .from('social_accounts')
-        .insert([{ platform, account_name: accountName }]);
+        .insert([{ 
+          platform, 
+          account_name: accountName,
+          access_token: accessToken 
+        }]);
 
       if (error) throw error;
     },
