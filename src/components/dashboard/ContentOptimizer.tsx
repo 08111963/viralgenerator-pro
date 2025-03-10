@@ -1,24 +1,15 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Sparkles, Calendar, Save } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
-import { useTrendingItems } from "@/hooks/useTrendingItems";
 import { supabase } from "@/integrations/supabase/client";
-import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { PlatformSelector } from './content-optimizer/PlatformSelector';
+import { TemplateForm } from './content-optimizer/TemplateForm';
+import { OptimizedContent } from './content-optimizer/OptimizedContent';
+import { useTrendingItems } from "@/hooks/useTrendingItems";
 import { useQueryClient } from "@tanstack/react-query";
-
-interface TemplateData {
-  id: string;
-  name: string;
-  template: string;
-  variables: Record<string, string>;
-}
 
 export const ContentOptimizer = () => {
   const { t } = useTranslation();
@@ -70,6 +61,45 @@ export const ContentOptimizer = () => {
     }
   };
 
+  const saveTemplate = async () => {
+    if (!templateName || !content) {
+      toast({
+        title: "Errore",
+        description: "Inserisci nome del template e contenuto",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) throw new Error("Devi essere autenticato");
+
+      const { error } = await supabase
+        .from('content_templates')
+        .insert({
+          name: templateName,
+          template: content,
+          user_id: session.session.user.id
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Template salvato",
+        description: "Il template è stato salvato con successo",
+      });
+      setTemplateName('');
+    } catch (error) {
+      console.error('Errore:', error);
+      toast({
+        title: "Errore",
+        description: "Errore durante il salvataggio del template",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSchedule = async () => {
     if (!optimizedContent || !scheduledTime) {
       toast({
@@ -110,45 +140,6 @@ export const ContentOptimizer = () => {
     }
   };
 
-  const saveTemplate = async () => {
-    if (!templateName || !content) {
-      toast({
-        title: "Errore",
-        description: "Inserisci nome del template e contenuto",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const { data: session } = await supabase.auth.getSession();
-      if (!session.session) throw new Error("Devi essere autenticato");
-
-      const { error } = await supabase
-        .from('content_templates')
-        .insert({
-          name: templateName,
-          template: content,
-          user_id: session.session.user.id
-        });
-
-      if (error) throw error;
-
-      toast({
-        title: "Template salvato",
-        description: "Il template è stato salvato con successo",
-      });
-      setTemplateName('');
-    } catch (error) {
-      console.error('Errore:', error);
-      toast({
-        title: "Errore",
-        description: "Errore durante il salvataggio del template",
-        variant: "destructive",
-      });
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -162,38 +153,18 @@ export const ContentOptimizer = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Select value={platform} onValueChange={setPlatform}>
-              <SelectTrigger>
-                <SelectValue placeholder="Seleziona piattaforma" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="twitter">Twitter</SelectItem>
-                <SelectItem value="linkedin">LinkedIn</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <PlatformSelector 
+            platform={platform}
+            onPlatformChange={setPlatform}
+          />
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-4 mb-2">
-              <Input
-                placeholder="Nome del template"
-                value={templateName}
-                onChange={(e) => setTemplateName(e.target.value)}
-              />
-              <Button onClick={saveTemplate} variant="outline">
-                <Save className="h-4 w-4 mr-2" />
-                Salva Template
-              </Button>
-            </div>
-            <label className="text-sm font-medium">Contenuto originale</label>
-            <Textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Inserisci il tuo contenuto qui..."
-              rows={4}
-            />
-          </div>
+          <TemplateForm
+            templateName={templateName}
+            content={content}
+            onTemplateNameChange={setTemplateName}
+            onContentChange={setContent}
+            onSaveTemplate={saveTemplate}
+          />
 
           <Button 
             onClick={handleOptimize} 
@@ -202,36 +173,13 @@ export const ContentOptimizer = () => {
             {isOptimizing ? "Ottimizzazione..." : "Ottimizza contenuto"}
           </Button>
 
-          {optimizedContent && (
-            <>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Contenuto ottimizzato</label>
-                <Textarea
-                  value={optimizedContent}
-                  onChange={(e) => setOptimizedContent(e.target.value)}
-                  rows={4}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Programma pubblicazione</label>
-                <div className="flex gap-4">
-                  <DateTimePicker
-                    date={scheduledTime}
-                    setDate={setScheduledTime}
-                  />
-                  <Button 
-                    onClick={handleSchedule}
-                    disabled={!scheduledTime}
-                    variant="outline"
-                  >
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Programma
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
+          <OptimizedContent
+            optimizedContent={optimizedContent}
+            onOptimizedContentChange={setOptimizedContent}
+            scheduledTime={scheduledTime}
+            onScheduledTimeChange={setScheduledTime}
+            onSchedule={handleSchedule}
+          />
         </div>
       </CardContent>
     </Card>
