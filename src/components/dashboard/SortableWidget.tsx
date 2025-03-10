@@ -24,6 +24,8 @@ export function SortableWidget({ id, children }: SortableWidgetProps) {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+    position: 'relative' as const,
+    width: '100%'
   };
 
   return (
@@ -40,7 +42,7 @@ export function SortableWidget({ id, children }: SortableWidgetProps) {
       >
         <GripVertical className="h-5 w-5 text-gray-400" />
       </div>
-      <div className="pl-10 w-full">
+      <div className="pl-10 w-full h-full">
         {children}
       </div>
     </div>
