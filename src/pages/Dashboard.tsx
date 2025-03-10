@@ -17,6 +17,7 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { SortableContext, arrayMove, rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableWidget } from "@/components/dashboard/SortableWidget";
 import { ContentOptimizer } from "@/components/dashboard/ContentOptimizer";
+import { ZapierIntegration } from "@/components/dashboard/integrations/ZapierIntegration";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -73,7 +74,8 @@ const Dashboard = () => {
     analytics: <AnalyticsSection />,
     predictive: <PredictiveTrends />,
     share: <ShareSection />,
-    contentOptimizer: <ContentOptimizer />  // Aggiunto nuovo widget
+    contentOptimizer: <ContentOptimizer />,
+    zapierIntegration: <ZapierIntegration />,
   };
 
   return (
