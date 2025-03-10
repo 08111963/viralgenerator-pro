@@ -1,6 +1,7 @@
+
 import React from "react";
 import { Navigation } from "@/components/Navigation";
-import { ApiKeyDisplay } from "@/components/dashboard/ApiKeyDisplay";
+import ApiKeyDisplay from "@/components/dashboard/ApiKeyDisplay";
 import { ContentGenerator } from "@/components/dashboard/ContentGenerator";
 import { ContentOptimizer } from "@/components/dashboard/ContentOptimizer";
 import { PremiumFeatureOverlay } from "@/components/dashboard/PremiumFeatureOverlay";
