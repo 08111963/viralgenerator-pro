@@ -17,10 +17,10 @@ export const PremiumFeatureOverlay = ({ children }: PremiumFeatureOverlayProps) 
   const { session } = useAuth();
   const isAdmin = useAdminStatus();
 
-  const { data: subscription } = useQuery({
-    queryKey: ["subscription"],
+  const { data: subscription, isLoading } = useQuery({
+    queryKey: ["subscription", session?.user?.id],
     queryFn: async () => {
-      if (!session) return null;
+      if (!session?.user?.id) return null;
       
       const { data, error } = await supabase
         .from('subscriptions')
@@ -35,7 +35,16 @@ export const PremiumFeatureOverlay = ({ children }: PremiumFeatureOverlayProps) 
 
       return data;
     },
-    enabled: !!session
+    enabled: !!session?.user?.id,
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
+
+  // Aggiungo log per il debug
+  console.log('PremiumFeatureOverlay:', {
+    isAdmin,
+    subscriptionStatus: subscription?.status,
+    isLoading,
+    userId: session?.user?.id
   });
 
   const hasPremiumAccess = isAdmin || subscription?.status === 'active';
@@ -55,6 +64,10 @@ export const PremiumFeatureOverlay = ({ children }: PremiumFeatureOverlayProps) 
         </div>
       </div>
     );
+  }
+
+  if (isLoading) {
+    return <>{children}</>; // Show content while checking subscription
   }
 
   if (hasPremiumAccess) {
