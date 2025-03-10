@@ -74,6 +74,16 @@ export function DashboardSettings() {
             checked={widgetSettings.share}
             onToggle={() => toggleWidget('share')}
           />
+          <WidgetToggle
+            label={t('dashboard.widgets.contentOptimizer')}
+            checked={widgetSettings.contentOptimizer}
+            onToggle={() => toggleWidget('contentOptimizer')}
+          />
+          <WidgetToggle
+            label="Zapier Integration"
+            checked={widgetSettings.zapierIntegration}
+            onToggle={() => toggleWidget('zapierIntegration')}
+          />
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
