@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { TrendingUp, Hash, FileText, UserRound, CheckCircle2 } from "lucide-reac
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/lib/supabase";
+import { supabase } from '@/integrations/supabase/client';
 import {
   Accordion,
   AccordionContent,

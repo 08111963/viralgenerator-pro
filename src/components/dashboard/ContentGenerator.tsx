@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageCircle, Sparkles } from "lucide-react";
@@ -7,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/lib/supabase";
+import { supabase } from '@/integrations/supabase/client';
 
 export const ContentGenerator = () => {
   const { toast } = useToast();
