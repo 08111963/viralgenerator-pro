@@ -36,6 +36,14 @@ interface TrendChartProps {
 }
 
 export const TrendChart = ({ data, metrics }: TrendChartProps) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-muted-foreground">Nessun dato disponibile</p>
+      </div>
+    );
+  }
+
   const averageValue = data.reduce((sum, item) => sum + item.volume, 0) / data.length;
 
   return (

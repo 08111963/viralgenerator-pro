@@ -120,7 +120,7 @@ export const ContentOptimizer = () => {
           content: optimizedContent,
           platform,
           scheduled_time: scheduledTime.toISOString(),
-          trend_data: trends,
+          trend_data: JSON.stringify(trends),
           user_id: session.session.user.id
         });
 
