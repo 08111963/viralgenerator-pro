@@ -1,9 +1,12 @@
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, ProtectedRoute } from "@/lib/auth";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
+import { useAuth } from "@/lib/auth";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -15,6 +18,28 @@ import Admin from "./pages/Admin";
 import Terms from "./pages/Terms";
 import "./i18n/config";
 import Guide from "./pages/Guide";
+
+// Admin route wrapper component
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAdmin = useAdminStatus();
+  const { session, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // If not logged in, redirect to login
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If logged in but not admin, redirect to dashboard
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const queryClient = new QueryClient();
 
@@ -46,9 +71,9 @@ const App = () => (
             <Route 
               path="/admin" 
               element={
-                <ProtectedRoute>
+                <AdminRoute>
                   <Admin />
-                </ProtectedRoute>
+                </AdminRoute>
               } 
             />
             <Route path="*" element={<NotFound />} />
