@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTrendingItems } from "@/hooks/useTrendingItems";
 import { BarChart2, Hash, Key, FileText } from "lucide-react";
+import { TrendingList } from "@/components/dashboard/TrendingList";
 
 type IconType = "hashtags" | "keywords" | "topics";
 

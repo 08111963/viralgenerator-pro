@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -16,12 +17,12 @@ export interface TrendingItem {
   historicalData?: { volume: number; timestamp: string }[];
 }
 
-type TrendType = "hashtags" | "keywords" | "topics";
+type IconType = "hashtags" | "keywords" | "topics";
 
-export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
+export const useTrendingItems = (type: IconType) => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const tableName = `trending_${type}` as TrendType;
+  const tableName = `trending_${type}`;
 
   const { data = [], refetch, ...rest } = useQuery({
     queryKey: [`trending-${type}`],
@@ -58,14 +59,12 @@ export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
         console.error('Error fetching historical data:', historicalError);
       }
 
-      console.log(`Found ${currentData?.length || 0} ${type}:`, currentData);
-
       if (!currentData) return [];
 
-      return currentData.map(item => {
+      return currentData.map((item: any) => {
         const itemHistoricalData = historicalData
-          ?.filter(h => h.created_at < item.created_at)
-          .map(h => ({
+          ?.filter((h: any) => h.created_at < item.created_at)
+          .map((h: any) => ({
             volume: h.volume,
             timestamp: h.created_at
           })) || [];
