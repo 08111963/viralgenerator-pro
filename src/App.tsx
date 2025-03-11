@@ -1,4 +1,3 @@
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,8 +17,8 @@ import Admin from "./pages/Admin";
 import Terms from "./pages/Terms";
 import "./i18n/config";
 import Guide from "./pages/Guide";
+import Reports from "./pages/Reports";
 
-// Admin route wrapper component
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const isAdmin = useAdminStatus();
   const { session, isLoading } = useAuth();
@@ -28,12 +27,10 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     return <div>Loading...</div>;
   }
 
-  // If not logged in, redirect to login
   if (!session) {
     return <Navigate to="/login" replace />;
   }
 
-  // If logged in but not admin, redirect to dashboard
   if (!isAdmin) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -60,6 +57,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/reports" 
+              element={
+                <ProtectedRoute>
+                  <Reports />
                 </ProtectedRoute>
               } 
             />

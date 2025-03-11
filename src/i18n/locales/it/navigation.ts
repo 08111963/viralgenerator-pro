@@ -6,6 +6,7 @@ export const navigation = {
   admin: 'Admin',
   login: 'Accedi',
   register: 'Inizia Ora',
-  terms: 'Termini e Privacy'
+  terms: 'Termini e Privacy',
+  reports: 'Report Settimanali'
 };
 

@@ -8,6 +8,7 @@ export const navigation = {
   login: 'Login',
   register: 'Register',
   admin: 'Admin',
-  terms: 'Terms & Privacy'
+  terms: 'Terms & Privacy',
+  reports: 'Weekly Reports'
 };
 

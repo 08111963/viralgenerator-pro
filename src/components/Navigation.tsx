@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, FileText } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
@@ -23,6 +23,10 @@ export const Navigation = () => {
           </Link>
           <Link to="/dashboard" className="text-foreground/60 hover:text-foreground transition-colors">
             {t('navigation.dashboard')}
+          </Link>
+          <Link to="/reports" className="text-foreground/60 hover:text-foreground transition-colors flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            {t('navigation.reports')}
           </Link>
           <Link to="/pricing" className="text-foreground/60 hover:text-foreground transition-colors">
             {t('navigation.pricing')}
