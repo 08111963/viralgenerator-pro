@@ -1,3 +1,4 @@
+
 import { Navigation } from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,22 @@ const Register = () => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message === 'User already registered') {
+          toast({
+            variant: "destructive",
+            title: t('register.error'),
+            description: t('register.userExists'),
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: t('register.error'),
+            description: error.message,
+          });
+        }
+        return;
+      }
 
       toast({
         title: t('register.success'),
