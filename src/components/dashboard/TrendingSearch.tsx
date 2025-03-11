@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Hash, Key, FileText, TrendingUp, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useTrendingSearch, TrendingItemType } from "@/hooks/useTrendingSearch";
@@ -16,16 +16,19 @@ export const TrendingSearch = () => {
 
   return (
     <Card className="w-full">
-      <CardContent className="pt-4">
-        <div className="flex gap-4 mb-4 items-center">
-          <TrendingUp className="h-5 w-5 text-muted-foreground" />
-          <Input
-            placeholder={t('dashboard.trends.searchPlaceholder')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1"
-          />
-        </div>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base font-medium flex items-center gap-2">
+          <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          {t('dashboard.trends.search')}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <Input
+          placeholder={t('dashboard.trends.searchPlaceholder')}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="mb-2"
+        />
 
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TrendingItemType)} className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-2">

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -49,23 +48,17 @@ export const useTrendingSearch = (type: TrendingItemType, searchQuery: string) =
     const channel = supabase
       .channel('trending_search_changes')
       .on(
-        'postgres_changes',
+        'INSERT',
         {
-          event: '*',
           schema: 'public',
           table: `trending_${type}`
         },
         (payload: { new: TrendingSearchItem }) => {
           setResults(current => {
             const updatedResults = [...current];
-            const index = updatedResults.findIndex(item => item.id === payload.new.id);
-            
-            if (index > -1) {
-              updatedResults[index] = payload.new;
-            } else if (payload.new.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+            if (payload.new.name.toLowerCase().includes(searchQuery.toLowerCase())) {
               updatedResults.push(payload.new);
             }
-            
             return updatedResults.sort((a, b) => b.volume - a.volume).slice(0, 10);
           });
         }
