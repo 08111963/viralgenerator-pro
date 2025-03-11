@@ -17,10 +17,12 @@ export interface TrendingItem {
   historicalData?: { volume: number; timestamp: string }[];
 }
 
+type TrendType = "trending_hashtags" | "trending_keywords" | "trending_topics";
+
 export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const tableName = `trending_${type}`;
+  const tableName = `trending_${type}` as TrendType;
 
   const { data = [], refetch, ...rest } = useQuery({
     queryKey: [`trending-${type}`],
@@ -30,8 +32,7 @@ export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
-      // Fetch current data
-      let { data: currentData, error } = await supabase
+      const { data: currentData, error } = await supabase
         .from(tableName)
         .select('*')
         .order('created_at', { ascending: false })
@@ -48,7 +49,6 @@ export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
         return [];
       }
 
-      // Fetch historical data for validation
       const { data: historicalData, error: historicalError } = await supabase
         .from(tableName)
         .select('volume, created_at')
@@ -94,7 +94,6 @@ export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
   });
 
   useEffect(() => {
-    // Subscribe to real-time changes
     const channel = supabase
       .channel('trending-changes')
       .on(
