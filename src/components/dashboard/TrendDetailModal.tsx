@@ -22,12 +22,12 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
   if (!item) return null;
 
   const trendData = [
-    { time: '24h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 100)))) },
-    { time: '20h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 120)))) },
-    { time: '16h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 140)))) },
-    { time: '12h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 160)))) },
-    { time: '8h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 180)))) },
-    { time: '4h fa', volume: Math.round(Math.max(0, item.volume - (item.volume * (item.change / 200)))) },
+    { time: '24h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 100))) },
+    { time: '20h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 120))) },
+    { time: '16h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 140))) },
+    { time: '12h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 160))) },
+    { time: '8h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 180))) },
+    { time: '4h fa', volume: Math.max(0, item.volume - (item.volume * (item.change / 200))) },
     { time: 'Ora', volume: item.volume },
   ];
 
@@ -39,7 +39,7 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => onClose()}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2 mb-2">
@@ -47,7 +47,7 @@ export const TrendDetailModal = ({ item, isOpen, onClose }: TrendDetailModalProp
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          <div className="h-[300px]">
+          <div className="h-[300px] w-full">
             <TrendChart data={trendData} metrics={metrics} />
           </div>
         </div>

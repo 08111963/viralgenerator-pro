@@ -18,9 +18,17 @@ export interface TrendingItem {
 }
 
 type IconType = "hashtags" | "keywords" | "topics";
+type TableName = "trending_hashtags" | "trending_keywords" | "trending_topics";
 
-const getTableName = (type: IconType) => {
-  return `trending_${type}`;
+const getTableName = (type: IconType): TableName => {
+  switch (type) {
+    case "hashtags":
+      return "trending_hashtags";
+    case "keywords":
+      return "trending_keywords";
+    case "topics":
+      return "trending_topics";
+  }
 };
 
 export const useTrendingItems = (type: IconType) => {
