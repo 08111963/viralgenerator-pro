@@ -19,7 +19,7 @@ const icons = {
 };
 
 export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
-  const { data, isLoading } = useTrendingItems(icon);
+  const { data = [], isLoading } = useTrendingItems(icon);
   const Icon = icons[icon] || BarChart2;
 
   return (
@@ -31,7 +31,7 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <TrendingList items={data} />
+        <TrendingList items={data || []} />
       </CardContent>
     </Card>
   );

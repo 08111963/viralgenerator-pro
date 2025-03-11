@@ -19,15 +19,19 @@ export interface TrendingItem {
 
 type IconType = "hashtags" | "keywords" | "topics";
 
+const getTableName = (type: IconType) => {
+  return `trending_${type}`;
+};
+
 export const useTrendingItems = (type: IconType) => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const tableName = `trending_${type}`;
+  const tableName = getTableName(type);
 
-  const { data = [], refetch, ...rest } = useQuery({
+  const { data = [], refetch, ...rest } = useQuery<TrendingItem[]>({
     queryKey: [`trending-${type}`],
     queryFn: async () => {
-      console.log(`Fetching all ${type} from ${tableName}...`);
+      console.log(`Fetching ${type} from ${tableName}...`);
       
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
