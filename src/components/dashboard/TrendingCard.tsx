@@ -31,7 +31,7 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <TrendingList items={data} isLoading={isLoading} />
+        <TrendingList items={data} />
       </CardContent>
     </Card>
   );
