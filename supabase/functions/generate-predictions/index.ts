@@ -38,20 +38,48 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           {
             role: 'system',
-            content: `Sei un analista di trend social media esperto. Genera previsioni per ogni data nel formato JSON richiesto con metriche realistiche per:
-            - followers: crescita dei follower (5000-50000)
-            - engagement: interazioni con i contenuti (1000-30000)
-            - popularity: viralità degli hashtag (500-10000)
-            
-            Spiega anche i fattori che influenzano ogni metrica.`
+            content: `You are a social media trend analyst. Generate predictions for each date in a JSON format that follows this exact structure:
+            {
+              "predictions": [
+                {
+                  "time": "2024-03-12",
+                  "followers": 15000,
+                  "engagement": 8000,
+                  "popularity": 3000,
+                  "trends": {
+                    "followers": {
+                      "percentageChange": 5,
+                      "trend": "up",
+                      "impact": "alto",
+                      "velocity": "rapida",
+                      "factors": ["Viral content", "Influencer mentions"]
+                    },
+                    "engagement": {
+                      "percentageChange": 3,
+                      "trend": "up",
+                      "impact": "medio",
+                      "velocity": "moderata",
+                      "factors": ["Increased post frequency", "Better content quality"]
+                    },
+                    "popularity": {
+                      "percentageChange": 2,
+                      "trend": "stable",
+                      "impact": "basso",
+                      "velocity": "lenta",
+                      "factors": ["Consistent hashtag usage", "Regular posting schedule"]
+                    }
+                  }
+                }
+              ]
+            }`
           },
           {
             role: 'user',
-            content: `Genera previsioni per queste date: ${dates.join(', ')}. Includi i fattori di influenza.`
+            content: `Generate predictions for these dates: ${dates.join(', ')}. Follow the exact JSON structure shown, with realistic metrics and specific factors for each trend.`
           }
         ],
         temperature: 0.7,
@@ -71,6 +99,11 @@ serve(async (req) => {
 
     const predictions = JSON.parse(data.choices[0].message.content);
 
+    // Validate predictions structure
+    if (!predictions.predictions || !Array.isArray(predictions.predictions)) {
+      throw new Error('Invalid predictions format received');
+    }
+
     // Store predictions in Supabase with timestamp
     const { error: insertError } = await supabase
       .from('predictive_trends')
@@ -81,6 +114,7 @@ serve(async (req) => {
 
     if (insertError) {
       console.error('Error storing predictions:', insertError);
+      throw new Error('Failed to store predictions');
     }
 
     return new Response(JSON.stringify(predictions), {
