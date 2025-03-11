@@ -31,7 +31,7 @@ export const useTrendingSearch = (type: TrendingItemType, searchQuery: string) =
           .limit(10);
 
         if (searchError) throw searchError;
-        setResults(data || []);
+        setResults(data as TrendingSearchItem[] || []);
       } catch (err) {
         console.error('Search error:', err);
         setError('Error searching trends');
@@ -46,7 +46,6 @@ export const useTrendingSearch = (type: TrendingItemType, searchQuery: string) =
       setResults([]);
     }
 
-    // Set up real-time subscription
     const channel = supabase
       .channel('trending_search_changes')
       .on(
@@ -56,15 +55,15 @@ export const useTrendingSearch = (type: TrendingItemType, searchQuery: string) =
           schema: 'public',
           table: `trending_${type}`
         },
-        (payload) => {
+        (payload: { new: TrendingSearchItem }) => {
           setResults(current => {
             const updatedResults = [...current];
             const index = updatedResults.findIndex(item => item.id === payload.new.id);
             
             if (index > -1) {
-              updatedResults[index] = payload.new as TrendingSearchItem;
+              updatedResults[index] = payload.new;
             } else if (payload.new.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-              updatedResults.push(payload.new as TrendingSearchItem);
+              updatedResults.push(payload.new);
             }
             
             return updatedResults.sort((a, b) => b.volume - a.volume).slice(0, 10);
