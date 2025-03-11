@@ -22,6 +22,9 @@ export const auth = {
     submitButton: "Crea Account",
     loading: "Creazione account in corso...",
     success: "Account creato con successo",
-    error: "Impossibile creare l'account. Riprova più tardi."
+    error: "Errore durante la registrazione",
+    genericError: "Si è verificato un errore. Riprova più tardi.",
+    userExistsError: "Account già registrato",
+    userExistsDescription: "Esiste già un account con questa email. Prova ad accedere invece."
   }
 };

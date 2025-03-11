@@ -20,6 +20,9 @@ export const auth = {
     submitButton: 'Create Account',
     loading: 'Creating account...',
     success: 'Account created successfully',
-    error: 'Unable to create account. Please try again.'
+    error: 'Registration error',
+    genericError: 'An error occurred. Please try again later.',
+    userExistsError: 'Account already exists',
+    userExistsDescription: 'An account with this email already exists. Try logging in instead.'
   }
 };

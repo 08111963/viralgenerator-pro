@@ -1,4 +1,3 @@
-
 import { Navigation } from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -54,26 +53,42 @@ const Login = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
-      const { error, data } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: registerEmail,
         password: registerPassword,
       });
       
-      if (error) throw error;
-      
-      toast({
-        title: t('register.success'),
-        description: t('auth.checkEmail'),
-      });
+      if (error) {
+        if (error.message.includes('already registered')) {
+          toast({
+            variant: "destructive",
+            title: t('register.userExistsError'),
+            description: t('register.userExistsDescription'),
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: t('register.error'),
+            description: error.message,
+          });
+        }
+        return;
+      }
 
-      // Redirect to dashboard after successful registration
-      navigate("/dashboard");
+      if (data?.user) {
+        toast({
+          title: t('register.success'),
+          description: t('auth.checkEmail'),
+        });
+        navigate("/dashboard");
+      }
     } catch (error) {
       toast({
         variant: "destructive",
         title: t('register.error'),
-        description: t('register.error'),
+        description: t('register.genericError'),
       });
     } finally {
       setLoading(false);
