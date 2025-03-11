@@ -55,7 +55,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error, data } = await supabase.auth.signUp({
         email: registerEmail,
         password: registerPassword,
       });
@@ -66,6 +66,9 @@ const Login = () => {
         title: t('register.success'),
         description: t('auth.checkEmail'),
       });
+
+      // Redirect to dashboard after successful registration
+      navigate("/dashboard");
     } catch (error) {
       toast({
         variant: "destructive",
