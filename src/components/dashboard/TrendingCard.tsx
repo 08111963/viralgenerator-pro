@@ -3,7 +3,6 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTrendingItems } from "@/hooks/useTrendingItems";
 import { BarChart2, Hash, Key, FileText } from "lucide-react";
-import { TrendingList } from "./TrendingList";
 
 type IconType = "hashtags" | "keywords" | "topics";
 
@@ -31,7 +30,7 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <TrendingList items={data} type={icon} />
+        <TrendingList items={data} isLoading={isLoading} />
       </CardContent>
     </Card>
   );

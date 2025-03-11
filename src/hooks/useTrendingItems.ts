@@ -16,7 +16,7 @@ export interface TrendingItem {
   historicalData?: { volume: number; timestamp: string }[];
 }
 
-type TrendType = "trending_hashtags" | "trending_keywords" | "trending_topics";
+type TrendType = "hashtags" | "keywords" | "topics";
 
 export const useTrendingItems = (type: "hashtags" | "keywords" | "topics") => {
   const { t } = useTranslation();
