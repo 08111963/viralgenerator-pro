@@ -54,7 +54,7 @@ const Register = () => {
         title: t('register.success'),
         description: t('auth.checkEmail'),
       });
-      navigate("/login");
+      navigate("/dashboard");
     } catch (error) {
       toast({
         variant: "destructive",
