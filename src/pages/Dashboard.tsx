@@ -10,7 +10,6 @@ import { FeatureSection } from "@/components/dashboard/FeatureSection";
 import { AnalyticsSection } from "@/components/dashboard/AnalyticsSection";
 import { PredictiveTrends } from "@/components/dashboard/PredictiveTrends";
 import { ShareSection } from "@/components/ShareSection";
-import { WeeklyReports } from "@/components/dashboard/WeeklyReports";
 import { DashboardSettings } from "@/components/dashboard/DashboardSettings";
 import { useDashboardSettings, WidgetKey } from "@/hooks/useDashboardSettings";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
@@ -68,7 +67,6 @@ const Dashboard = () => {
   };
 
   const widgetComponents: Record<WidgetKey, React.ReactNode> = {
-    weeklyReports: <WeeklyReports />,
     trending: <TrendingSection />,
     features: <FeatureSection />,
     analytics: <AnalyticsSection />,

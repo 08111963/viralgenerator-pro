@@ -1,8 +1,6 @@
-
 import { useState } from 'react';
 
 export type WidgetKey = 
-  | 'weeklyReports'
   | 'trending'
   | 'features'
   | 'analytics'
@@ -12,7 +10,6 @@ export type WidgetKey =
   | 'zapierIntegration';
 
 export interface DashboardWidgetSettings {
-  weeklyReports: boolean;
   trending: boolean;
   features: boolean;
   analytics: boolean;
@@ -51,7 +48,6 @@ export const useDashboardSettings = () => {
   const [widgetSettings, setWidgetSettings] = useLocalStorage<DashboardWidgetSettings>(
     'dashboardWidgetSettings',
     {
-      weeklyReports: true,
       trending: true,
       features: true,
       analytics: true,
@@ -65,7 +61,6 @@ export const useDashboardSettings = () => {
   const [widgetOrder, setWidgetOrder] = useLocalStorage<WidgetKey[]>(
     'dashboardWidgetOrder',
     [
-      'weeklyReports',
       'trending',
       'features',
       'analytics',
@@ -94,4 +89,3 @@ export const useDashboardSettings = () => {
     reorderWidgets,
   };
 };
-
