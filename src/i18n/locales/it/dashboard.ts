@@ -1,4 +1,3 @@
-
 export const dashboard = {
   title: "Dashboard",
   notifications: {
@@ -15,7 +14,11 @@ export const dashboard = {
     error: "Errore nel caricamento dei trend",
     noData: "Nessun trend disponibile",
     realtime: "Aggiornamento in tempo reale",
-    trendDetail: "Dettaglio trend"
+    trendDetail: "Dettaglio trend",
+    search: 'Cerca Trend',
+    searchPlaceholder: 'Cerca hashtag, parole chiave o argomenti...',
+    startTyping: 'Inizia a digitare per cercare...',
+    noResults: 'Nessun risultato trovato'
   },
   predictions: {
     title: "Previsioni AI",
