@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ export const SocialAccountsManager = () => {
   const { accounts, isLoading, addAccount, removeAccount } = useSocialAccounts();
   const [platform, setPlatform] = useState<string>('');
   const [accountName, setAccountName] = useState('');
-  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,58 +39,55 @@ export const SocialAccountsManager = () => {
   return (
     <PremiumFeatureOverlay>
       <Card>
-        <CardHeader>
-          <CardTitle>{t('dashboard.social.title')}</CardTitle>
-          <CardDescription>
-            {t('dashboard.social.description')}
-          </CardDescription>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-medium">{t('dashboard.social.title')}</CardTitle>
+          <CardDescription className="text-xs">{t('dashboard.social.description')}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4 mb-6">
-            <div className="flex gap-4">
-              <Select value={platform} onValueChange={setPlatform}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder={t('dashboard.social.selectPlatform')} />
-                </SelectTrigger>
-                <SelectContent>
-                  {PLATFORMS.map(p => (
-                    <SelectItem key={p} value={p}>{p}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Input
-                placeholder={t('dashboard.social.accountName')}
-                value={accountName}
-                onChange={(e) => setAccountName(e.target.value)}
-                className="flex-1"
-              />
-              <Button type="submit" disabled={addAccount.isPending}>
-                {t('dashboard.social.add')}
-              </Button>
-            </div>
+        <CardContent className="space-y-3 pt-0">
+          <form onSubmit={handleSubmit} className="flex gap-2">
+            <Select value={platform} onValueChange={setPlatform}>
+              <SelectTrigger className="w-[120px] h-8 text-sm">
+                <SelectValue placeholder={t('dashboard.social.selectPlatform')} />
+              </SelectTrigger>
+              <SelectContent>
+                {PLATFORMS.map(p => (
+                  <SelectItem key={p} value={p} className="text-sm">{p}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              placeholder={t('dashboard.social.accountName')}
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
+              className="flex-1 h-8 text-sm"
+            />
+            <Button type="submit" size="sm" disabled={addAccount.isPending}>
+              {t('dashboard.social.add')}
+            </Button>
           </form>
 
           {isLoading ? (
-            <div className="text-center py-4">{t('loading')}</div>
+            <div className="text-center py-2 text-sm">{t('loading')}</div>
           ) : accounts.length === 0 ? (
-            <div className="text-center py-4 text-muted-foreground">
+            <div className="text-center py-2 text-sm text-muted-foreground">
               {t('dashboard.social.noAccounts')}
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-1">
               {accounts.map((account) => (
-                <div key={account.id} className="flex items-center justify-between p-2 rounded-lg border">
+                <div key={account.id} className="flex items-center justify-between p-1.5 text-sm rounded-md hover:bg-muted">
                   <div>
                     <span className="font-medium">{account.platform}</span>
                     <span className="text-muted-foreground ml-2">{account.account_name}</span>
                   </div>
                   <Button
                     variant="ghost"
-                    size="sm"
+                    size="icon"
+                    className="h-6 w-6"
                     onClick={() => removeAccount.mutate(account.id)}
                     disabled={removeAccount.isPending}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
               ))}
