@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ const PLATFORMS = ['Twitter', 'Instagram', 'LinkedIn', 'Facebook', 'TikTok'];
 
 export const SocialAccountsManager = () => {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const { accounts, isLoading, addAccount, removeAccount } = useSocialAccounts();
   const [platform, setPlatform] = useState<string>('');
   const [accountName, setAccountName] = useState('');
