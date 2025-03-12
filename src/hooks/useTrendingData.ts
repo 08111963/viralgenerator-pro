@@ -1,87 +1,53 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 
-interface TrendItem {
+export interface TrendingData {
   id: string;
   name: string;
   volume: number;
-  change: number;
+  change_percentage: number;
+  created_at: string;
 }
 
-export const useTrendingData = () => {
-  const { data: trendingHashtags = [] } = useQuery({
-    queryKey: ["trending-hashtags"],
+export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
+  return useQuery({
+    queryKey: [`trending_${type}`],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("trending_hashtags")
-        .select("*")
-        .order("volume", { ascending: false })
-        .limit(5);
+      // Fetch data from Supabase
+      const { data: dbData, error: dbError } = await supabase
+        .from(`trending_${type}`)
+        .select('*')
+        .order('volume', { ascending: false })
+        .limit(10);
 
-      if (error) {
-        console.error("Error fetching trending hashtags:", error);
-        return [];
+      if (dbError) throw dbError;
+
+      // If we have less than 5 items, fetch global trends
+      if (!dbData || dbData.length < 5) {
+        const { data: globalData, error: globalError } = await supabase.functions.invoke('fetch-global-trends');
+        
+        if (globalError) throw globalError;
+
+        if (globalData?.trends) {
+          // Convert global trends to our format
+          const formattedTrends = globalData.trends
+            .slice(0, 10)
+            .map(trend => ({
+              id: crypto.randomUUID(),
+              name: trend,
+              volume: Math.floor(Math.random() * 1000) + 100, // Random volume for demonstration
+              change_percentage: Math.floor(Math.random() * 100) - 50, // Random change between -50 and +50
+              created_at: new Date().toISOString()
+            }));
+
+          // Combine with existing data if any
+          return [...(dbData || []), ...formattedTrends].slice(0, 10);
+        }
       }
 
-      return data.map(hashtag => ({
-        id: hashtag.id,
-        name: hashtag.name,
-        volume: hashtag.volume,
-        change: Number(hashtag.change_percentage)
-      }));
-    }
+      return dbData || [];
+    },
+    refetchInterval: 30000 // Refresh every 30 seconds
   });
-
-  const { data: trendingKeywords = [] } = useQuery({
-    queryKey: ["trending-keywords"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("trending_keywords")
-        .select("*")
-        .order("volume", { ascending: false })
-        .limit(5);
-
-      if (error) {
-        console.error("Error fetching trending keywords:", error);
-        return [];
-      }
-
-      return data.map(keyword => ({
-        id: keyword.id,
-        name: keyword.name,
-        volume: keyword.volume,
-        change: Number(keyword.change_percentage)
-      }));
-    }
-  });
-
-  const { data: trendingTopics = [] } = useQuery({
-    queryKey: ["trending-topics"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("trending_topics")
-        .select("*")
-        .order("volume", { ascending: false })
-        .limit(5);
-
-      if (error) {
-        console.error("Error fetching trending topics:", error);
-        return [];
-      }
-
-      return data.map(topic => ({
-        id: topic.id,
-        name: topic.name,
-        volume: topic.volume,
-        change: Number(topic.change_percentage)
-      }));
-    }
-  });
-
-  return {
-    trendingHashtags,
-    trendingKeywords,
-    trendingTopics
-  };
 };

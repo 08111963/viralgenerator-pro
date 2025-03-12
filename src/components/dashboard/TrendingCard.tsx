@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTrendingItems } from "@/hooks/useTrendingItems";
-import { BarChart2, Hash, Key, FileText } from "lucide-react";
+import { useTrendingData } from "@/hooks/useTrendingData";
+import { BarChart2, Hash, Key, FileText, RefreshCcw } from "lucide-react";
 import { TrendingList } from "@/components/dashboard/TrendingList";
+import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
 
 type IconType = "hashtags" | "keywords" | "topics";
 
@@ -19,8 +21,13 @@ const icons = {
 };
 
 export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
-  const { data = [], isLoading } = useTrendingItems(icon);
+  const { data = [], isLoading, isError } = useTrendingData(icon);
+  const queryClient = useQueryClient();
   const Icon = icons[icon] || BarChart2;
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: [`trending_${icon}`] });
+  };
 
   if (isLoading) {
     return (
@@ -39,13 +46,31 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
     );
   }
 
+  if (isError) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center text-red-500 py-4">
+            Errore nel caricamento dei dati
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
+        <CardTitle className="text-sm font-medium flex items-center gap-2">
+          <Icon className="h-4 w-4 text-muted-foreground" />
           {title}
         </CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
+        <Button variant="ghost" size="icon" onClick={handleRefresh}>
+          <RefreshCcw className="h-4 w-4" />
+        </Button>
       </CardHeader>
       <CardContent>
         <TrendingList items={data} />
