@@ -50,6 +50,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
     "framer-motion": "^12.4.10",
+    "google-trends-api": "^4.9.2",
     "i18next": "^23.10.1",
     "i18next-browser-languagedetector": "^7.2.0",
     "input-otp": "^1.2.4",

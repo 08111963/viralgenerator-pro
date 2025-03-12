@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -24,7 +23,8 @@ export const useTrendingSearch = (type: TrendingItemType, searchQuery: string) =
       
       try {
         console.log(`Fetching ${type} with search query: ${searchQuery}`);
-        const { data, error: searchError } = await supabase
+        
+        const { data: supabaseData, error: searchError } = await supabase
           .from(`trending_${type}`)
           .select('*')
           .ilike('name', `%${searchQuery}%`)
@@ -33,8 +33,27 @@ export const useTrendingSearch = (type: TrendingItemType, searchQuery: string) =
 
         if (searchError) throw searchError;
         
-        console.log(`Fetched ${type} data:`, data);
-        setResults(data as TrendingSearchItem[] || []);
+        if (!supabaseData || supabaseData.length < 5) {
+          const { data: globalTrends } = await supabase.functions.invoke('fetch-global-trends');
+          
+          if (globalTrends?.trends) {
+            const filteredTrends = globalTrends.trends
+              .filter(trend => trend.toLowerCase().includes(searchQuery.toLowerCase()))
+              .map(trend => ({
+                id: crypto.randomUUID(),
+                name: trend,
+                volume: 100,
+                change_percentage: 0,
+                created_at: new Date().toISOString()
+              }));
+            
+            setResults([...(supabaseData || []), ...filteredTrends].slice(0, 10));
+            return;
+          }
+        }
+        
+        console.log(`Fetched ${type} data:`, supabaseData);
+        setResults(supabaseData as TrendingSearchItem[] || []);
       } catch (err) {
         console.error(`Error searching ${type}:`, err);
         setError('Error searching trends');
@@ -49,7 +68,6 @@ export const useTrendingSearch = (type: TrendingItemType, searchQuery: string) =
       setResults([]);
     }
 
-    // Set up real-time subscription
     const channel = supabase
       .channel('trending_search_changes')
       .on(
