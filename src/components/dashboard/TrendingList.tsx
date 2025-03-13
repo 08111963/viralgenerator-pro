@@ -57,11 +57,11 @@ export const TrendingList = ({ items }: TrendingListProps) => {
 
       <TrendDetailModal
         item={selectedItem}
-        isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
           setSelectedItem(null);
         }}
+        isOpen={isModalOpen}
       />
     </>
   );

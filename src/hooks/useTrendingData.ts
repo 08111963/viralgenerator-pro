@@ -45,8 +45,8 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
             .map(trend => ({
               id: crypto.randomUUID(),
               name: trend,
-              volume: Math.floor(Math.random() * 1000) + 100, // Random volume for demonstration
-              change_percentage: Math.floor(Math.random() * 100) - 50, // Random change between -50 and +50
+              volume: Math.floor(Math.random() * 1000) + 100,
+              change_percentage: Math.floor(Math.random() * 100) - 50,
               created_at: new Date().toISOString()
             }));
 
@@ -60,7 +60,9 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
       console.log(`Returning database data for ${type}:`, dbData);
       return dbData || [];
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
-    staleTime: 25000, // Consider data stale after 25 seconds
+    refetchInterval: 180000, // Refresh every 3 minutes
+    staleTime: 170000, // Consider data stale after ~3 minutes
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
