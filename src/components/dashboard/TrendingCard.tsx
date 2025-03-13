@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTrendingData } from "@/hooks/useTrendingData";
@@ -22,15 +21,12 @@ const icons = {
 
 export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
   const queryClient = useQueryClient();
-  const { data = [], isLoading, isError } = useTrendingData(icon);
+  const { data = [], isLoading, isError, refetch } = useTrendingData(icon);
   const Icon = icons[icon] || BarChart2;
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     console.log(`Manually refreshing ${icon} data...`);
-    // Force a fresh fetch by removing existing data
-    queryClient.removeQueries({ queryKey: [`trending_${icon}`] });
-    // Then refetch
-    queryClient.fetchQuery({ queryKey: [`trending_${icon}`] });
+    await refetch();
   };
 
   if (isLoading) {
