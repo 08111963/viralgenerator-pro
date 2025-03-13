@@ -21,12 +21,16 @@ const icons = {
 };
 
 export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
-  const { data = [], isLoading, isError } = useTrendingData(icon);
   const queryClient = useQueryClient();
+  const { data = [], isLoading, isError } = useTrendingData(icon);
   const Icon = icons[icon] || BarChart2;
 
   const handleRefresh = () => {
-    queryClient.invalidateQueries({ queryKey: [`trending_${icon}`] });
+    // Invalidate and refetch the query
+    queryClient.invalidateQueries({
+      queryKey: [`trending_${icon}`],
+      exact: true
+    });
   };
 
   if (isLoading) {
@@ -68,7 +72,12 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
           <Icon className="h-4 w-4 text-muted-foreground" />
           {title}
         </CardTitle>
-        <Button variant="ghost" size="icon" onClick={handleRefresh}>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={handleRefresh}
+          className="hover:bg-accent/50"
+        >
           <RefreshCcw className="h-4 w-4" />
         </Button>
       </CardHeader>

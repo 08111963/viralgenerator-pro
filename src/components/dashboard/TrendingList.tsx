@@ -1,23 +1,21 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { TrendingItem } from '@/hooks/useTrendingItems';
+import { TrendingData } from '@/hooks/useTrendingData';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TrendDetailModal } from './TrendDetailModal';
-import { formatDistanceToNow } from 'date-fns';
-import { it } from 'date-fns/locale';
 
 interface TrendingListProps {
-  items: TrendingItem[];
+  items: TrendingData[];
 }
 
 export const TrendingList = ({ items }: TrendingListProps) => {
-  const { t, i18n } = useTranslation();
-  const [selectedItem, setSelectedItem] = useState<TrendingItem | null>(null);
+  const { t } = useTranslation();
+  const [selectedItem, setSelectedItem] = useState<TrendingData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleItemClick = (item: TrendingItem) => {
+  const handleItemClick = (item: TrendingData) => {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
@@ -34,7 +32,7 @@ export const TrendingList = ({ items }: TrendingListProps) => {
           >
             <div className="flex items-center gap-2">
               <span className="font-medium">{item.name}</span>
-              {item.isTrending && (
+              {item.volume > 100 && (
                 <TrendingUp className="h-4 w-4 text-primary" />
               )}
             </div>
@@ -42,8 +40,8 @@ export const TrendingList = ({ items }: TrendingListProps) => {
               <span className="text-sm text-muted-foreground">
                 {item.volume.toLocaleString()} {t('dashboard.trends.mentions')}
               </span>
-              <span className={`text-sm ${item.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {item.change >= 0 ? '+' : ''}{item.change}%
+              <span className={`text-sm ${item.change_percentage >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                {item.change_percentage >= 0 ? '+' : ''}{item.change_percentage}%
               </span>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </div>
