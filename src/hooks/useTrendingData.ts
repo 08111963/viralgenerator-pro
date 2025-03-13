@@ -8,6 +8,9 @@ export interface TrendingData {
   volume: number;
   change_percentage: number;
   created_at: string;
+  change?: number;  // Optional to maintain compatibility
+  confidence?: number;  // Optional to maintain compatibility
+  validationIssues?: string[];  // Optional to maintain compatibility
 }
 
 export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
@@ -61,7 +64,7 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
       return dbData || [];
     },
     refetchInterval: 180000, // Refresh every 3 minutes
-    staleTime: 170000, // Consider data stale after ~3 minutes
+    staleTime: 0, // This ensures data is always considered stale and will be refetched
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
