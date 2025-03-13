@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTrendingData } from "@/hooks/useTrendingData";
@@ -26,6 +27,7 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
 
   const handleRefresh = async () => {
     console.log(`Manually refreshing ${icon} data...`);
+    await queryClient.invalidateQueries({ queryKey: [`trending_${icon}`] });
     await refetch();
   };
 

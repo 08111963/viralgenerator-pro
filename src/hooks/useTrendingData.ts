@@ -8,9 +8,6 @@ export interface TrendingData {
   volume: number;
   change_percentage: number;
   created_at: string;
-  change?: number;  // Optional to maintain compatibility
-  confidence?: number;  // Optional to maintain compatibility
-  validationIssues?: string[];  // Optional to maintain compatibility
 }
 
 export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
@@ -19,52 +16,23 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
     queryFn: async () => {
       console.log(`Fetching ${type} data...`);
       
-      // Fetch data from Supabase
-      const { data: dbData, error: dbError } = await supabase
+      const { data, error } = await supabase
         .from(`trending_${type}`)
         .select('*')
-        .order('volume', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(10);
 
-      if (dbError) {
-        console.error(`Error fetching ${type} data:`, dbError);
-        throw dbError;
+      if (error) {
+        console.error(`Error fetching ${type} data:`, error);
+        throw error;
       }
 
-      // If we have less than 5 items, fetch global trends
-      if (!dbData || dbData.length < 5) {
-        console.log(`Fetching global trends for ${type}...`);
-        const { data: globalData, error: globalError } = await supabase.functions.invoke('fetch-global-trends');
-        
-        if (globalError) {
-          console.error('Error fetching global trends:', globalError);
-          throw globalError;
-        }
-
-        if (globalData?.trends) {
-          // Convert global trends to our format
-          const formattedTrends = globalData.trends
-            .slice(0, 10)
-            .map(trend => ({
-              id: crypto.randomUUID(),
-              name: trend,
-              volume: Math.floor(Math.random() * 1000) + 100,
-              change_percentage: Math.floor(Math.random() * 100) - 50,
-              created_at: new Date().toISOString()
-            }));
-
-          // Combine with existing data if any
-          const combinedData = [...(dbData || []), ...formattedTrends].slice(0, 10);
-          console.log(`Returning combined data for ${type}:`, combinedData);
-          return combinedData;
-        }
-      }
-
-      console.log(`Returning database data for ${type}:`, dbData);
-      return dbData || [];
+      console.log(`Received ${type} data:`, data);
+      return data || [];
     },
-    refetchInterval: 180000, // Refresh every 3 minutes
-    staleTime: 0, // This ensures data is always considered stale and will be refetched
+    refetchInterval: 30000, // Refresh every 30 seconds
+    staleTime: 0, // Data is always considered stale
+    gcTime: 0, // Immediately garbage collect old data
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
