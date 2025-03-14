@@ -8,8 +8,8 @@ export interface TrendingData {
   volume: number;
   change: number;
   change_percentage: number;
-  confidence?: number;
-  validationIssues?: string[];
+  confidence: number;
+  validationIssues: string[];
   created_at: string;
 }
 
@@ -32,12 +32,15 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
 
       console.log(`Received ${type} data:`, data);
       
-      // Transform the data to match the interface
-      const transformedData = data?.map((item: any) => ({
-        ...item,
+      const transformedData = data?.map((item: any): TrendingData => ({
+        id: item.id,
+        name: item.name,
+        volume: item.volume,
         change: item.change_percentage,
+        change_percentage: item.change_percentage,
         confidence: 100,
-        validationIssues: []
+        validationIssues: [],
+        created_at: item.created_at
       })) || [];
 
       return transformedData;
