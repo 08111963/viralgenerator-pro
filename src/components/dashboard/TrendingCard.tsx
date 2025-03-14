@@ -28,11 +28,8 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
   const handleRefresh = async () => {
     try {
       console.log(`Starting manual refresh for ${icon}...`);
-      // First invalidate the query to ensure fresh data
-      await queryClient.invalidateQueries({ queryKey: [`trending_${icon}`] });
-      // Then force a refetch
-      const result = await refetch();
-      console.log(`Manual refresh completed for ${icon}`, result);
+      await refetch();
+      console.log(`Manual refresh completed for ${icon}`);
     } catch (error) {
       console.error(`Error during manual refresh for ${icon}:`, error);
     }
@@ -92,4 +89,3 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
     </Card>
   );
 };
-

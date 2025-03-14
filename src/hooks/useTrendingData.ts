@@ -19,7 +19,7 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
       const { data, error } = await supabase
         .from(`trending_${type}`)
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('volume', { ascending: false })
         .limit(10);
 
       if (error) {
