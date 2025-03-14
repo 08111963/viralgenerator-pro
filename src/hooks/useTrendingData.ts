@@ -6,7 +6,10 @@ export interface TrendingData {
   id: string;
   name: string;
   volume: number;
+  change: number;
   change_percentage: number;
+  confidence?: number;
+  validationIssues?: string[];
   created_at: string;
 }
 
@@ -28,11 +31,20 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
       }
 
       console.log(`Received ${type} data:`, data);
-      return data || [];
+      
+      // Transform the data to match the interface
+      const transformedData = data?.map((item: any) => ({
+        ...item,
+        change: item.change_percentage,
+        confidence: 100,
+        validationIssues: []
+      })) || [];
+
+      return transformedData;
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
-    staleTime: 0, // Data is always considered stale
-    gcTime: 0, // Immediately garbage collect old data
+    refetchInterval: 30000,
+    staleTime: 0,
+    gcTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
