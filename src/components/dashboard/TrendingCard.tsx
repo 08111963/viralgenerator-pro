@@ -26,9 +26,16 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
   const Icon = icons[icon] || BarChart2;
 
   const handleRefresh = async () => {
-    console.log(`Manually refreshing ${icon} data...`);
-    await queryClient.invalidateQueries({ queryKey: [`trending_${icon}`] });
-    await refetch();
+    try {
+      console.log(`Starting manual refresh for ${icon}...`);
+      // First invalidate the query to ensure fresh data
+      await queryClient.invalidateQueries({ queryKey: [`trending_${icon}`] });
+      // Then force a refetch
+      const result = await refetch();
+      console.log(`Manual refresh completed for ${icon}`, result);
+    } catch (error) {
+      console.error(`Error during manual refresh for ${icon}:`, error);
+    }
   };
 
   if (isLoading) {
@@ -85,3 +92,4 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ title, icon }) => {
     </Card>
   );
 };
+
