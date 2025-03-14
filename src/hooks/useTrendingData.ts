@@ -32,23 +32,17 @@ export const useTrendingData = (type: 'hashtags' | 'keywords' | 'topics') => {
 
       console.log(`Received ${type} data:`, data);
       
-      const transformedData = data?.map((item: any): TrendingData => ({
+      return data?.map((item): TrendingData => ({
         id: item.id,
         name: item.name,
-        volume: item.volume,
-        change: item.change_percentage,
-        change_percentage: item.change_percentage,
+        volume: item.volume || 0,
+        change: item.change_percentage || 0,
+        change_percentage: item.change_percentage || 0,
         confidence: 100,
         validationIssues: [],
         created_at: item.created_at
       })) || [];
-
-      return transformedData;
     },
     refetchInterval: 30000,
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
   });
 };
